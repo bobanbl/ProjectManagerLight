@@ -9,15 +9,14 @@ import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
-
+/** The Controller for interactions with the database classes in the package database
+ 	Class is still in test
+ */
 public class DatabaseController {
 	
-//	@PersistenceContext
-
-
-	// singleton implementation
 	private static DatabaseController onlyInstance;
 	
+//Test method for instance	
 	public static DatabaseController getInstance() {
 		
 		if (onlyInstance != null) return onlyInstance;
@@ -36,7 +35,7 @@ public class DatabaseController {
 	 * D... delete
 	 */
 	
-	//-------------Project User--------------------------	
+//-------------Project User--------------------------	
 	public void createUser(String userShortcut, String firstName, String lastName, String eMail, String role, String password) {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
 		EntityManager em = emf.createEntityManager();

@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
+//The Controller for userManView.fxml
 public class UserManController {
     @FXML
     private ResourceBundle resources;

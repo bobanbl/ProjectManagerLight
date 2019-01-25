@@ -14,7 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+//  The Controller for main.fxml
 public class NavigationController {
 	
     @FXML
@@ -24,32 +24,40 @@ public class NavigationController {
     private URL location;
 
     @FXML
-    private Button navigationButtonUserManView;
+    private ImageView navigationButtonUserManView;
 
     @FXML
     private Label mainSelectedProject;
 
     @FXML
-    private Button navigationButtonTaskView;
+    private ImageView navigationButtonTaskView;
 
     @FXML
     private VBox mainNavigationVBox;
 
     @FXML
-    private Button navigationButtonDashboardView;
+    private ImageView navigationButtonDashboardView;
 
+//Navigation Button for loading projectView.fxml in AnchorPane
     @FXML
     void navigationButtonDashboardViewPressed(ActionEvent event) {
-
+    	System.out.println("Dashboard Navigation Button pressed");
     }
 
+//Navigation Button for loading taskView.fxml in AnchorPane    
     @FXML
     void navigationButtonTaskViewPressed(ActionEvent event) {
-
+    	System.out.println("Task Navigation Button pressed");
     }
-
+    
+//Navigation Button for loading userManView.fxml in AnchorPane
     @FXML
     void navigationButtonUserManViewPressed(ActionEvent event) {
+    	System.out.println("User Man. Navigation Button pressed");
+    	//new fxml loader
+    	//PC.getView erzeugen in jedem COntroller
+    	//view.parent aufrufen
+    	
 
     }
 
@@ -57,27 +65,6 @@ public class NavigationController {
     void initialize() {
 
     }
-
-	
-//    private void loadProjectDashboardView() {
-//    	System.out.println("Loading Project-DashboardView");
-//    	
-//		try {
-//   	
-//    	FXMLLoader loader = new FXMLLoader();
-//    	loader.setLocation(getClass().getResource("../view/projectView.fxml"));
-//		Parent root = loader.load();
-//		NavigationController controller = loader.getController();
-//		controller.getClass();
-//    	Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));
-//
-////    	mainStage.setScene(scene);
-////    	mainStage.show();
-//
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}	
-//    }
 
 }
 

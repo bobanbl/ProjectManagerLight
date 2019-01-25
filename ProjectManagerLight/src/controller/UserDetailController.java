@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+//The Controller for userDetailPopUp.fxml
 public class UserDetailController {
 
     @FXML

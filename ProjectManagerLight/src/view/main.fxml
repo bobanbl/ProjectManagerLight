@@ -12,33 +12,21 @@
    <children>
       <VBox fx:id="mainNavigationVBox" layoutY="185.0" prefHeight="210.0" prefWidth="60.0" style="-fx-background-color: #86C232;" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="200.0">
          <children>
-            <Button fx:id="navigationButtonDashboardView" mnemonicParsing="false" onAction="#navigationButtonDashboardViewPressed" prefHeight="43.0" prefWidth="50.0" style="-fx-background-color: #86C232;" textFill="TRANSPARENT">
-               <graphic>
-                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/DashboardView.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="navigationButtonTaskView" mnemonicParsing="false" onAction="#navigationButtonTaskViewPressed" style="-fx-background-color: #86C232;">
-               <graphic>
-                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/TaskView.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="navigationButtonUserManView" mnemonicParsing="false" onAction="#navigationButtonUserManViewPressed" style="-fx-background-color: #86C232;">
-               <graphic>
-                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../assets/UserManagementView.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
+            <ImageView fx:id="navigationButtonDashboardView" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#navigationButtonDashboardViewPressed" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/DashboardView.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="navigationButtonTaskView" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#navigationButtonTaskViewPressed" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/TaskView.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="navigationButtonUserManView" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#navigationButtonUserManViewPressed" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/UserManagementView.png" />
+               </image>
+            </ImageView>
          </children>
       </VBox>
       <AnchorPane prefHeight="40.0" prefWidth="1000.0" style="-fx-background-color: #86C232;">
