@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #222629;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavigationController">
+   <children>
+      <VBox fx:id="mainNavigationVBox" layoutY="185.0" prefHeight="210.0" prefWidth="60.0" style="-fx-background-color: #86C232;" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="200.0">
+         <children>
+            <Button fx:id="navigationButtonDashboardView" mnemonicParsing="false" onAction="#navigationButtonDashboardViewPressed" prefHeight="43.0" prefWidth="50.0" style="-fx-background-color: #86C232;" textFill="TRANSPARENT">
+               <graphic>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/DashboardView.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="navigationButtonTaskView" mnemonicParsing="false" onAction="#navigationButtonTaskViewPressed" style="-fx-background-color: #86C232;">
+               <graphic>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/TaskView.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="navigationButtonUserManView" mnemonicParsing="false" onAction="#navigationButtonUserManViewPressed" style="-fx-background-color: #86C232;">
+               <graphic>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/UserManagementView.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </VBox>
+      <AnchorPane prefHeight="40.0" prefWidth="1000.0" style="-fx-background-color: #86C232;">
+         <children>
+            <Label fx:id="mainSelectedProject" alignment="CENTER" contentDisplay="CENTER" layoutX="153.0" layoutY="7.0" prefHeight="27.0" prefWidth="640.0" text="Label" textAlignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="89.0" layoutY="40.0" prefHeight="560.0" prefWidth="940.0">
+         <children>
+            <fx:include source="projectView.fxml" />
+         </children></AnchorPane>
+   </children>
+</AnchorPane>

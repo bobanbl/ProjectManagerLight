@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: #222629;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UserManDetailController">
+   <children>
+      <Label layoutX="14.0" layoutY="64.0" text="First Name" textFill="#61892f">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+      <Label layoutX="15.0" layoutY="101.0" text="Last Name" textFill="#61892f">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+      <Label layoutX="16.0" layoutY="141.0" text="eMail" textFill="#61892f">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+      <Label layoutX="15.0" layoutY="178.0" text="Role" textFill="#61892f">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="218.0" text="Password" textFill="#61892f">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+      <Button fx:id="userDetailAssumeButton" layoutX="116.0" layoutY="345.0" mnemonicParsing="false" onAction="#userDetailAssumeButtonPressed" prefHeight="51.0" prefWidth="146.0" style="-fx-background-color: #86C232;" text="Assume" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <TextField fx:id="userDetailFirstNameField" layoutX="141.0" layoutY="60.0" prefHeight="34.0" prefWidth="244.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="userDetailLastNameField" layoutX="141.0" layoutY="99.0" prefHeight="34.0" prefWidth="244.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="userDetailEmailField" layoutX="141.0" layoutY="138.0" prefHeight="34.0" prefWidth="244.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="userDetailRoleField" layoutX="141.0" layoutY="176.0" prefHeight="34.0" prefWidth="244.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <PasswordField fx:id="userDetailPasswordField" layoutX="141.0" layoutY="215.0" prefHeight="34.0" prefWidth="244.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </PasswordField>
+      <TextField fx:id="userDetailShortcutField" layoutX="141.0" layoutY="21.0" prefHeight="34.0" prefWidth="244.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <Label layoutX="14.0" layoutY="25.0" text="Shortcut" textFill="#61892f">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
