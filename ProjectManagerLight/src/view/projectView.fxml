@@ -7,32 +7,19 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProjectController">
+<AnchorPane maxHeight="560.0" maxWidth="940.0" prefHeight="560.0" prefWidth="940.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProjectController">
    <children>
-      <TableView layoutX="66.0" layoutY="31.0" prefHeight="491.0" prefWidth="675.0">
+      <TableView prefHeight="560.0" prefWidth="769.0">
         <columns>
           <TableColumn prefWidth="75.0" text="C1" />
           <TableColumn prefWidth="75.0" text="C2" />
         </columns>
       </TableView>
-      <ImageView fx:id="addProjectButton" fitHeight="150.0" fitWidth="200.0" nodeOrientation="INHERIT" onMouseClicked="#addProjectImageButtonPressed" pickOnBounds="true" preserveRatio="true">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow>
-                     <input>
-                        <Blend />
-                     </input>
-                  </Shadow>
-               </bumpInput>
-               <light>
-                  <Light.Distant color="#00ff5e" />
-               </light>
-            </Lighting>
-         </effect>
+      <AnchorPane fx:id="anchorPaneDetailView" layoutX="364.0" prefHeight="560.0" prefWidth="400.0" />
+      <ImageView fx:id="addProjectButton" fitHeight="150.0" fitWidth="164.0" layoutX="779.0" layoutY="396.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../bin/assets/AddProject.png" />
          </image>
       </ImageView>
    </children>
-</HBox>
+</AnchorPane>

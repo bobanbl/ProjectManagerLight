@@ -9,105 +9,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="400.0" style="-fx-background-color: #474B4F;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProjectDetailController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="400.0" style="-fx-background-color: #474B4F;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProjectDetailController">
    <children>
-      <ImageView fitHeight="87.0" fitWidth="42.0" layoutX="-1.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="closeDetailViewButton" fitHeight="87.0" fitWidth="42.0" layoutX="-1.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../bin/assets/closeDetails.png" />
          </image>
       </ImageView>
-      <Label layoutX="30.0" layoutY="42.0" text="Project" textFill="#61892f">
-         <font>
-            <Font size="30.0" />
-         </font>
-      </Label>
-      <Label layoutX="30.0" layoutY="89.0" text="ID" textFill="#61892f">
-         <font>
-            <Font size="30.0" />
-         </font>
-      </Label>
-      <Label layoutX="27.0" layoutY="131.0" text="Status" textFill="#61892f">
-         <font>
-            <Font size="30.0" />
-         </font>
-      </Label>
-      <Label layoutX="27.0" layoutY="176.0" text="Description" textFill="#61892f">
-         <font>
-            <Font size="30.0" />
-         </font>
-      </Label>
-      <Label layoutX="30.0" layoutY="417.0" text="Start" textFill="#61892f">
-         <font>
-            <Font size="30.0" />
-         </font>
-      </Label>
-      <Label layoutX="30.0" layoutY="462.0" text="Finish" textFill="#61892f">
-         <font>
-            <Font size="30.0" />
-         </font>
-      </Label>
-      <TextField layoutX="139.0" layoutY="49.0" prefHeight="32.0" prefWidth="240.0">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </TextField>
-      <TextArea layoutX="29.0" layoutY="220.0" prefHeight="201.0" prefWidth="354.0">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </TextArea>
-      <Label fx:id="projectID" layoutX="139.0" layoutY="89.0" text="Project ID" textFill="#86c232">
-         <font>
-            <Font size="30.0" />
-         </font>
-      </Label>
-      <ComboBox fx:id="projectStatusComboBox" layoutX="139.0" layoutY="141.0" prefHeight="32.0" prefWidth="166.0" />
-      <DatePicker fx:id="projectStartDate" layoutX="131.0" layoutY="427.0" prefHeight="32.0" prefWidth="174.0" />
-      <DatePicker fx:id="projectFinishDate" layoutX="131.0" layoutY="469.0" prefHeight="32.0" prefWidth="174.0" />
-      <AnchorPane layoutX="3.0" layoutY="41.0" prefHeight="522.0" prefWidth="400.0">
-         <children>
-            <SubScene fill="#45494d00" height="522.0" width="400.0">
-              <root>
-                <Region />
-              </root>
-            </SubScene>
-            <Label layoutX="20.0" layoutY="14.0" text="Sponsor" textFill="#61892f">
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </Label>
-            <Label layoutX="20.0" layoutY="51.0" text="Manager" textFill="#61892f">
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </Label>
-            <Label layoutX="20.0" layoutY="91.0" text="Memeber" textFill="#61892f">
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </Label>
-            <ComboBox fx:id="projectStatusComboBox1" layoutX="159.0" layoutY="58.0" prefHeight="32.0" prefWidth="230.0" />
-            <VBox layoutX="159.0" layoutY="96.0" prefHeight="342.0" prefWidth="230.0">
-               <children>
-                  <ScrollBar orientation="VERTICAL" pickOnBounds="false" prefHeight="342.0" prefWidth="14.0">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </ScrollBar>
-               </children>
-            </VBox>
-            <ImageView fitHeight="101.0" fitWidth="76.0" layoutX="313.0" layoutY="438.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../bin/assets/AddUser.png" />
-               </image>
-            </ImageView>
-         </children>
-      </AnchorPane>
-      <TextField layoutX="163.0" layoutY="63.0" prefHeight="32.0" prefWidth="230.0">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </TextField>
+      <AnchorPane fx:id="anchorPaneDetailViews" layoutY="45.0" prefHeight="515.0" prefWidth="400.0" />
    </children>
 </AnchorPane>

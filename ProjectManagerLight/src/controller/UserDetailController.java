@@ -42,11 +42,11 @@ public class UserDetailController {
     @FXML
     void userDetailAssumeButtonPressed(ActionEvent event) {
     	//TODO Insert check if right values are in fields
-		DatabaseController databaseController = new DatabaseController();
-		
-		databaseController.createUser(userDetailShortcutField.getText(),
-				userDetailFirstNameField.getText(), userDetailLastNameField.getText(),
-				userDetailEmailField.getText(), userDetailRoleField.getText(), userDetailPasswordField.getText());	 
+//		DatabaseController databaseController = new DatabaseController();
+//		
+//		databaseController.createUser(userDetailShortcutField.getText(),
+//				userDetailFirstNameField.getText(), userDetailLastNameField.getText(),
+//				userDetailEmailField.getText(), userDetailRoleField.getText(), userDetailPasswordField.getText());	 
     }
 
     @FXML

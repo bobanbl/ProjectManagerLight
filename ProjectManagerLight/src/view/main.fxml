@@ -12,17 +12,17 @@
    <children>
       <VBox fx:id="mainNavigationVBox" layoutY="185.0" prefHeight="210.0" prefWidth="60.0" style="-fx-background-color: #86C232;" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="200.0">
          <children>
-            <ImageView fx:id="navigationButtonDashboardView" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#navigationButtonDashboardViewPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="navigationButtonDashboardView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assets/DashboardView.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="navigationButtonTaskView" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#navigationButtonTaskViewPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="navigationButtonTaskView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assets/TaskView.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="navigationButtonUserManView" fitHeight="50.0" fitWidth="50.0" onMouseClicked="#navigationButtonUserManViewPressed" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="navigationButtonUserManView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assets/UserManagementView.png" />
                </image>
@@ -36,9 +36,14 @@
                   <Font size="18.0" />
                </font>
             </Label>
+            <Label fx:id="labelSelectedView" prefHeight="40.0" prefWidth="257.0" text="Slected View">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="89.0" layoutY="40.0" prefHeight="560.0" prefWidth="940.0">
+      <AnchorPane fx:id="anchorPaneViews" layoutX="89.0" layoutY="40.0" prefHeight="560.0" prefWidth="940.0">
          <children>
             <fx:include source="projectView.fxml" />
          </children></AnchorPane>
