@@ -16,6 +16,9 @@
             <Image url="@../../bin/assets/closeDetails.png" />
          </image>
       </ImageView>
-      <AnchorPane fx:id="anchorPaneDetailViews" layoutY="45.0" prefHeight="515.0" prefWidth="400.0" />
+      <AnchorPane fx:id="anchorPaneDetailViews" layoutY="45.0" prefHeight="515.0" prefWidth="400.0">
+         <children>
+            <fx:include fx:id="projectDetailMain" source="projectDetailMain.fxml" />
+         </children></AnchorPane>
    </children>
 </AnchorPane>

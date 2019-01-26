@@ -12,20 +12,29 @@
    <children>
       <VBox fx:id="mainNavigationVBox" layoutY="185.0" prefHeight="210.0" prefWidth="60.0" style="-fx-background-color: #86C232;" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="200.0">
          <children>
-            <ImageView fx:id="navigationButtonDashboardView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="navigationButtonDashboardView" fitHeight="55.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assets/DashboardView.png" />
                </image>
+               <VBox.margin>
+                  <Insets left="2.0" top="5.0" />
+               </VBox.margin>
             </ImageView>
-            <ImageView fx:id="navigationButtonTaskView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="navigationButtonTaskView" fitHeight="55.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assets/TaskView.png" />
                </image>
+               <VBox.margin>
+                  <Insets left="2.0" top="10.0" />
+               </VBox.margin>
             </ImageView>
-            <ImageView fx:id="navigationButtonUserManView" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="navigationButtonUserManView" fitHeight="55.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assets/UserManagementView.png" />
                </image>
+               <VBox.margin>
+                  <Insets left="3.0" top="10.0" />
+               </VBox.margin>
             </ImageView>
          </children>
       </VBox>

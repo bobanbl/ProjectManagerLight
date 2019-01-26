@@ -15,8 +15,8 @@
           <TableColumn prefWidth="75.0" text="C2" />
         </columns>
       </TableView>
-      <AnchorPane fx:id="anchorPaneDetailView" layoutX="364.0" prefHeight="560.0" prefWidth="400.0" />
-      <ImageView fx:id="addProjectButton" fitHeight="150.0" fitWidth="164.0" layoutX="779.0" layoutY="396.0" pickOnBounds="true" preserveRatio="true">
+      <AnchorPane fx:id="anchorPaneDetailView" layoutX="516.0" prefHeight="560.0" prefWidth="400.0" />
+      <ImageView fx:id="addProjectButton" fitHeight="150.0" fitWidth="164.0" layoutX="763.0" layoutY="396.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../bin/assets/AddProject.png" />
          </image>

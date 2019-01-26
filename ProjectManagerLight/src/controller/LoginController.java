@@ -12,24 +12,19 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
-// The LoginController for login.fxml
+//LoginController for login.fxml
 public class LoginController {
 	
     @FXML
     private ResourceBundle resources;
-
     @FXML
     private URL location;
-
     @FXML
     private TextField loginUsername;
-
     @FXML
     private Button loginButton;
-
     @FXML
     private PasswordField loginPassword;
-
     @FXML
     private Label loginLabel;
 
@@ -60,24 +55,21 @@ public class LoginController {
 
     }
     
-// Closes the Login-Window and opens the Main-Window (main.fxml)    
+//closes the Login-Window and opens the Main-Window (main.fxml)    
     private void loginUser() {
-    	System.out.println("LOGIN successfull!");
-    	
+    	System.out.println("LOGIN successfull!");   	
 		try {
     	loginButton.getScene().getWindow().hide();	
     	FXMLLoader loader = new FXMLLoader();
     	loader.setLocation(getClass().getResource("../view/main.fxml"));  	
 		Parent root = loader.load();
-
-		
+	
     	Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));
     	Stage mainStage = new Stage();
     	
     	mainStage.setTitle("ProjectManagerLight");
     	mainStage.setScene(scene);
     	mainStage.show();
-
 		} catch(Exception e) {
 			e.printStackTrace();
 		}	
@@ -90,8 +82,5 @@ public class LoginController {
     private void errorMessageSeconds(String message, int duration) {
     	
     }
-    
-    
-
 }
 

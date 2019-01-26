@@ -16,57 +16,47 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-//  The Controller for main.fxml
+
+//Controller for main.fxml
 public class NavigationController {
 	
     @FXML
     private ResourceBundle resources;
-
     @FXML
     private URL location;
-
     @FXML
     private ImageView navigationButtonUserManView;
-
     @FXML
     private Label mainSelectedProject;
-
     @FXML
     private ImageView navigationButtonTaskView;
-
     @FXML
     private VBox mainNavigationVBox;
-
     @FXML
-    private ImageView navigationButtonDashboardView;
-    
+    private ImageView navigationButtonDashboardView;  
     @FXML
-    private AnchorPane anchorPaneViews;
-   
+    private AnchorPane anchorPaneViews; 
     @FXML
     private Label labelSelectedView;
 
     @FXML
     void initialize() {
-    	System.out.println("NavigationController loaded");
     	labelSelectedView.setText("Project Dashboard");
-    	
+//click on Navigation Button Dashboard View calls method loadProjectView()    	
     	navigationButtonDashboardView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
     		System.out.println("Project Dashboard Navigation Button pressed");
     		laodProjectView();
     	});
-    	
+//click on Navigation Button Task View calls method loadTaskView()        	
     	navigationButtonTaskView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
     		System.out.println("Task Navigation Button pressed");
-    		laodTaskView();
-    		
+    		laodTaskView();		
     	});
-    	
+//click on Navigation Button User Management calls method loadUserManView()        	
     	navigationButtonUserManView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
     		System.out.println("User Man. Navigation Button pressed");
     		laodUserManView();
-    	});
-    	
+    	});   	
     }
  
 /* Load in AnchorPane Task View
@@ -78,39 +68,33 @@ public class NavigationController {
 	    	loader.setLocation(getClass().getResource("../view/taskView.fxml"));  	
 			Parent root = loader.load();	
 			anchorPaneViews.getChildren().setAll(root);
-			
-			labelSelectedView.setText("Tasks");
-			
+			labelSelectedView.setText("Tasks");			
     	} catch (IOException e) {
 			e.printStackTrace();
 		}
     }
  
-// Load in AnchorPane User Management View
+//load in AnchorPane User Management View
     private void laodUserManView() {
     	try {
 	    	FXMLLoader loader = new FXMLLoader();
 	    	loader.setLocation(getClass().getResource("../view/userManView.fxml"));  	
 			Parent root = loader.load();
-			anchorPaneViews.getChildren().setAll(root);
-			
-			labelSelectedView.setText("User Management");
-			
+			anchorPaneViews.getChildren().setAll(root);			
+			labelSelectedView.setText("User Management");			
     	} catch (IOException e) {
 			e.printStackTrace();
 		}
     }    
 
-// Load in AnchorPane Project View    
+//load in AnchorPane Project View    
     private void laodProjectView() {
     	try {
 	    	FXMLLoader loader = new FXMLLoader();
 	    	loader.setLocation(getClass().getResource("../view/projectView.fxml"));  	
 			Parent root = loader.load();
-			anchorPaneViews.getChildren().setAll(root);
-			
-			labelSelectedView.setText("Project Dashboard");
-			
+			anchorPaneViews.getChildren().setAll(root);	
+			labelSelectedView.setText("Project Dashboard");			
     	} catch (IOException e) {
 			e.printStackTrace();
 		}

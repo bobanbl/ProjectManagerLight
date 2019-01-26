@@ -12,15 +12,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-//The Controller for taskView.fxml
+//Controller for taskView.fxml
 public class TaskController {
 
     @FXML
     private ResourceBundle resources;
-
     @FXML
     private URL location;
-
     @FXML
     private ImageView addStoryButton;
     @FXML
@@ -30,7 +28,7 @@ public class TaskController {
     		laodCreateStoryPopUp();		
     	});
     }
-    
+//opens taskDetailPopUp.fxml in new window
     private void laodCreateStoryPopUp() {
     	try {
 	    	FXMLLoader loader = new FXMLLoader();
@@ -48,6 +46,5 @@ public class TaskController {
     	} catch (IOException e) {
 			e.printStackTrace();
 		}
-    }    
-    
+    }      
 }
