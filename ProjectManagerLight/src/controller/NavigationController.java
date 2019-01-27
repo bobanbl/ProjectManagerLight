@@ -38,6 +38,8 @@ public class NavigationController {
     private AnchorPane anchorPaneViews; 
     @FXML
     private Label labelSelectedView;
+    @FXML
+    private Label labelLoggedUser;
 
     @FXML
     void initialize() {
@@ -98,6 +100,10 @@ public class NavigationController {
     	} catch (IOException e) {
 			e.printStackTrace();
 		}
-    }    
+    }   
+    
+    public void setLabelLoggedUser(String loggedUser) {
+    	labelLoggedUser.setText("Logged User: " + loggedUser);
+    }
 }
 

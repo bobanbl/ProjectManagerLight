@@ -33,4 +33,15 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
+	
+    public static void delay() {
+    	try        
+    	{	
+    		Thread.sleep(20000);
+    	} 
+    	catch(InterruptedException ex) 
+    	{
+    		Thread.currentThread().interrupt();
+    	}	
+    }
 }

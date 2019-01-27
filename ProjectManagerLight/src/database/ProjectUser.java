@@ -17,7 +17,6 @@ import javax.persistence.OneToMany;
 @Entity
 public class ProjectUser implements Serializable{
 
-
 	/**
 	 * 
 	 */
@@ -39,7 +38,7 @@ public class ProjectUser implements Serializable{
 	private List<Task> involvedTasks = new ArrayList<>();
 	
 	public ProjectUser() {
-		
+		super();
 	}
 	
 	public ProjectUser(String userShortcut, String firstName, String lastName, String eMail, String role, String password) {

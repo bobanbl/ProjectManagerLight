@@ -37,6 +37,7 @@ public class DatabaseController {
 	
 //-------------Project User--------------------------	
 	public void createUser(String userShortcut, String firstName, String lastName, String eMail, String role, String password) {
+		System.out.println("Start creating user");
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
@@ -44,14 +45,19 @@ public class DatabaseController {
 		System.out.println("Create User: " + userShortcut);
 		transaction.begin();
 		
-//		Query query = JPA.em().createNativeQuery("");
-//		query.setParameter(1, "MuelSt");
-		
-		ProjectUser newUser = new ProjectUser(userShortcut, firstName, lastName, eMail, role, password);
+		ProjectUser newUser = new ProjectUser();
+		newUser.setFirstName(firstName);
+		newUser.setLastName(lastName);
+		newUser.seteMail(eMail);
+		newUser.setUserShortcut(userShortcut);
+//TODO Generate password to HashCode
+		newUser.setPassword(password);
+		newUser.setRole(role);
 		
 		em.persist(newUser);
 		transaction.commit();
 		em.close();
+		emf.close();
 	}
 	
 	public ProjectUser readUser(String userShortcut) throws NoResultException{
@@ -70,15 +76,65 @@ public class DatabaseController {
 		
 		return user;
 	}
-	
-	public boolean userLoginQuery(String loginShortcut, String password) {
-		//returns true if login data in database
-		if(readUser(loginShortcut).getPassword().equals(password)) {
-			return true;
+/**returns 1 when loginShortcut and password are correct in database
+ * returns 2 if password does not match to user
+ * returns 3 if user does not exist in database 
+ * threw the try-catch-NoResultExeption the the error is catched if no result is in the database
+ * 
+ * @param loginShortcut is not case sensitive
+ * @param password
+ */
+	public int userLoginQuery(String loginShortcut, String password) {
+		System.out.println("Start Query Shortcut and Password");
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction transaction = em.getTransaction();
+		
+		System.out.println("Aks Login data from: " + loginShortcut);
+		transaction.begin();
+		
+		try {
+			ProjectUser loginUser = (ProjectUser)em.createQuery("SELECT u FROM ProjectUser u WHERE LOWER(u.userShortcut) LIKE '" + loginShortcut.toLowerCase() + "'").getSingleResult();
+
+			transaction.commit();
+			em.close();
+
+			System.out.println(loginUser.getPassword());
+			if (loginUser.getPassword().equals(password)) {
+				System.out.println("Password ok");
+				return 1;
+			} else {
+				System.out.println("Password not ok");
+				return 2;
+			}
+		} catch (NoResultException e) {
+			System.out.println("User: " + loginShortcut + " does not exist");
+			return 3;
 		}
-		return false;
 	}
-	
+/** returns TRUE if Shortcut exists in database, FALSE if not
+ * 	
+ * @param shortcut
+ * @return
+ */
+	public boolean userShortcutExistis(String shortcut) {
+		System.out.println("Start Query if shortcut exists");
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction transaction = em.getTransaction();
+		transaction.begin();
+		
+		try {
+			ProjectUser loginUser = (ProjectUser)em.createQuery("SELECT u FROM ProjectUser u WHERE LOWER(u.userShortcut) LIKE '" + shortcut.toLowerCase() + "'").getSingleResult();
+
+			transaction.commit();
+			em.close();
+			return true;
+		} catch (NoResultException e) {
+			System.out.println("User: " + shortcut + " does not exist");
+			return false;
+		}
+	}
 	public ProjectUser updateUser(ProjectUser updateUser) {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
 		EntityManager em = emf.createEntityManager();
@@ -114,7 +170,7 @@ public class DatabaseController {
 		transaction.commit();
 		em.close();
 	}
-	//------------Project--------------------------------
+//------------Project--------------------------------
 	public void createProject(Project newProject) {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
 		EntityManager em = emf.createEntityManager();

@@ -43,29 +43,29 @@
                   <Insets left="50.0" top="40.0" />
                </GridPane.margin>
             </ImageView>
-            <Label alignment="TOP_CENTER" pickOnBounds="false" text="New" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="2">
+            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="32.0" prefWidth="124.0" text="New" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="2">
                <font>
-                  <Font name="Arial Bold" size="35.0" />
+                  <Font name="Arial Bold" size="28.0" />
                </font>
             </Label>
-            <Label alignment="TOP_CENTER" pickOnBounds="false" text="In pogress" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="3">
+            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="32.0" prefWidth="196.0" text="In pogress" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="3">
                <font>
-                  <Font name="Arial Bold" size="35.0" />
+                  <Font name="Arial Bold" size="28.0" />
                </font>
             </Label>
-            <Label alignment="TOP_CENTER" pickOnBounds="false" text="On hold" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="4">
+            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="32.0" prefWidth="160.0" text="On hold" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="4">
                <font>
-                  <Font name="Arial Bold" size="35.0" />
+                  <Font name="Arial Bold" size="28.0" />
                </font>
             </Label>
-            <Label alignment="TOP_CENTER" pickOnBounds="false" text="Rejected" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="5">
+            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="32.0" prefWidth="131.0" text="Rejected" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="5">
                <font>
-                  <Font name="Arial Bold" size="35.0" />
+                  <Font name="Arial Bold" size="28.0" />
                </font>
             </Label>
             <Label alignment="TOP_CENTER" pickOnBounds="false" text="Close" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="6">
                <font>
-                  <Font name="Arial Bold" size="35.0" />
+                  <Font name="Arial Bold" size="28.0" />
                </font>
             </Label>
             <ImageView fitHeight="25.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1">

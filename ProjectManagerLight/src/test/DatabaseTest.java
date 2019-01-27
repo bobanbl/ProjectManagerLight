@@ -8,8 +8,8 @@ public class DatabaseTest {
 	public static void main(String[] args) {
 		
 		DatabaseController databaseTestController = new DatabaseController();
-//		databaseTestController.createUser("MuelSt", "Stefan", "Mueller", "stefan@company.com", "Developer", "Test123");
-		 
+//		databaseTestController.createUser("MayFr", "Franz", "Mayer", "franz@company.com", "Developer", "test321");
+		databaseTestController.userLoginQuery("mafr", "test321");
 
 	}
 
