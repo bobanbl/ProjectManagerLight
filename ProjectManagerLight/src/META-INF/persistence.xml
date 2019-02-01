@@ -6,7 +6,7 @@
 		<class>database.Task</class>
 		<class>database.ProjectUser</class>
 		<properties>
-			<property name="javax.persistence.jdbc.url" value="jdbc:derby:C:\Users\blazebo\MyDB;create=true"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:derby:C:\Users\blazebo\Desktop\Java\Project_Repository\ProjectManagerLight\DB;create=true"/>
 			<property name="javax.persistence.jdbc.user" value="admin"/>
 			<property name="javax.persistence.jdbc.password" value="100"/>
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>

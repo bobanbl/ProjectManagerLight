@@ -40,9 +40,7 @@ public class UserManController {
     private TableColumn<?, ?> colFirstName;
     @FXML
     private TableColumn<?, ?> colEmail;
-    void startUserTable(ActionEvent event) {
-    	
-    }
+    
     
     @FXML
     void initialize() {

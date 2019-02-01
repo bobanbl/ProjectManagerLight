@@ -66,9 +66,9 @@ public class UserDetailController {
     	}); 
     	
     	userDetailShortcutField.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
-    		if(userDetailShortcutField.getText().trim().indexOf("") != 0) {
+//    		if(userDetailShortcutField.getText().trim().indexOf("") != 0) {
     			evaluateuserDetailShortcutField(userDetailShortcutField.getText().trim());
-    		}
+//    		}
     	}); 
     	
     	userDetailEmailField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {

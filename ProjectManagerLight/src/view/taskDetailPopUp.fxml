@@ -6,15 +6,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: #222629;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TaskDetailController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: #222629;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TaskDetailController">
    <children>
-      <TextField layoutX="143.0" layoutY="28.0" prefHeight="34.0" prefWidth="244.0">
+      <TextField fx:id="nameTextField" layoutX="143.0" layoutY="28.0" prefHeight="34.0" prefWidth="244.0">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <Button layoutX="119.0" layoutY="335.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="146.0" style="-fx-background-color: #86C232;" text="Assume" textFill="WHITE">
+      <Button fx:id="assumeButton" layoutX="119.0" layoutY="335.0" mnemonicParsing="false" onAction="#assumeButtonPressed" prefHeight="51.0" prefWidth="146.0" style="-fx-background-color: #86C232;" text="Assume" textFill="WHITE">
          <font>
             <Font size="24.0" />
          </font>
@@ -29,19 +28,19 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <TextArea layoutX="143.0" layoutY="72.0" prefHeight="161.0" prefWidth="244.0" />
+      <TextArea fx:id="descriptionTextField" layoutX="143.0" layoutY="72.0" prefHeight="161.0" prefWidth="244.0" />
       <Label layoutX="8.0" layoutY="241.0" text="Responsibility" textFill="#61892f">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <ComboBox layoutX="143.0" layoutY="244.0" prefHeight="25.0" prefWidth="244.0" />
+      <ComboBox fx:id="responsibilityComboBox" layoutX="143.0" layoutY="244.0" prefHeight="25.0" prefWidth="244.0" />
       <Label layoutX="8.0" layoutY="284.0" text="Duration" textFill="#61892f">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField layoutX="143.0" layoutY="282.0" prefHeight="34.0" prefWidth="244.0">
+      <TextField fx:id="durationTextField" layoutX="143.0" layoutY="282.0" prefHeight="34.0" prefWidth="244.0">
          <font>
             <Font size="15.0" />
          </font>

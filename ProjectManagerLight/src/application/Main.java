@@ -34,14 +34,14 @@ public class Main extends Application {
 		launch(args);
 	}
 	
-    public static void delay() {
-    	try        
-    	{	
-    		Thread.sleep(20000);
-    	} 
-    	catch(InterruptedException ex) 
-    	{
-    		Thread.currentThread().interrupt();
-    	}	
-    }
+//    public static void delay() {
+//    	try        
+//    	{	
+//    		Thread.sleep(20000);
+//    	} 
+//    	catch(InterruptedException ex) 
+//    	{
+//    		Thread.currentThread().interrupt();
+//    	}	
+//    }
 }
