@@ -13,7 +13,7 @@
             <Image url="@../../bin/assets/AddUser.png" />
          </image>
       </ImageView>
-      <TableView layoutX="4.0" layoutY="117.0" prefHeight="429.0" prefWidth="932.0">
+      <TableView fx:id="userTable" layoutX="4.0" layoutY="117.0" prefHeight="429.0" prefWidth="932.0">
         <columns>
           <TableColumn prefWidth="75.0" text="C1" />
           <TableColumn prefWidth="75.0" text="C2" />

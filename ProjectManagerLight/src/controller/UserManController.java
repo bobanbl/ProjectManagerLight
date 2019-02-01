@@ -10,6 +10,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.PopupWindow;
@@ -23,7 +25,24 @@ public class UserManController {
     @FXML
     private URL location;
     @FXML
+    private TableColumn<?, ?> colProjects;
+    @FXML
+    private TableColumn<?, ?> colLastName;
+    @FXML
     private ImageView addUserButton;
+    @FXML
+    private TableView<?> userTable;
+    @FXML
+    private TableColumn<?, ?> colRole;
+    @FXML
+    private TableColumn<?, ?> colShortcut;
+    @FXML
+    private TableColumn<?, ?> colFirstName;
+    @FXML
+    private TableColumn<?, ?> colEmail;
+    void startUserTable(ActionEvent event) {
+    	
+    }
     
     @FXML
     void initialize() {
@@ -32,6 +51,8 @@ public class UserManController {
     		System.out.println("Add-User-Button pressed");
     		laodUserDetailPopUp();		
     	});
+    	
+
     }
 //opens User Detail Pop Up Window    
     private void laodUserDetailPopUp() {
