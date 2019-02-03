@@ -1,1 +1,21 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.button{
+	-fx-background-color:  #86C232;
+}
+
+.anchorbackgroundDARK{
+	-fx-background-color:  #222629;
+}
+
+.anchorbackgroundGREEN{
+	-fx-background-color:  #86C232;
+}
+
+.anchorbackgroundMiddleDARK{
+	-fx-background-color:  #474B4F;
+}
+
+.text{
+	-fx-text-fill:  #86C232;
+} 

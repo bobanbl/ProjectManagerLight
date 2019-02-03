@@ -21,6 +21,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.DataModel;
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 //LoginController for login.fxml
@@ -28,6 +29,7 @@ public class LoginController {
 	
 	private NavigationController navigationController;
 	private String loggedUser;
+	private DataModel model;
     @FXML
     private ResourceBundle resources;
     @FXML
@@ -66,12 +68,14 @@ public class LoginController {
     	
     }
     
-//closes the Login-Window and opens the Main-Window (main.fxml)    
-    private void loginUser() {    	
-    	DatabaseController databaseTestController = new DatabaseController();
-    	
+    public void setDataModel(DataModel model) {
+    	this.model = model;
+    }
+    
+//closes the Login-Window and opens the Main-Window (main.fxml)        
+    private void loginUser() {
     	loggedUser = loginUsername.getText().trim();
-    	int loginResult = databaseTestController.userLoginQuery(loggedUser, loginPassword.getText().trim());
+    	int loginResult = model.getLoginData(loggedUser, loginPassword.getText().trim());
     	switch(loginResult) {
     	case 1:		openMainWindow();
     	break;
@@ -79,7 +83,7 @@ public class LoginController {
     				errorWindow("Wrong password!");
     	break;
     	default: 	System.out.println("User does not exist");
-    				errorWindow("User " + loginUsername.getText().trim() + " does not exist");
+    				errorWindow("User " + loggedUser + " does not exist");
     	break;
     	} 
     }
@@ -93,6 +97,7 @@ public class LoginController {
     		
     		this.navigationController =  loader.getController();
     		this.navigationController.setLabelLoggedUser(loggedUser.toUpperCase());
+    		this.navigationController.setDataModel(model);
 
     		Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));
     		Stage mainStage = new Stage();

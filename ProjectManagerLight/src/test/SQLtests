@@ -1,2 +1,0 @@
-Select * from PROJECTUSER
-Delete from PROJECTUSER where USERID = 101 

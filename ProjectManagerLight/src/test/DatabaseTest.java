@@ -8,7 +8,7 @@ public class DatabaseTest {
 	public static void main(String[] args) {
 		
 		DatabaseController databaseTestController = new DatabaseController();
-		databaseTestController.createUser("mayfr", "Franz", "Mayer", "franz@company.com", "Developer", "test");
+//		databaseTestController.createUser("mayfr", "Franz", "Mayer", "franz@company.com", "Developer", "test");
 //		databaseTestController.userLoginQuery("mafr", "test321");
 		//
 

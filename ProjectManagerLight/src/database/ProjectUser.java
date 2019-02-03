@@ -120,5 +120,15 @@ public class ProjectUser implements Serializable{
 		this.involvedTasks.add(newTask);
 	}
 
+	@Override
+	public String toString() {
+		return "ProjectUser [userID=" + userID + ", userShortcut=" + userShortcut + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", eMail=" + eMail + ", role=" + role + ", password=" + password
+				+ ", involvedProjects=" + involvedProjects + ", involvedStories=" + involvedStories + ", involvedTasks="
+				+ involvedTasks + "]";
+	}
+	
+	
+
 
 }

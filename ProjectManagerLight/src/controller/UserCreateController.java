@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-import database.ProjectUser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -19,11 +18,10 @@ import javafx.scene.paint.Color;
 import model.DataModel;
 
 //The Controller for userDetailPopUp.fxml
-public class UserDetailController {
+public class UserCreateController {
 
 	private DataModel model;
 	private UserManController userManController;
-	private ProjectUser selectedUser;
     @FXML
     private ResourceBundle resources;
     @FXML
@@ -100,16 +98,6 @@ public class UserDetailController {
     
     public void setUserManController(UserManController controller) {
     	this.userManController = controller;
-    }
-    
-    public void setSelectedUser(ProjectUser selectedUser) {
-    	this.selectedUser = selectedUser;
-    	userDetailShortcutField.setText(selectedUser.getUserShortcut());
-    	userDetailEmailField.setText(selectedUser.geteMail());
-    	userDetailFirstNameField.setText(selectedUser.getFirstName());
-    	userDetailLastNameField.setText(selectedUser.getLastName());
-    	userDetailRoleField.setText(selectedUser.getRole());
-    	userDetailPasswordField.setText(selectedUser.getPassword());    	
     }
     
 //return true if Shortcut already exists in database, otherwise false     

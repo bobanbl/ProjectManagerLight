@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="940.0" style="-fx-background-color: #222629;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UserManController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="940.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UserManController">
    <children>
       <ImageView fx:id="addUserButton" fitHeight="89.0" fitWidth="82.0" layoutX="801.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -15,8 +15,12 @@
       </ImageView>
       <TableView fx:id="userTable" layoutX="4.0" layoutY="117.0" prefHeight="429.0" prefWidth="932.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
+          <TableColumn fx:id="colShortcut" prefWidth="75.0" text="Shortcut" />
+          <TableColumn fx:id="colFirstName" prefWidth="75.0" text="FirstName" />
+            <TableColumn fx:id="colLastName" prefWidth="75.0" text="LastName" />
+            <TableColumn fx:id="colEmail" prefWidth="75.0" text="Email" />
+            <TableColumn fx:id="colRole" prefWidth="75.0" text="Role" />
+            <TableColumn fx:id="colProjects" prefWidth="75.0" text="Projects" />
         </columns>
       </TableView>
    </children>

@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,10 +17,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import model.DataModel;
 
 //Controller for main.fxml
 public class NavigationController {
 	
+	private DataModel model;
     @FXML
     private ResourceBundle resources;
     @FXML
@@ -60,6 +64,10 @@ public class NavigationController {
     		laodUserManView();
     	});   	
     }
+    
+    public void setDataModel(DataModel model) {
+    	this.model = model;
+    }
  
 /* Load in AnchorPane Task View
 	Set label(selected View) on "Tasks"
@@ -80,8 +88,16 @@ public class NavigationController {
     private void laodUserManView() {
     	try {
 	    	FXMLLoader loader = new FXMLLoader();
-	    	loader.setLocation(getClass().getResource("../view/userManView.fxml"));  	
+			   	
+	    	
+	    	loader.setLocation(getClass().getResource("../view/userManView.fxml"));  
+	    		 
 			Parent root = loader.load();
+			
+			UserManController userManController =  loader.getController();
+			userManController.setDataModel(model);
+			System.out.println("trying to open: " + userManController);
+			
 			anchorPaneViews.getChildren().setAll(root);			
 			labelSelectedView.setText("User Management");			
     	} catch (IOException e) {
