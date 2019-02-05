@@ -35,12 +35,17 @@ public class DataModel {
                 	for (int i = c.getFrom(); i < c.getTo(); ++i) {
                 		database.updateUser(userList.get(i));
                    }
+                } else if (c.wasRemoved()){
+                	for (ProjectUser u : c.getRemoved()) {
+                		System.out.println("Test");
+                		database.deleteUser(u);
+                	}
                 } else {
-
                     for (ProjectUser u : c.getAddedSubList()) {
                         database.createUser(u);
                     }
                 }
+	
 			}
 		});
 		
@@ -113,6 +118,12 @@ public class DataModel {
 		newUser.setRole(role);
     	userList.add(newUser);
     	printUserData();    	
+    }
+    
+    public void deleteUser(ProjectUser deleteUser) {
+    	System.out.println("[DataModel Deleting user");
+    	userList.remove(deleteUser);
+    	printUserData();
     }
     
     

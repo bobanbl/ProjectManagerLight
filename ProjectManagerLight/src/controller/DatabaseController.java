@@ -114,6 +114,30 @@ public class DatabaseController {
 		return user;		
 	}
 	
+	public void deleteUser(ProjectUser deleteUser) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
+		EntityManager em = emf.createEntityManager();
+		
+		EntityTransaction transaction = em.getTransaction();
+		
+		System.out.println("Delete User: " + deleteUser.getUserShortcut());
+		transaction.begin();		
+		
+		if (!em.contains(deleteUser)) {
+			deleteUser = em.merge(deleteUser);
+		}
+		
+		em.remove(deleteUser);
+		
+		transaction.commit();
+		em.close();
+	}	
+	
+	
+	
+	
+	//-----------------------------------------------
+	
 	public List<Object> readAllData(){
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
 		EntityManager em = emf.createEntityManager();
@@ -150,24 +174,7 @@ public class DatabaseController {
 		return updatedUser;
 	}
 	
-	public void deleteUser(ProjectUser deleteUser) {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
-		EntityManager em = emf.createEntityManager();
-		
-		EntityTransaction transaction = em.getTransaction();
-		
-		System.out.println("Delete User: " + deleteUser.getUserShortcut());
-		transaction.begin();		
-		
-		if (!em.contains(deleteUser)) {
-			deleteUser = em.merge(deleteUser);
-		}
-		
-		em.remove(deleteUser);
-		
-		transaction.commit();
-		em.close();
-	}
+
 //------------Project--------------------------------
 	public void createProject(Project newProject) {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");

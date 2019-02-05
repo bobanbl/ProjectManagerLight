@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.apache.derby.iapi.sql.dictionary.UserDescriptor;
@@ -16,7 +17,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -37,6 +40,7 @@ import model.DataModel;
 public class UserManController {
 	
 	private DataModel model;
+	ObservableList<ProjectUser> selectedUserList;
 	
     @FXML
     private ResourceBundle resources;
@@ -131,12 +135,12 @@ public class UserManController {
 //    	});
 //    	
     	userTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-    		ObservableList<ProjectUser> oValue = userTable.getSelectionModel().getSelectedItems();
-    		System.out.println(oValue.get(0).getLastName());
+    		selectedUserList = userTable.getSelectionModel().getSelectedItems();
+    		System.out.println(selectedUserList.get(0).getLastName());
     		if (event.getClickCount() == 2) {
-    			laodUserDetailPopUp(oValue.get(0));
+    			laodUserDetailPopUp();
     		}
-    		if (event.getButton() == MouseButton.SECONDARY) {
+    		if (event.getButton() == MouseButton.SECONDARY && selectedUserList.get(0) != null) {
     			System.out.println("Right Mouse Button clicked");
     			openContextMenu();
     		}
@@ -155,10 +159,8 @@ public class UserManController {
             
     }
     
-    
-    
     //opens User Detail Pop Up Window - User Details  
-    private void laodUserDetailPopUp(ProjectUser selectedUser) {
+    private void laodUserDetailPopUp() {
     	try {
     		FXMLLoader loader = new FXMLLoader();
     		loader.setLocation(getClass().getResource("../view/userDetailPopUp.fxml"));  	
@@ -167,7 +169,7 @@ public class UserManController {
     		UserDetailController userDetailController =  loader.getController();
     		userDetailController.setDataModel(model);
     		userDetailController.setUserManController(this);
-    		userDetailController.setSelectedUser(selectedUser);
+    		userDetailController.setSelectedUser(selectedUserList.get(0));
 
     		Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));	
     		popUpWindow = new Stage();
@@ -179,26 +181,24 @@ public class UserManController {
     		e.printStackTrace();
     	}
     } 
-    
-//https://o7planning.org/en/11115/javafx-contextmenu-tutorial    
+     
     
     private void openContextMenu() {
     	Label label = new Label();
     	ContextMenu contextMenu = new ContextMenu();
 
-    	MenuItem item1 = new MenuItem("Delete User");
+    	MenuItem item1 = new MenuItem("Delete User: " + selectedUserList.get(0).getUserShortcut());
     	item1.setOnAction(new EventHandler<ActionEvent>() {
 
     		@Override
     		public void handle(ActionEvent event) {
     			label.setText("Select Menu Item 1");
-    			System.out.println("Delete User?");
+    			confirmDeletingUserWindow();
     		}
     		
     	});	
     	contextMenu.getItems().addAll(item1);
     	userTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-    		 
             @Override
             public void handle(ContextMenuEvent event) {
                 contextMenu.show(userTable, event.getScreenX(), event.getScreenY());
@@ -209,7 +209,21 @@ public class UserManController {
     		System.out.println("Any button pressed hide context");
     		contextMenu.hide();
     	}); 
-    	
     }
+    
+    private void confirmDeletingUserWindow() {
+    	System.out.println("Print User Error-Message");
+    	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    	alert.setTitle("Delete User");
+    	alert.setHeaderText("Deleting user: " + selectedUserList.get(0).getUserShortcut() + " Are you sure?");
+    	Optional<ButtonType> result = alert.showAndWait();
+    	if(result.get() == ButtonType.OK) {
+    		System.out.println("[UserManController] User deleted!");
+    		model.deleteUser(selectedUserList.get(0));	
+    	}
+    	else if(result.get() == ButtonType.CANCEL) {
+    	    alert.close();
+    	}
+    }   
 
 }
