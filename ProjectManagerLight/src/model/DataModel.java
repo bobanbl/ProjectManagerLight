@@ -45,7 +45,6 @@ public class DataModel {
                         database.createUser(u);
                     }
                 }
-	
 			}
 		});
 		
@@ -68,35 +67,36 @@ public class DataModel {
     	return userList;
     }
     
-    /**returns 1 when loginShortcut and password are correct in database
-     * returns 2 if password does not match to user
-     * returns 3 if user does not exist in database 
-     * threw the try-catch-NoResultExeption the the error is catched if no result is in the database
+    /** proves if loginShortcut exists with associated password in userList 
      * 
      * @param loginShortcut is not case sensitive
      * @param password
+     * @return
+     * returns 1 when loginShortcut and password are correct in database
+     * returns 2 if password does not match to user
+     * returns 3 if user does not exist in database
      */    
     public int getLoginData(String loginShortcut, String password) {
     	System.out.println("Start Query Shortcut and Password in DataModel");
     	for(ProjectUser u : userList) {
     		if(u.getUserShortcut().equals(loginShortcut)) {
     			if(u.getPassword().equals(password)) {
-    				System.out.println("Password ok");
+    				System.out.println("[DataModel] Password ok");
     				return 1;
     			} else {
-    				System.out.println("Password not ok");
+    				System.out.println("[DataModel] Password not ok");
     				return 2;       				
     			}
     		}
     	}
-    	System.out.println("User: " + loginShortcut + " does not exist");
+    	System.out.println("[DataModel] User: " + loginShortcut + " does not exist");
     	return 3;
     }
     
-    /** returns TRUE if Shortcut exists in database, FALSE if not
+    /** proves is userShortcut already exists in userList
      * 	
      * @param shortcut
-     * @return
+     * @return true...userShortcut exists in userList false...userShortcut does not exist in userList
      */
     public boolean userShortcutExistis(String shortcut) {
     	for(ProjectUser u : userList) {
@@ -106,25 +106,54 @@ public class DataModel {
     	}
     	return false;
     }
-    
+    /* Creating new ProjectUser and adding to userList
+     *     
+    */
     public void createUser(String userShortcut, String firstName, String lastName, String eMail, String role, String password) {
-		System.out.println("[DataModel] Adding new User to List");
+    	System.out.println("[DataModel] Adding new User to List");
     	ProjectUser newUser = new ProjectUser();
-		newUser.setFirstName(firstName);
-		newUser.setLastName(lastName);
-		newUser.seteMail(eMail);
-		newUser.setUserShortcut(userShortcut);
+    	newUser.setFirstName(firstName);
+    	newUser.setLastName(lastName);
+    	newUser.seteMail(eMail);
+    	newUser.setUserShortcut(userShortcut);
 		newUser.setPassword(password);
 		newUser.setRole(role);
     	userList.add(newUser);
     	printUserData();    	
     }
-    
+    /** Deleting existing ProjectUser in userList
+     * 
+     * @param deleteUser 
+     */
     public void deleteUser(ProjectUser deleteUser) {
-    	System.out.println("[DataModel Deleting user");
+    	System.out.println("[DataModel] Deleting user");
     	userList.remove(deleteUser);
     	printUserData();
     }
+
+    /** Update existing projectUser in userList
+     * 
+     * @param updateUser	Object: existing User
+     * @param userShortcut	
+     * @param firstName
+     * @param lastName
+     * @param eMail
+     * @param role
+     * @param password
+     */
+    public void updateUser(ProjectUser updateUser, String userShortcut, String firstName, String lastName, String eMail, String role, String password) {
+    	System.out.println("[DataModel] Update user" + updateUser.getUserShortcut());
+    	int userIndex = userList.indexOf(updateUser);
+    	updateUser.setFirstName(firstName);
+    	updateUser.setLastName(lastName);
+    	updateUser.seteMail(eMail);
+    	updateUser.setUserShortcut(userShortcut);
+		updateUser.setPassword(password);
+		updateUser.setRole(role);
+		userList.set(userIndex, updateUser);
+    	printUserData();
+    }
+    
     
     
 

@@ -64,7 +64,7 @@ public class UserDetailController {
     	} else if(shortcut.equals("") || eMail.equals("") || firstName.equals("") || lastName.equals("") || role.equals("") || password.equals("")) {
     		errorWindow("Empty field!");
     	} else {
-    		model.createUser(shortcut, firstName, lastName,	eMail, role, password);
+    		model.updateUser(selectedUser, shortcut, firstName, lastName,	eMail, role, password);
     		userManController.closePopUpWindow();
     	}
     }
@@ -116,7 +116,7 @@ public class UserDetailController {
     
 //return true if Shortcut already exists in database, otherwise false     
     private boolean evaluateuserDetailShortcutField(String shortcut) {
-    	if(model.userShortcutExistis(shortcut)) {
+    	if(model.userShortcutExistis(shortcut) && !shortcut.equals(selectedUser.getUserShortcut())) {
     		System.out.println("User-Shortcut already exists");
     		userDetailShortcutField.setStyle("-fx-control-inner-background: #FF0000");
     		return true;    		

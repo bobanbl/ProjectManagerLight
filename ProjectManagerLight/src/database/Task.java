@@ -34,6 +34,13 @@ public class Task implements Serializable{
 	@Enumerated(EnumType.STRING)
 	private TaskStatus status;
 	
+//	@ManyToOne(cascade = CascadeType.PERSIST)
+//	private Task task;
+//	
+//	public final Task getTask() {
+//		return this.task;
+//	}
+	
 	public int getTaskID() {
 		return taskID;
 	}
