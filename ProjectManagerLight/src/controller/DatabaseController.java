@@ -2,6 +2,7 @@ package controller;
 
 import database.*;
 
+import java.net.NetworkInterface;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -68,7 +69,7 @@ public class DatabaseController {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction transaction = em.getTransaction();
 		
-		System.out.println("Create User: " + newUser.getUserShortcut());
+		System.out.println("[DatabaseController] Create User: " + newUser.getUserShortcut());
 		transaction.begin();
 				
 		em.persist(newUser);
@@ -76,16 +77,14 @@ public class DatabaseController {
 		em.close();
 		emf.close();
 	}
-	
-	
-	
+
 	public ProjectUser readUser(String userShortcut) throws NoResultException{
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
 		EntityManager em = emf.createEntityManager();
 		
 		EntityTransaction transaction = em.getTransaction();
 		
-		System.out.println("Read User: " + userShortcut);
+		System.out.println("[DatabaseController] Read User: " + userShortcut);
 		transaction.begin();		
 		
 		ProjectUser user = (ProjectUser)em.createQuery("select userShortcut from ProjectUser user where user.userShortcut like '" + userShortcut + "'");
@@ -102,7 +101,7 @@ public class DatabaseController {
 		
 		EntityTransaction transaction = em.getTransaction();
 		
-		System.out.println("Read all User");
+		System.out.println("[DatabaseController] Read all User");
 		transaction.begin();	
 		
 		@SuppressWarnings("unchecked")
@@ -120,7 +119,7 @@ public class DatabaseController {
 		
 		EntityTransaction transaction = em.getTransaction();
 		
-		System.out.println("Delete User: " + deleteUser.getUserShortcut());
+		System.out.println("[DatabaseController] Delete User: " + deleteUser.getUserShortcut());
 		transaction.begin();		
 		
 		if (!em.contains(deleteUser)) {
@@ -133,9 +132,6 @@ public class DatabaseController {
 		em.close();
 	}	
 	
-	
-	
-	
 	//-----------------------------------------------
 	
 	public List<Object> readAllData(){
@@ -144,7 +140,7 @@ public class DatabaseController {
 		
 		EntityTransaction transaction = em.getTransaction();
 		
-		System.out.println("Read all User");
+		System.out.println("[DatabaseController] Read all User");
 		transaction.begin();	
 		
 		@SuppressWarnings("unchecked")
@@ -156,14 +152,13 @@ public class DatabaseController {
 		return data;		
 	}
 
-
 	public ProjectUser updateUser(ProjectUser updateUser) {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
 		EntityManager em = emf.createEntityManager();
 		
 		EntityTransaction transaction = em.getTransaction();
 		
-		System.out.println("Update User: " + updateUser.getUserShortcut());
+		System.out.println("[DatabaseController] Update User: " + updateUser.getUserShortcut());
 		transaction.begin();		
 		
 		ProjectUser updatedUser = em.merge(updateUser);
@@ -173,7 +168,106 @@ public class DatabaseController {
 		
 		return updatedUser;
 	}
+	//-------------Story--------------------------------
+	public void createStory(Story newStory) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
+		EntityManager em = emf.createEntityManager();
+		
+		EntityTransaction transaction = em.getTransaction();
+		
+		System.out.println("[DatabaseController] Create Story: " + newStory.getStoryID());
+		transaction.begin();
+		
+		em.persist(newStory);
+		
+		transaction.commit();
+		em.close();			
+	}
+	public void createStoryDirectInDatabase(String description, int duration, String storyName) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
+		EntityManager em = emf.createEntityManager();
+		
+		EntityTransaction transaction = em.getTransaction();
+		
+		System.out.println("[DatabaseController] Create Story: " + storyName);
+		transaction.begin();
+		
+		Story newStory = new Story();
+		newStory.setDescription(description);
+		newStory.setDuration(duration);
+		newStory.setStoryName(storyName);
+		
+		
+		em.persist(newStory);
+		
+		transaction.commit();
+		em.close();			
+	}	
 	
+	public Story readStory(String storyName) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
+		EntityManager em = emf.createEntityManager();
+		
+		EntityTransaction transaction = em.getTransaction();
+		
+		System.out.println("[DatabaseController] Read Story: " + storyName);
+		transaction.begin();
+		
+		Story story = (Story)em.createQuery("select s from Story s where s.storyName like '" + storyName + "'").getSingleResult();
+				
+		em.persist(story);
+		
+		transaction.commit();
+		em.close();	
+		
+		return story;
+	}
+	
+	public Story updateStory(Story updatedStory) {
+		return null;
+	}
+	
+	public void deleteStory(Project deletedStory) {
+		
+	}	
+	//-------------Task--------------------------------
+	public void createTaskDirectInDatabase(String taskName, String description, int duration, Story toStory) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
+		EntityManager em = emf.createEntityManager();
+		
+		EntityTransaction transaction = em.getTransaction();
+		
+		System.out.println("[DatabaseController] Create Story: " + taskName);
+		transaction.begin();
+		
+		Task newTask= new Task();
+		newTask.setTaskName(taskName);
+		newTask.setDescription(description);
+		newTask.setDuration(duration);
+		newTask.setStory(toStory);
+						
+		em.persist(newTask);
+
+		transaction.commit();
+		em.close();			
+	}		
+	
+	
+	public void createTask(Task newTask) {
+		
+	}
+	
+	public Task readTask(String TaskID) {
+		return null;
+	}
+	
+	public Task updateTask(Task updatedTask) {
+		return null;
+	}
+	
+	public void deleteTask(Project deletedTask) {
+		
+	}	
 
 //------------Project--------------------------------
 	public void createProject(Project newProject) {
@@ -202,49 +296,7 @@ public class DatabaseController {
 	public void deleteProject(Project deletedProject) {
 		
 	}
-	//-------------Story--------------------------------
-	public void createStory(Story newStory) {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
-		EntityManager em = emf.createEntityManager();
-		
-		EntityTransaction transaction = em.getTransaction();
-		
-		System.out.println("Create Story: " + newStory.getStoryID());
-		transaction.begin();
-		
-		em.persist(newStory);
-		
-		transaction.commit();
-		em.close();			
-	}
-	
-	public Story readStory(String storyID) {
-		return null;
-	}
-	
-	public Story updateStory(Story updatedStory) {
-		return null;
-	}
-	
-	public void deleteStory(Project deletedStory) {
-		
-	}	
-	//-------------Task--------------------------------
-	public void createTask(Task newTask) {
-		
-	}
-	
-	public Task readTask(String TaskID) {
-		return null;
-	}
-	
-	public Task updateTask(Task updatedTask) {
-		return null;
-	}
-	
-	public void deleteTask(Project deletedTask) {
-		
-	}
+
 	
 	
 	

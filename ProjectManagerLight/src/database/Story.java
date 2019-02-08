@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,7 +30,7 @@ public class Story implements Serializable{
 	private String description;
 	private ProjectUser responsibility;
 	private int duration;
-	@OneToMany
+	@OneToMany(mappedBy = "story")
 	private List<Task> tasks = new ArrayList<>();
 	
 	public int getStoryID() {
@@ -70,7 +72,8 @@ public class Story implements Serializable{
 	
 	public void addTasktoStory(Task newTask) {
 		this.tasks.add(newTask);
+		System.out.println("[database.Story] Task List: " + this.getTasks());
 	}
-	
+		
 	
 }

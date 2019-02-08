@@ -2,12 +2,16 @@ package database;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  * Entity implementation class for Entity: Task
@@ -33,13 +37,13 @@ public class Task implements Serializable{
 	private int duration;
 	@Enumerated(EnumType.STRING)
 	private TaskStatus status;
-	
-//	@ManyToOne(cascade = CascadeType.PERSIST)
-//	private Task task;
-//	
-//	public final Task getTask() {
-//		return this.task;
-//	}
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "FKStoryID", referencedColumnName = "STORYID")
+	private Story story;
+		
+	public final Task getTask() {
+		return this;
+	}
 	
 	public int getTaskID() {
 		return taskID;
@@ -76,6 +80,18 @@ public class Task implements Serializable{
 	}
 	public void setStatus(TaskStatus status) {
 		this.status = status;
+	}
+
+	public Story getStory() {
+		return story;
+	}
+
+	public void setStory(Story story) {
+		this.story = story;
+		System.out.println("[database.Task] Story: " + story.getStoryName());
+		if(!story.getTasks().contains(this)) {
+			story.addTasktoStory(this);
+		}
 	}
 	
 }
