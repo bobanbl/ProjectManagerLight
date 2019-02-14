@@ -22,6 +22,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.DataModel;
+import model.DataModelProject;
+import model.DataModelStory;
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 //LoginController for login.fxml
@@ -29,7 +31,9 @@ public class LoginController {
 	
 	private NavigationController navigationController;
 	private String loggedUser;
-	private DataModel model;
+	private DataModel userModel;
+	private DataModelStory storyModel;
+	private DataModelProject projectModel;
     @FXML
     private ResourceBundle resources;
     @FXML
@@ -64,18 +68,19 @@ public class LoginController {
     		if(event.getCode() == KeyCode.ENTER) {
     			loginUser();
     		}
-    	});    	
-    	
+    	});    		
     }
     
-    public void setDataModel(DataModel model) {
-    	this.model = model;
+    public void setModels(DataModel userModel, DataModelStory storyModel, DataModelProject projectModel) {
+    	this.userModel = userModel;
+    	this.storyModel = storyModel;
+    	this.projectModel = projectModel;
     }
     
 //closes the Login-Window and opens the Main-Window (main.fxml)        
     private void loginUser() {
     	loggedUser = loginUsername.getText().trim();
-    	int loginResult = model.getLoginData(loggedUser, loginPassword.getText().trim());
+    	int loginResult = userModel.getLoginData(loggedUser, loginPassword.getText().trim());
     	switch(loginResult) {
     	case 1:		openMainWindow();
     	break;
@@ -97,7 +102,7 @@ public class LoginController {
     		
     		this.navigationController =  loader.getController();
     		this.navigationController.setLabelLoggedUser(loggedUser.toUpperCase());
-    		this.navigationController.setDataModel(model);
+    		this.navigationController.setModels(userModel, storyModel, projectModel);
 
     		Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));
     		Stage mainStage = new Stage();

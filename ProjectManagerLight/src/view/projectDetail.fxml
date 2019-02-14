@@ -16,6 +16,16 @@
             <Image url="@../../bin/assets/closeDetails.png" />
          </image>
       </ImageView>
+      <Button fx:id="cancelButton" cancelButton="true" layoutX="239.0" layoutY="6.0" mnemonicParsing="false" onAction="#cancelButtonPressed" prefHeight="31.0" prefWidth="115.0" style="-fx-background-color: red;" text="Cancel" visible="false">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Button fx:id="createProjectButton" layoutX="49.0" layoutY="6.0" mnemonicParsing="false" onAction="#createProjectButtonPressed" prefHeight="31.0" prefWidth="115.0" text="Create Project" visible="false">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
       <AnchorPane fx:id="anchorPaneDetailViews" layoutY="45.0" prefHeight="515.0" prefWidth="400.0">
          <children>
             <fx:include fx:id="projectDetailMain" source="projectDetailMain.fxml" />

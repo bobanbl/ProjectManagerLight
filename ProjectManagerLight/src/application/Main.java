@@ -7,6 +7,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.DataModel;
+import model.DataModelProject;
+import model.DataModelStory;
 /** This is the main Class from the tool "ProjectManagerLight" which opens the Login Window
 @author Boblaz
 @version 0.3 <I>Java Project 2019</I>
@@ -21,9 +23,13 @@ public class Main extends Application {
 			Parent root = loader.load();
 			
 			LoginController loginController = loader.getController();
-			DataModel model = new DataModel();
-			loginController.setDataModel(model);
 			
+			//create and handle DataModels
+			DataModel model = new DataModel();
+			DataModelStory storyModel= new DataModelStory();
+			DataModelProject projectModel = new DataModelProject();
+			loginController.setModels(model, storyModel, projectModel);
+						
 			Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setTitle("Login");

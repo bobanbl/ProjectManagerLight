@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 
 import org.apache.derby.iapi.sql.dictionary.UserDescriptor;
 
-import database.ProjectUser;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -35,6 +34,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import model.DataModel;
+import model.ProjectUser;
 
 //The Controller for userManView.fxml
 public class UserManController {

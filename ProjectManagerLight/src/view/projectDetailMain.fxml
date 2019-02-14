@@ -13,7 +13,7 @@
    <children>
       <VBox layoutX="-5.0" layoutY="-6.0" prefHeight="528.0" prefWidth="411.0">
          <children>
-            <HBox fx:id="projectHBox" alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="400.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="400.0">
                <children>
                   <Label text="Project" textFill="#61892f">
                      <font>
@@ -23,7 +23,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField prefHeight="32.0" prefWidth="240.0">
+                  <TextField fx:id="projectNameTextField" prefHeight="32.0" prefWidth="240.0">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -36,7 +36,7 @@
                   <Insets />
                </opaqueInsets>
             </HBox>
-            <HBox fx:id="projectHBox1" alignment="BOTTOM_LEFT" prefHeight="45.0" prefWidth="400.0">
+            <HBox alignment="BOTTOM_LEFT" prefHeight="45.0" prefWidth="400.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -59,7 +59,7 @@
                   </Label>
                </children>
             </HBox>
-            <HBox fx:id="projectHBox11" alignment="BOTTOM_LEFT" prefHeight="45.0" prefWidth="400.0">
+            <HBox alignment="BOTTOM_LEFT" prefHeight="45.0" prefWidth="400.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -89,7 +89,7 @@
                         <Insets left="20.0" />
                      </VBox.margin>
                   </Label>
-                  <TextArea maxWidth="370.0" prefHeight="201.0" prefWidth="354.0">
+                  <TextArea fx:id="projectDescriptionTextField" maxWidth="370.0" prefHeight="201.0" prefWidth="354.0">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -99,7 +99,7 @@
                   </TextArea>
                </children>
             </VBox>
-            <HBox fx:id="projectHBox111" alignment="BOTTOM_LEFT" prefHeight="45.0" prefWidth="400.0">
+            <HBox alignment="BOTTOM_LEFT" prefHeight="45.0" prefWidth="400.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -119,7 +119,7 @@
                   </DatePicker>
                </children>
             </HBox>
-            <HBox fx:id="projectHBox1111" alignment="BOTTOM_LEFT" prefHeight="45.0" prefWidth="400.0">
+            <HBox alignment="BOTTOM_LEFT" prefHeight="45.0" prefWidth="400.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -139,7 +139,7 @@
                   </DatePicker>
                </children>
             </HBox>
-            <HBox fx:id="projectHBox11111" alignment="CENTER_RIGHT" prefHeight="45.0" prefWidth="400.0">
+            <HBox alignment="CENTER_RIGHT" prefHeight="45.0" prefWidth="400.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>

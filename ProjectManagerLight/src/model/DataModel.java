@@ -2,9 +2,8 @@ package model;
 
 import java.util.List;
 import java.util.Optional;
-import controller.DatabaseController;
-import database.Project;
-import database.ProjectUser;
+
+import database.DatabaseController;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -15,7 +14,7 @@ public class DataModel {
 	private final DatabaseController database = DatabaseController.getInstance();
 	
     private ObservableList<ProjectUser> userList;
-    private ObservableList<Object> projectList;
+//    private ObservableList<Object> projectList;
 	
     public DataModel() {
 		loadUserData();
@@ -59,7 +58,7 @@ public class DataModel {
     
     public void printUserData() {
     	for(ProjectUser u : userList) {
-    		System.out.println(u.toString());
+    		System.out.println("[model.DataModel]" + u.toString());
     	}
     }
     
@@ -89,7 +88,7 @@ public class DataModel {
     			}
     		}
     	}
-    	System.out.println("[DataModel] User: " + loginShortcut + " does not exist");
+    	System.out.println("[model.DataModel] User: " + loginShortcut + " does not exist");
     	return 3;
     }
     
@@ -110,7 +109,7 @@ public class DataModel {
      *     
     */
     public void createUser(String userShortcut, String firstName, String lastName, String eMail, String role, String password) {
-    	System.out.println("[DataModel] Adding new User to List");
+    	System.out.println("[model.DataModel] Adding new User to List");
     	ProjectUser newUser = new ProjectUser();
     	newUser.setFirstName(firstName);
     	newUser.setLastName(lastName);
@@ -161,18 +160,18 @@ public class DataModel {
     
     
 
-    public void loadAllData() {
-    	List<Object> projectList = database.readAllData();
-		projectList = FXCollections.observableArrayList(projectList);	
-    }   
-    
-    public void printAllData() {
-    	for(Object u : projectList) {
-    		if(u != null) {
-    			System.out.println(u.getClass());
-    		}
-    	}
-    }
+//    public void loadAllData() {
+//    	List<Object> projectList = database.readAllData();
+//		projectList = FXCollections.observableArrayList(projectList);	
+//    }   
+//    
+//    public void printAllData() {
+//    	for(Object u : projectList) {
+//    		if(u != null) {
+//    			System.out.println(u.getClass());
+//    		}
+//    	}
+//    }
     
     
 	

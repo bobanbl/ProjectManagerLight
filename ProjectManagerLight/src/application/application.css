@@ -19,3 +19,10 @@
 .text{
 	-fx-text-fill:  #86C232;
 } 
+
+.vbox{
+	-fx-background-color:  #86C232;
+    -fx-padding: 10;
+    -fx-max-width: 100px;
+    -fx-max-height: 50px;    
+}

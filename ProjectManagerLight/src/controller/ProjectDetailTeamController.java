@@ -7,10 +7,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.ImageView;
+import model.Project;
 
 //Controller for projectDetailTeam.fxml
 public class ProjectDetailTeamController {
 	
+	private Project selectedProject;
 	private ProjectDetailController projectDetailController;	
     @FXML
     private ResourceBundle resources;
@@ -34,5 +36,9 @@ public class ProjectDetailTeamController {
 //sets the ProjectDetailController projectDetailController        
     public void setProjectDetailController(ProjectDetailController controller) {
     	this.projectDetailController = controller;
+    }
+    
+    public void setSelectedProject(Project selectedProject) {
+    	this.selectedProject = selectedProject;	
     }
 }

@@ -9,10 +9,10 @@
 
 <AnchorPane maxHeight="560.0" maxWidth="940.0" prefHeight="560.0" prefWidth="940.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProjectController">
    <children>
-      <TableView prefHeight="560.0" prefWidth="769.0">
+      <TableView fx:id="projectTable" prefHeight="560.0" prefWidth="769.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
+          <TableColumn fx:id="colProjectName" prefWidth="285.0" text="Project Name" />
+          <TableColumn fx:id="colProjectStatus" prefWidth="322.0" text="Project Status" />
         </columns>
       </TableView>
       <AnchorPane fx:id="anchorPaneDetailView" layoutX="539.0" prefHeight="560.0" prefWidth="400.0" />

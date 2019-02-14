@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	<persistence-unit name="ProjectManagerLight" transaction-type="RESOURCE_LOCAL">
-		<class>database.Project</class>
-		<class>database.Story</class>
-		<class>database.Task</class>
-		<class>database.ProjectUser</class>
+		<class>model.Project</class>
+		<class>model.Story</class>
+		<class>model.Task</class>
+		<class>model.ProjectUser</class>
 		<properties>
 			<property name="javax.persistence.jdbc.url" value="jdbc:derby:C:\Users\blazebo\Desktop\Java\Project_Repository\ProjectManagerLight\DB;create=true"/>
 			<property name="javax.persistence.jdbc.user" value="admin"/>

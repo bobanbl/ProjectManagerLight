@@ -19,11 +19,20 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import model.DataModel;
+import model.DataModelProject;
+import model.DataModelStory;
+import model.Project;
 
 //Controller for main.fxml
 public class NavigationController {
 	
-	private DataModel model;
+	private DataModel userModel;
+	private DataModelStory storyModel;
+	private DataModelProject projectModel;
+	private Project selectedProject;
+	
+	@FXML
+	ProjectController projectController;
     @FXML
     private ResourceBundle resources;
     @FXML
@@ -47,6 +56,13 @@ public class NavigationController {
 
     @FXML
     void initialize() {
+    	/*when initializing, the instance is hand over to the object ProjectDetailMainController
+    	 * in the FXML was the "fx:id="projectController"" was included
+    	 * and in this Controller "@FXML	ProjectController projectController;" was included
+    	 */
+    	projectController.setNavigationController(this);
+    	
+
     	labelSelectedView.setText("Project Dashboard");
 //click on Navigation Button Dashboard View calls method loadProjectView()    	
     	navigationButtonDashboardView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -65,8 +81,20 @@ public class NavigationController {
     	});   	
     }
     
-    public void setDataModel(DataModel model) {
-    	this.model = model;
+    public void setModels(DataModel userModel, DataModelStory storyModel, DataModelProject projectModel) {
+    	this.userModel = userModel;
+    	this.storyModel = storyModel;
+    	this.projectModel = projectModel;
+    	projectController.setDataModelProject(projectModel);
+    	
+    }
+    
+    public void setSelectedProject(Project selectedProject) {
+    	this.selectedProject = selectedProject;
+    }
+    
+    public DataModelProject getDataModelProject() {
+    	return this.projectModel;
     }
  
 /* Load in AnchorPane Task View
@@ -76,7 +104,12 @@ public class NavigationController {
     	try {
 	    	FXMLLoader loader = new FXMLLoader();
 	    	loader.setLocation(getClass().getResource("../view/taskView.fxml"));  	
-			Parent root = loader.load();	
+			Parent root = loader.load();
+			root.getStylesheets().add("application/application.css");
+			
+			TaskController taskController =  loader.getController();
+			taskController.setDataModelStory(storyModel);
+			
 			anchorPaneViews.getChildren().setAll(root);
 			labelSelectedView.setText("Tasks");			
     	} catch (IOException e) {
@@ -95,9 +128,8 @@ public class NavigationController {
 			Parent root = loader.load();
 			
 			UserManController userManController =  loader.getController();
-			userManController.setDataModel(model);
-			System.out.println("trying to open: " + userManController);
-			
+			userManController.setDataModel(userModel);
+						
 			anchorPaneViews.getChildren().setAll(root);			
 			labelSelectedView.setText("User Management");			
     	} catch (IOException e) {
@@ -111,6 +143,10 @@ public class NavigationController {
 	    	FXMLLoader loader = new FXMLLoader();
 	    	loader.setLocation(getClass().getResource("../view/projectView.fxml"));  	
 			Parent root = loader.load();
+			
+			ProjectController projectController =  loader.getController();
+			projectController.setDataModelProject(projectModel);
+			
 			anchorPaneViews.getChildren().setAll(root);	
 			labelSelectedView.setText("Project Dashboard");			
     	} catch (IOException e) {
@@ -120,6 +156,10 @@ public class NavigationController {
     
     public void setLabelLoggedUser(String loggedUser) {
     	labelLoggedUser.setText("Logged User: " + loggedUser);
+    }
+    
+    public void setLabelSelectedProject(String projectName) {
+    	mainSelectedProject.setText(projectName);
     }
 }
 
