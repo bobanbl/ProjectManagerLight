@@ -186,7 +186,7 @@ public class DatabaseController {
 		transaction.commit();
 		em.close();			
 	}
-	public void createStoryDirectInDatabase(String description, int duration, String storyName) {
+	public void createStoryDirectInDatabase(String description, int duration, String storyName, Project toProject, int positionGridPane) {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
 		EntityManager em = emf.createEntityManager();
 		
@@ -199,6 +199,8 @@ public class DatabaseController {
 		newStory.setDescription(description);
 		newStory.setDuration(duration);
 		newStory.setStoryName(storyName);
+		newStory.setProject(toProject);
+		newStory.setPositionGridPane(positionGridPane);
 				
 		em.persist(newStory);
 		
@@ -218,7 +220,6 @@ public class DatabaseController {
 		Story story = (Story)em.createQuery("select s from Story s where s.storyName like '" + storyName + "'").getSingleResult();
 				
 		em.persist(story);
-		
 		transaction.commit();
 		em.close();	
 		
@@ -357,8 +358,22 @@ public class DatabaseController {
 		return project;		
 	}
 	
-	public Project readProject(String projectID) {
-		return null;
+	public Project readProject(String projectName) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
+		EntityManager em = emf.createEntityManager();
+		
+		EntityTransaction transaction = em.getTransaction();
+		
+		System.out.println("[database.DatabaseController] Read Project: " + projectName);
+		transaction.begin();
+		
+		Project project = (Project)em.createQuery("select s from Project s where s.projectName like '" + projectName + "'").getSingleResult();
+				
+		em.persist(project);		
+		transaction.commit();
+		em.close();	
+		
+		return project;
 	}
 	
 	public Project updateProject(Project updateProject) {

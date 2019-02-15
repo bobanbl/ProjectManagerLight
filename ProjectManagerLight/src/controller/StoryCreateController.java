@@ -13,12 +13,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import model.DataModel;
 import model.DataModelStory;
+import model.Project;
 import model.ProjectUser;
 
 public class StoryCreateController {
 	
 	private DataModelStory storyModel;
 	private TaskController taskController;
+	private Project selectedProject;
 	
     @FXML
     private ResourceBundle resources;
@@ -50,8 +52,9 @@ public class StoryCreateController {
     	if(storyName.equals("") || description.equals("")) {
     		errorWindow("Empty field!");
     	} else {
-    		storyModel.createStory(description, duration, storyName);
-    		taskController.createNewStory(storyName, duration);
+//    		int rowCount = taskController.getRowCount();
+    		storyModel.createStory(description, duration, storyName, taskController.getRowCount(), selectedProject);
+    		taskController.updateTasks();
     		taskController.closePopUpWindow();
     	}
     }
@@ -67,6 +70,10 @@ public class StoryCreateController {
     
     public void setTaskController(TaskController taskController) {
     	this.taskController = taskController;
+    }
+    
+    public void setSelectedProject(Project selectedProject) {
+    	this.selectedProject = selectedProject;
     }
     
     private void errorWindow(String message) {

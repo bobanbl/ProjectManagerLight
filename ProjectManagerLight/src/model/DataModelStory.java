@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import database.DatabaseController;
@@ -62,26 +63,38 @@ public class DataModelStory {
     	}
     }
     
-    public void createStory(String description, int duration, String storyName) {
+    public void createStory(String description, int duration, String storyName, int positionGridPane, Project project) {
     	System.out.println("[model.DataModelStory] Adding new Story to List");
     	Story newStory = new Story();
     	newStory.setDescription(description);
 		newStory.setDuration(duration);
 		newStory.setStoryName(storyName);
+		newStory.setPositionGridPane(positionGridPane);
+		newStory.setProject(project);
 		storyList.add(newStory);
 		printStoryData();    	
     }
-    
-    
-    
+        
     public void loadTaskData() {
     	List<Task> list = database.readAllTasks();
 		taskList = FXCollections.observableArrayList(list);	
     } 
+    
     public void printTaskData() {
     	for(Task u : taskList) {
     		System.out.println("[model.DataModelStory]" + u.toString());
     	}
+    }
+    
+    public List<Story> getStoriesFromSelectedProject(Project selectedProject){
+    	List<Story> selectedStoryList = new ArrayList<Story>();    	
+    	for(Story s : storyList) {
+    		if(s.getProject().getProjectID() == selectedProject.getProjectID()) { 
+    			System.out.println("[model.DataModelStory] SelectedStoryList: " + s.getStoryName());
+    			selectedStoryList.add(s);
+    		}
+    	}
+    	return selectedStoryList;
     }
     
     

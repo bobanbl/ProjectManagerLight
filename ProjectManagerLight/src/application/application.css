@@ -22,7 +22,11 @@
 
 .vbox{
 	-fx-background-color:  #86C232;
-    -fx-padding: 10;
-    -fx-max-width: 100px;
-    -fx-max-height: 50px;    
+	-fx-padding: 15px;
+    -fx-max-width: 1000px;
+    -fx-max-height: 1000px;    
+    -fx-background-insets: 10px;
+    -fx-border-insets: 10px;
+    -fx-background-radius: 10px;
+    
 }

@@ -91,8 +91,10 @@ public class NavigationController {
     
     public void setSelectedProject(Project selectedProject) {
     	this.selectedProject = selectedProject;
+    	mainSelectedProject.setText(selectedProject.getProjectName());
     }
     
+
     public DataModelProject getDataModelProject() {
     	return this.projectModel;
     }
@@ -109,6 +111,7 @@ public class NavigationController {
 			
 			TaskController taskController =  loader.getController();
 			taskController.setDataModelStory(storyModel);
+			taskController.setSelectedProject(selectedProject);
 			
 			anchorPaneViews.getChildren().setAll(root);
 			labelSelectedView.setText("Tasks");			
@@ -146,6 +149,7 @@ public class NavigationController {
 			
 			ProjectController projectController =  loader.getController();
 			projectController.setDataModelProject(projectModel);
+			projectController.setNavigationController(this);
 			
 			anchorPaneViews.getChildren().setAll(root);	
 			labelSelectedView.setText("Project Dashboard");			
@@ -158,8 +162,6 @@ public class NavigationController {
     	labelLoggedUser.setText("Logged User: " + loggedUser);
     }
     
-    public void setLabelSelectedProject(String projectName) {
-    	mainSelectedProject.setText(projectName);
-    }
+
 }
 

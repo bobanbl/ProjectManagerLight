@@ -113,19 +113,20 @@ public class ProjectController {
     public void tablesChanges() { 	
     	projectTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
     		selectedProjectList = projectTable.getSelectionModel().getSelectedItems();
-    		System.out.println("[controller.ProjectController]Double Mouse Click on Project: " + selectedProjectList.get(0).getProjectName());
+    		System.out.println("[controller.ProjectController] Mouse Click on Project: " + selectedProjectList.get(0).getProjectName());
     		if (event.getClickCount() == 2) {
+    			System.out.println("[controller.ProjectController] Double Mouse Click on Project: " + selectedProjectList.get(0).getProjectName());
     			this.newProject = false;
     			laodProjectDetailWindow();
-    		} else if (event.getClickCount() == 1) {
-    			System.out.println("[controller.ProjectController] One Mouse Click on Project: " + selectedProjectList.get(0).getProjectName());
-//    			closeDetailWindow();
-    			navigationController.setLabelSelectedProject(selectedProjectList.get(0).getProjectName());
-    		}
-    		if (event.getButton() == MouseButton.SECONDARY && selectedProjectList.get(0) != null) {
+    		} else if (event.getButton() == MouseButton.SECONDARY && selectedProjectList.get(0) != null) {
     			System.out.println("[controller.ProjectController] Right Mouse Button clicked");
     			closeDetailWindow();
     			openContextMenu();
+    		} else if (event.getClickCount() == 1) {
+    			System.out.println("[controller.ProjectController] One Mouse Click on Project: " + selectedProjectList.get(0).getProjectName());
+//    			closeDetailWindow();
+    			System.out.println("[controller.ProjectController] navigationController: " + navigationController);
+    			navigationController.setSelectedProject(selectedProjectList.get(0));
     		}
     	});            
     }

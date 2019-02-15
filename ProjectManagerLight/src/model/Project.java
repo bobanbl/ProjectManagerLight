@@ -1,6 +1,7 @@
 package model;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
@@ -26,8 +27,8 @@ public class Project implements Serializable{
 	@Enumerated(EnumType.STRING)
 	private ProjectStatus projectStatus;
 	private String description;
-	private String startDate;
-	private String planedFinishDate;
+	private Date startDate;
+	private Date planedFinishDate;
 	private String projectSponsor;
 	private ProjectUser projectManager;
 	@OneToMany
@@ -71,19 +72,19 @@ public class Project implements Serializable{
 		this.description = description;
 	}
 
-	public String getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(String startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
-	public String getPlanedFinishDate() {
+	public Date getPlanedFinishDate() {
 		return planedFinishDate;
 	}
 
-	public void setPlanedFinishDate(String planedFinishDate) {
+	public void setPlanedFinishDate(Date planedFinishDate) {
 		this.planedFinishDate = planedFinishDate;
 	}
 
