@@ -177,7 +177,7 @@ public class ProjectController {
     }
     
     private void confirmDeletingProjectWindow() {
-    	System.out.println("Print User Error-Message");
+    	System.out.println("[controller.ProjectController] Print Project Error-Message");
     	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     	alert.setTitle("Delete User");
     	alert.setHeaderText("Deleting user: " + selectedProjectList.get(0).getProjectName() + " Are you sure?");

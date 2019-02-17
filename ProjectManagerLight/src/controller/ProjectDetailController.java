@@ -160,13 +160,13 @@ public class ProjectDetailController {
     
     public boolean checkIfChangesExists() {
     	System.out.println("[controller.ProjectDetailController] checkIfChangesExists");
-    	String ProjectNameNEW = projectDetailMainController.getprojectNameTextField();
+    	String projectNameNEW = projectDetailMainController.getprojectNameTextField();
     	String descriptionNEW = projectDetailMainController.getprojectDescriptionTextField();
-    	String ProjectNameOLD = selectedProject.getProjectName().trim();
+    	String projectNameOLD = selectedProject.getProjectName().trim();
     	String descriptionOLD = selectedProject.getDescription().trim();
 //    	System.out.println(ProjectNameNEW + ProjectNameOLD);
     	
-    	if(ProjectNameNEW.equals(ProjectNameOLD) && descriptionNEW.equals(descriptionOLD)) {
+    	if(projectNameNEW.equals(projectNameOLD) && descriptionNEW.equals(descriptionOLD)) {
     		return false;
     	} else {
     		return true;

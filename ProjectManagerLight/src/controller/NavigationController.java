@@ -102,7 +102,7 @@ public class NavigationController {
 /* Load in AnchorPane Task View
 	Set label(selected View) on "Tasks"
 */
-    private void laodTaskView() {
+    public void laodTaskView() {
     	try {
 	    	FXMLLoader loader = new FXMLLoader();
 	    	loader.setLocation(getClass().getResource("../view/taskView.fxml"));  	
@@ -111,7 +111,9 @@ public class NavigationController {
 			
 			TaskController taskController =  loader.getController();
 			taskController.setDataModelStory(storyModel);
+			taskController.setNavigationController(this);
 			taskController.setSelectedProject(selectedProject);
+			
 			
 			anchorPaneViews.getChildren().setAll(root);
 			labelSelectedView.setText("Tasks");			
@@ -132,6 +134,7 @@ public class NavigationController {
 			
 			UserManController userManController =  loader.getController();
 			userManController.setDataModel(userModel);
+			
 						
 			anchorPaneViews.getChildren().setAll(root);			
 			labelSelectedView.setText("User Management");			

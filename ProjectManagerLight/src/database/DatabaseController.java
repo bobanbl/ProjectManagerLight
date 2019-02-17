@@ -244,12 +244,37 @@ public class DatabaseController {
 		return story;		
 	}
 	
-	public Story updateStory(Story updatedStory) {
-		return null;
+	public Story updateStory(Story updateStory) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
+		EntityManager em = emf.createEntityManager();	
+		EntityTransaction transaction = em.getTransaction();
+		
+		System.out.println("[DatabaseController] Update Story: " + updateStory.getStoryName());
+		transaction.begin();		
+		
+		Story updatedStory = em.merge(updateStory);
+		
+		transaction.commit();
+		em.close();
+		
+		return updatedStory;
 	}
 	
 	public void deleteStory(Story deletedStory) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
+		EntityManager em = emf.createEntityManager();	
+		EntityTransaction transaction = em.getTransaction();
 		
+		System.out.println("[database.DatabaseController] Delete Story: " + deletedStory.getStoryName());
+		transaction.begin();		
+		
+		if (!em.contains(deletedStory)) {
+			deletedStory = em.merge(deletedStory);
+		}
+		
+		em.remove(deletedStory);	
+		transaction.commit();
+		em.close();
 	}	
 	//-------------Task--------------------------------
 	public void createTaskDirectInDatabase(String taskName, String description, int duration, Story toStory) {

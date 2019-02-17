@@ -97,6 +97,28 @@ public class DataModelStory {
     	return selectedStoryList;
     }
     
+    /** Deleting existing Story in storyList
+     * 
+     * @param deleteStory
+     */
+    public void deleteStory(Story deleteStory) {
+    	System.out.println("[model.DataModelStory] Deleting story");
+    	storyList.remove(deleteStory);
+    	printStoryData();
+    }    
+    
+    
+    public void updateStory(Story updateStory, String storyName, String description, int duration) {
+    	System.out.println("[model.DataModelStory] UpdateStory: " + updateStory.getStoryName());
+    	int storyIndex = storyList.indexOf(updateStory);
+    	updateStory.setStoryName(storyName);
+    	updateStory.setDescription(description);
+    	updateStory.setDuration(duration);
+    	storyList.set(storyIndex, updateStory);
+    	printStoryData();
+    }
+    
+    
     
     
 	
