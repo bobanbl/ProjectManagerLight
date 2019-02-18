@@ -61,8 +61,7 @@ public class ProjectController {
     		addProjectButton.setVisible(false);
     		this.newProject = true;
     		laodDetailMainView();
-    	});
-    	
+    	});  	
     	tablesChanges();
     }
     
@@ -108,6 +107,10 @@ public class ProjectController {
     	projectTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
     	colProjectName.setCellValueFactory(new PropertyValueFactory<Project, String>("projectName"));
     	colProjectStatus.setCellValueFactory(new PropertyValueFactory<Project, String>("projectStatus"));
+    	//Select first project in table at the first opening of the application
+    	if(navigationController.getSelectedProject() == null) {
+    		navigationController.setSelectedProject(projectTable.getItems().get(0));
+    	}
     }
     
     public void tablesChanges() { 	
@@ -180,14 +183,26 @@ public class ProjectController {
     	System.out.println("[controller.ProjectController] Print Project Error-Message");
     	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     	alert.setTitle("Delete User");
-    	alert.setHeaderText("Deleting user: " + selectedProjectList.get(0).getProjectName() + " Are you sure?");
+    	alert.setHeaderText("Deleting Project: " + selectedProjectList.get(0).getProjectName() + " Are you sure?");
     	Optional<ButtonType> result = alert.showAndWait();
     	if(result.get() == ButtonType.OK) {
-    		System.out.println("[UserManController] User deleted!");
-    		projectModel.deleteProject(selectedProjectList.get(0));	
-    	}
-    	else if(result.get() == ButtonType.CANCEL) {
-    	    alert.close();
+    		System.out.println("[UserManController] Project deleted!");
+    		//select another Project when deleting the selected Project
+    		if(navigationController.getSelectedProject() == selectedProjectList.get(0)) {
+    			System.out.println("[controller.ProjectController] selectedProject = deletedProject");
+    			if(projectTable.getItems().get(0) != selectedProjectList.get(0)) {
+    				System.out.println("[controller.ProjectController] selectedProject = POSITION NOT 0");
+    				navigationController.setSelectedProject(projectTable.getItems().get(0));
+    			} else {
+    				System.out.println("[controller.ProjectController] selectedProject = POSITION 0");
+    				navigationController.setSelectedProject(projectTable.getItems().get(1));
+    			}
+    		}
+    			projectModel.deleteProject(selectedProjectList.get(0));	
+
+    		}
+    		else if(result.get() == ButtonType.CANCEL) {
+    			alert.close();
     	}
     }
 }

@@ -135,26 +135,6 @@ public class DatabaseController {
 		em.close();
 	}	
 	
-	//-----------------------------------------------
-	
-	public List<Object> readAllData(){
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
-		EntityManager em = emf.createEntityManager();
-		
-		EntityTransaction transaction = em.getTransaction();
-		
-		System.out.println("[DatabaseController] Read all User");
-		transaction.begin();	
-		
-		@SuppressWarnings("unchecked")
-		List<Object> data = (List<Object>)em.createQuery("select u from ProjectUser u").getResultList();
-		
-		transaction.commit();
-		em.close();
-		
-		return data;		
-	}
-
 	public ProjectUser updateUser(ProjectUser updateUser) {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
 		EntityManager em = emf.createEntityManager();
@@ -272,7 +252,8 @@ public class DatabaseController {
 			deletedStory = em.merge(deletedStory);
 		}
 		
-		em.remove(deletedStory);	
+		em.remove(deletedStory);
+		
 		transaction.commit();
 		em.close();
 	}	
@@ -318,19 +299,68 @@ public class DatabaseController {
 	
 	
 	public void createTask(Task newTask) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
+		EntityManager em = emf.createEntityManager();
 		
-	}
-	
-	public Task readTask(String TaskID) {
-		return null;
-	}
-	
-	public Task updateTask(Task updatedTask) {
-		return null;
-	}
-	
-	public void deleteTask(Project deletedTask) {
+		EntityTransaction transaction = em.getTransaction();
 		
+		System.out.println("[DatabaseController] Create Task: " + newTask.getTaskID());
+		transaction.begin();
+		
+		em.persist(newTask);
+		
+		transaction.commit();
+		em.close();	
+	}
+	
+	public Task readTask(String TaskName) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
+		EntityManager em = emf.createEntityManager();
+		
+		EntityTransaction transaction = em.getTransaction();
+		
+		System.out.println("[database.DatabaseController] Read Story: " + TaskName);
+		transaction.begin();
+		
+		Task task = (Task)em.createQuery("select s from Story s where s.storyName like '" + TaskName + "'").getSingleResult();
+				
+		em.persist(task);
+		transaction.commit();
+		em.close();	
+		
+		return task;
+	}
+	
+	public Task updateTask(Task updateTask) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
+		EntityManager em = emf.createEntityManager();	
+		EntityTransaction transaction = em.getTransaction();
+		
+		System.out.println("[DatabaseController] Update Story: " + updateTask.getTaskName());
+		transaction.begin();		
+		
+		Task updatedTask = em.merge(updateTask);
+		
+		transaction.commit();
+		em.close();
+		
+		return updatedTask;
+	}
+	
+	public void deleteTask(Task deletedTask) {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
+		EntityManager em = emf.createEntityManager();	
+		EntityTransaction transaction = em.getTransaction();
+		
+		System.out.println("[database.DatabaseController] Delete Task: " + deletedTask.getTaskName());
+		transaction.begin();		
+		
+		if (!em.contains(deletedTask)) {
+			deletedTask = em.merge(deletedTask);
+		}
+		em.remove(deletedTask);	
+		transaction.commit();
+		em.close();		
 	}	
 
 //------------Project--------------------------------

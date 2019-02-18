@@ -33,7 +33,7 @@ public class Project implements Serializable{
 	private ProjectUser projectManager;
 	@OneToMany
 	private List<ProjectUser> projectMember = new ArrayList<>();
-	@OneToMany(mappedBy = "project")
+	@OneToMany(mappedBy = "project", orphanRemoval=true, cascade = CascadeType.ALL)
 	private List<Story> story = new ArrayList<>();
 	
 	public Project() {

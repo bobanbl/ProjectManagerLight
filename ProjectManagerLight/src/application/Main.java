@@ -28,7 +28,9 @@ public class Main extends Application {
 			DataModel model = new DataModel();
 			DataModelStory storyModel= new DataModelStory();
 			DataModelProject projectModel = new DataModelProject();
+			projectModel.setDataModelStory(storyModel);
 			loginController.setModels(model, storyModel, projectModel);
+			
 						
 			Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());

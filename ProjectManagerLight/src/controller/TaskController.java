@@ -35,6 +35,8 @@ import model.DataModel;
 import model.DataModelStory;
 import model.Project;
 import model.Story;
+import model.Task;
+import model.Task.TaskStatus;
 
 //Controller for taskView.fxml
 public class TaskController {
@@ -45,7 +47,8 @@ public class TaskController {
 	private NavigationController navigationController;
 	
 	private Story selectedStory;
-
+	private Task selectedTask;
+//	private String taskOrStory;
     @FXML
     private GridPane gridPane;
     @FXML
@@ -98,37 +101,89 @@ public class TaskController {
     }
             
     private void createVBox(List<Story> storyList) {
-    	    	
-    	for(Story s : storyList) {
-        	Label storyNameLabel = new Label();
-        	storyNameLabel.setText(s.getStoryName());
-        	storyNameLabel.setTextFill(Color.WHITE);
-        	storyNameLabel.setFont(new Font("Arial", 20));
 
-        	Label storyDurationLabel = new Label();
-        	storyDurationLabel.setText(String.valueOf(s.getDuration()));
-        	storyDurationLabel.setTextFill(Color.WHITE);
-        	storyDurationLabel.setFont(new Font("Arial", 20));
-        	storyDurationLabel.setAlignment(Pos.CENTER_RIGHT);
-        
-        	VBox vbox = new VBox(storyNameLabel, storyDurationLabel);
-        	vbox.getStyleClass().add("vbox");
-        	gridPane.add(vbox, 0, s.getPositionGridPane());
-        	vbox.setUserData(s);
-        	        	
-        	Image addImage = new Image(getClass().getResourceAsStream("../assets/AddProject.png"),20,20,false,true);
-        	ImageView addTaskButton = new ImageView();
-        	addTaskButton.setImage(addImage);
-        	
-        	gridPane.add(addTaskButton, 1, s.getPositionGridPane());
-        	
+    	for(Story s : storyList) {
+    		Label storyNameLabel = new Label();
+    		storyNameLabel.setText(s.getStoryName());
+    		storyNameLabel.setTextFill(Color.WHITE);
+    		storyNameLabel.setFont(new Font("Arial", 20));
+
+    		Label storyDurationLabel = new Label();
+    		storyDurationLabel.setText(String.valueOf(s.getDuration()));
+    		storyDurationLabel.setTextFill(Color.WHITE);
+    		storyDurationLabel.setFont(new Font("Arial", 20));
+    		storyDurationLabel.setAlignment(Pos.CENTER_RIGHT);
+
+    		VBox vbox = new VBox(storyNameLabel, storyDurationLabel);
+    		vbox.getStyleClass().add("vbox");
+    		gridPane.add(vbox, 0, s.getPositionGridPane());
+    		vbox.setUserData(s);
+    		vbox.setId("StoryBox");
+
+    		Image addImage = new Image(getClass().getResourceAsStream("../assets/AddProject.png"),20,20,false,true);
+    		ImageView addTaskButton = new ImageView();
+    		addTaskButton.setImage(addImage);
+    		addTaskButton.setUserData(s);
+    		addTaskButton.setId("AddTaskButton");
+
+    		gridPane.add(addTaskButton, 1, s.getPositionGridPane());
+
+    		List<Task> taskListStory = s.getTasks();
+
+
+    		VBox vboxNEW = new VBox();
+    		VBox vboxINPROGRESS = new VBox();
+    		VBox vboxONHOLD = new VBox();
+    		VBox vboxREJECTED = new VBox();
+    		VBox vboxCLOSED = new VBox(); 	
+
+    		for(Task t : taskListStory) {
+    			//getting tasks from taskList bc same tasks are saved under other reference in storyList
+    			t = storyModel.getTaskWithID(t.getTaskID());
+    			    			
+    			Label taskNameLabel = new Label();
+    			taskNameLabel.setText(t.getTaskName());
+    			taskNameLabel.setTextFill(Color.WHITE);
+    			taskNameLabel.setFont(new Font("Arial", 10));
+
+    			Label taskDurationLabel = new Label();
+    			taskDurationLabel.setText(String.valueOf(t.getDuration()));
+    			taskDurationLabel.setTextFill(Color.WHITE);
+    			taskDurationLabel.setFont(new Font("Arial", 10));
+    			taskDurationLabel.setAlignment(Pos.CENTER_RIGHT);
+
+    			VBox vbox1 = new VBox(taskNameLabel, taskDurationLabel);
+    			vbox1.getStyleClass().add("vboxTasks");
+    			vbox1.setUserData(t);
+    			vbox1.setId("TaskBox");
+
+    			switch(t.getStatus()) {
+    			case NEW: vboxNEW.getChildren().add(vbox1); break;
+    			case IN_PROGRESS: vboxINPROGRESS.getChildren().add(vbox1); break;
+    			case ON_HOLD: vboxONHOLD.getChildren().add(vbox1); break;
+    			case REJECTED: vboxREJECTED.getChildren().add(vbox1); break;
+    			case CLOSED: vboxCLOSED.getChildren().add(vbox1); break;
+    			}
+
+    		}    
+    		//    	t.getStory().getPositionGridPane()
+    		
+    		gridPane.add(vboxNEW, 2, s.getPositionGridPane());
+    		gridPane.add(vboxINPROGRESS, 3, s.getPositionGridPane());
+    		gridPane.add(vboxONHOLD, 4, s.getPositionGridPane());
+    		gridPane.add(vboxREJECTED, 5, s.getPositionGridPane());
+    		gridPane.add(vboxCLOSED, 6, s.getPositionGridPane());
+    		
+    		
     	}
+
     	System.out.println("[controller.TaskController] Row Count: " + getRowCount());
     }
     
     public void updateTasks() {
     	System.out.println("[controller.TaskController] Selected Project: " + selectedProject.getProjectName());
     	List<Story> storyList = storyModel.getStoriesFromSelectedProject(selectedProject);
+//    	List<Task> taskList = storyModel.getTasksFromSelectedStory(selectedProject.getStory());
     	for(Story s : storyList) {
     		System.out.println("[controller.TaskController] Stories: " + s);
     	}
@@ -160,18 +215,46 @@ public class TaskController {
     //Not Finished -- ON WORK -- 
     public void mouseActivities() {
 
-    	gridPane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {   		
+    	gridPane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {   
+    		selectedStory = null;
+    		selectedTask = null;
     		Node clickedNode = event.getPickResult().getIntersectedNode();
+    		System.out.println("[controller.TaskController] clicked Node ID: " + clickedNode.getId());
+    		try {
+    			if(clickedNode.getId().equals("StoryBox")) {
+    				selectedStory = (Story) clickedNode.getUserData();
+//    				taskOrStory = "Story";
+    				System.out.println("[controller.TaskController] StoryName: " + selectedStory.getStoryName());
+    			} else if(clickedNode.getId().equals("AddTaskButton")) {
+    				System.out.println("[controller.TaskController] AddTaskButton was pressed " + clickedNode.getUserData());
+    				selectedStory = (Story) clickedNode.getUserData();
+    				addTaskToStory();    				
+    			} else if(clickedNode.getId().equals("TaskBox")) {
+    				selectedTask = (Task) clickedNode.getUserData();
+//    				taskOrStory = "Task";
+    				System.out.println("[controller.TaskController] TaskName: " + selectedTask.getTaskName());
+    			}
+    		} catch(NullPointerException e) {
+    			System.out.println("[controller.TaskController] NullPointerException: " + e.getMessage());
+    		}
+    		
     		if (clickedNode != gridPane) {
     			// click on descendant node
     			Node parent = clickedNode.getParent();
-    			
+
     			while (parent != gridPane) {
     				clickedNode = parent;
     				parent = clickedNode.getParent();
     				if(parent.getUserData() != null) {
-    					selectedStory = (Story) parent.getUserData();
-    					System.out.println("[controller.TaskController] StoryName: " + selectedStory.getStoryName());
+    					if(parent.getId().equals("StoryBox")) {
+    						selectedStory = (Story) parent.getUserData();
+//    						taskOrStory = "Story";
+    						System.out.println("[controller.TaskController] StoryName: " + selectedStory.getStoryName());
+    					} else if(parent.getId().equals("TaskBox")) {
+    						selectedTask = (Task) parent.getUserData();
+//    						taskOrStory = "Task";
+    						System.out.println("[controller.TaskController] TaskName: " + selectedTask.getTaskName());
+    					}
     				}	
     			}
     			Integer colIndex = GridPane.getColumnIndex(clickedNode);
@@ -179,9 +262,13 @@ public class TaskController {
     			System.out.println("[controller.TaskController] Mouse clicked cell: " + colIndex + " and: " + rowIndex);
     		}
     		
-    		if (event.getClickCount() == 2 && selectedStory != null) {
-    			loadStoryDetailPopUp();
-    		} else if (event.getButton() == MouseButton.SECONDARY && selectedStory != null && selectedStory != null) {
+    		if (event.getClickCount() == 2 && (selectedStory != null || selectedTask != null)) {
+    			if(selectedStory != null ) {
+    				loadStoryDetailPopUp();
+    			} else if(selectedTask != null) {
+    				loadTaskDetailPopUp();
+    			}
+    		} else if (event.getButton() == MouseButton.SECONDARY && (selectedStory != null || selectedTask != null)) {
     			System.out.println("[controller.TaskController] Right Mouse Button clicked");
     			openContextMenu();
     		}
@@ -211,21 +298,60 @@ public class TaskController {
 		}	
     }
     
+    private void loadTaskDetailPopUp() {
+    	try {
+	    	FXMLLoader loader = new FXMLLoader();
+	    	loader.setLocation(getClass().getResource("../view/taskDetailPopUp.fxml"));  	
+			Parent root = loader.load();	
+			
+			TaskDetailController taskDetailController =  loader.getController();
+			taskDetailController.setDataModelStory(storyModel);
+			taskDetailController.setTaskController(this);
+			taskDetailController.setSelectedTask(selectedTask);
+			
+	    	Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));    	
+	    	popUpWindow = new Stage();
+	    	
+	    	popUpWindow.setTitle("Task Details");
+	    	popUpWindow.setScene(scene);
+	    	popUpWindow.showAndWait();
+	    	
+    	} catch (IOException e) {
+			e.printStackTrace();
+		}	
+    }
+    
     private void openContextMenu() {
     	Label label = new Label();
     	ContextMenu contextMenu = new ContextMenu();
+    	//taskOrStory.equals("Story")
+    	if(selectedStory != null) {
+    		MenuItem item1 = new MenuItem("Delete Story: " + selectedStory.getStoryName());
+    		item1.setOnAction(new EventHandler<ActionEvent>() {
 
-    	MenuItem item1 = new MenuItem("Delete Story: " + selectedStory.getStoryName());
-    	item1.setOnAction(new EventHandler<ActionEvent>() {
+    			@Override
+    			public void handle(ActionEvent event) {
+    				label.setText("Select Menu Item 1");
+    				confirmDeletingStoryWindow();
+    			}
 
-    		@Override
-    		public void handle(ActionEvent event) {
-    			label.setText("Select Menu Item 1");
-    			confirmDeletingStoryWindow();
-    		}
-    		
-    	});	
-    	contextMenu.getItems().addAll(item1);
+    		});	
+    		contextMenu.getItems().addAll(item1);
+    	} else if(selectedTask != null) {
+    		MenuItem item1 = new MenuItem("Delete Task: " + selectedTask.getTaskName());
+    		item1.setOnAction(new EventHandler<ActionEvent>() {
+
+    			@Override
+    			public void handle(ActionEvent event) {
+    				label.setText("Select Menu Item 1");
+    				confirmDeletingTaskWindow();
+    			}
+
+    		});	
+    		contextMenu.getItems().addAll(item1);
+    	}
+
+    	
     	gridPane.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
             @Override
             public void handle(ContextMenuEvent event) {
@@ -252,13 +378,54 @@ public class TaskController {
     	if(result.get() == ButtonType.OK) {
     		System.out.println("[controller.TaskController] Story deleted!");
     		storyModel.deleteStory(selectedStory);	
-    		navigationController.laodTaskView();
-//    		updateTasks();
-    		
+    		navigationController.laodTaskView();    		
     	}
     	else if(result.get() == ButtonType.CANCEL) {
     	    alert.close();
     	}
+    }
+    
+    private void confirmDeletingTaskWindow() {
+    	System.out.println("[controller.TasklController] Print Task Error-Message");
+    	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    	alert.setTitle("Delete Task");
+    	alert.setHeaderText("Deleting task: " + selectedTask.getTaskName() + " Are you sure?");
+    	Optional<ButtonType> result = alert.showAndWait();
+    	if(result.get() == ButtonType.OK) {
+    		System.out.println("[controller.TaskController] Task deleted!");
+    		storyModel.deleteTask(selectedTask);	
+    		navigationController.laodTaskView();    		
+    	}
+    	else if(result.get() == ButtonType.CANCEL) {
+    	    alert.close();
+    	}
+    }
+    
+    
+    
+    private void addTaskToStory() {
+    	System.out.println("[controller.TaskController] addTaskToStory()");
+    	try {
+	    	FXMLLoader loader = new FXMLLoader();
+	    	loader.setLocation(getClass().getResource("../view/taskCreatePopUp.fxml"));  	
+			Parent root = loader.load();	
+			
+			TaskCreateController taskCreateController =  loader.getController();
+			taskCreateController.setDataModelStory(storyModel);
+			taskCreateController.setTaskController(this);
+			taskCreateController.setSelectedStory(selectedStory);
+			
+			
+	    	Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));    	
+	    	popUpWindow = new Stage();
+	    	
+	    	popUpWindow.setTitle("Create Task");
+	    	popUpWindow.setScene(scene);
+	    	popUpWindow.showAndWait();
+	    	
+    	} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
     	
     

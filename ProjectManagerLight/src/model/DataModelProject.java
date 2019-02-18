@@ -11,6 +11,7 @@ import javafx.collections.ListChangeListener.Change;
 public class DataModelProject {
 	private final DatabaseController database = DatabaseController.getInstance();
 	private ObservableList<Project> projectList;
+	private DataModelStory storyModel;
 	
 	public DataModelProject(){
 		loadProjectData();
@@ -42,10 +43,14 @@ public class DataModelProject {
 			}
 		});
 	}	
+	public void setDataModelStory(DataModelStory storyModel) {
+		this.storyModel = storyModel;
+	}
+	
 	//----------------------------Project------------------------------------------
     public void loadProjectData() {
     	List<Project> list = database.readAllProjects();
-		projectList = FXCollections.observableArrayList(list);	
+		projectList = FXCollections.observableArrayList(list);
     }
     
     public void printProjectData() {
@@ -74,6 +79,7 @@ public class DataModelProject {
     public void deleteProject(Project deleteProject) {
     	System.out.println("[model.DataModelProject] Deleting project");
     	projectList.remove(deleteProject);
+    	storyModel.loadStoryData();
     	printProjectData();
     }
     

@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TaskDetailController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TaskCreateController">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="-1.0" layoutY="-5.0" prefHeight="450.0" prefWidth="400.0">
+      <VBox alignment="TOP_CENTER" layoutX="-1.0" layoutY="-5.0" prefHeight="400.0" prefWidth="400.0">
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="400.0">
                <children>
@@ -85,24 +85,7 @@
                   </TextField>
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="400.0">
-               <children>
-                  <Label text="Task Status" textFill="#61892f">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                  </Label>
-                  <ComboBox fx:id="taskStatusComboBox" prefHeight="35.0" prefWidth="245.0">
-                     <HBox.margin>
-                        <Insets left="32.0" />
-                     </HBox.margin>
-                  </ComboBox>
-               </children>
-            </HBox>
-            <Button fx:id="assumeButton" mnemonicParsing="false" onAction="#assumeButtonPressed" prefHeight="51.0" prefWidth="146.0" style="-fx-background-color: #86C232;" text="Assume" textFill="WHITE">
+            <Button fx:id="createButton" mnemonicParsing="false" onAction="#createButtonPressed" prefHeight="51.0" prefWidth="146.0" style="-fx-background-color: #86C232;" text="Create" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>

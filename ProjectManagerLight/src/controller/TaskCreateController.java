@@ -11,17 +11,16 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
-import model.DataModel;
 import model.DataModelStory;
 import model.Project;
-import model.ProjectUser;
+import model.Story;
 
-public class StoryCreateController {
+public class TaskCreateController {
 	
 	private DataModelStory storyModel;
 	private TaskController taskController;
-	private Project selectedProject;
-	
+	private Story selectedStory;
+
     @FXML
     private ResourceBundle resources;
 
@@ -41,18 +40,19 @@ public class StoryCreateController {
     private TextArea descriptionTextField;
 
     @FXML
-    private ComboBox<ProjectUser> responsibilityComboBox;
+    private ComboBox<?> responsibilityComboBox;
+
 
     @FXML
-    void assumeButtonPressed(ActionEvent event) {
-    	String storyName = nameTextField.getText().trim();
+    void createButtonPressed(ActionEvent event) {
+    	String taskName = nameTextField.getText().trim();
     	int duration = Integer.parseInt(durationTextField.getText().trim());
     	String description = descriptionTextField.getText().trim();
     	
-    	if(storyName.equals("") || description.equals("")) {
+    	if(taskName.equals("") || description.equals("")) {
     		errorWindow("Empty field!");
     	} else {
-    		storyModel.createStory(description, duration, storyName, taskController.getRowCount(), selectedProject);
+    		storyModel.createTask(description, duration, taskName, selectedStory);
     		taskController.updateTasks();
     		taskController.closePopUpWindow();
     	}
@@ -71,16 +71,17 @@ public class StoryCreateController {
     	this.taskController = taskController;
     }
     
-    public void setSelectedProject(Project selectedProject) {
-    	this.selectedProject = selectedProject;
+    public void setSelectedStory(Story selectedStory) {
+    	this.selectedStory = selectedStory;
     }
     
     private void errorWindow(String message) {
-    	System.out.println("[controller.StroyCreateController] Print Error-Message");
+    	System.out.println("[controller.TaskCreateController] Print Error-Message");
     	Alert alert = new Alert(AlertType.ERROR);
-    	alert.setTitle("Creating Story Failed!");
+    	alert.setTitle("Creating Task Failed!");
     	alert.setHeaderText(message);
     	alert.showAndWait();
     }
+    
+    
 }
-

@@ -27,6 +27,15 @@
     -fx-max-height: 1000px;    
     -fx-background-insets: 10px;
     -fx-border-insets: 10px;
-    -fx-background-radius: 10px;
-    
+    -fx-background-radius: 10px; 
+}
+
+.vboxTasks{
+	-fx-background-color:  #474B4F;
+	-fx-padding: 15px;
+    -fx-max-width: 1000px;
+    -fx-max-height: 50px;    
+    -fx-background-insets: 10px;
+    -fx-border-insets: 10px;
+    -fx-background-radius: 10px; 
 }

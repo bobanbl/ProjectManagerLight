@@ -103,7 +103,7 @@ public class StoryDetailController {
     	alert.setHeaderText("Update Story: Save changes?");
     	Optional<ButtonType> result = alert.showAndWait();
     	if(result.get() == ButtonType.OK) {
-    		System.out.println("[controller.StoryDetailController] Update Project Confirm!");
+    		System.out.println("[controller.StoryDetailController] Update Story Confirm!");
     		storyModel.updateStory(selectedStory, storyNameNEW, descriptionNEW, Integer.parseInt(durationNEW));
     		taskController.updateTasks();
     		taskController.closePopUpWindow();	

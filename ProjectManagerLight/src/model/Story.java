@@ -34,9 +34,10 @@ public class Story implements Serializable{
 	private ProjectUser responsibility;
 	private int duration;
 	private int positionGridPane;
-	@OneToMany(mappedBy = "story")
+	@OneToMany(mappedBy = "story", orphanRemoval=true, cascade = CascadeType.ALL)
 	private List<Task> tasks = new ArrayList<>();
-	@OneToOne(fetch=FetchType.LAZY)
+	//(fetch=FetchType.LAZY)
+	@OneToOne
 	@JoinColumn(name = "FKProjectID", referencedColumnName = "PROJECTID")
 	private Project project;
 //	private List<Task> tasks = new ArrayList<>();

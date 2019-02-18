@@ -94,6 +94,10 @@ public class NavigationController {
     	mainSelectedProject.setText(selectedProject.getProjectName());
     }
     
+    public Project getSelectedProject() {
+    	return selectedProject;
+    }
+    
 
     public DataModelProject getDataModelProject() {
     	return this.projectModel;
@@ -144,15 +148,16 @@ public class NavigationController {
     }    
 
 //load in AnchorPane Project View    
-    private void laodProjectView() {
+    public void laodProjectView() {
     	try {
 	    	FXMLLoader loader = new FXMLLoader();
 	    	loader.setLocation(getClass().getResource("../view/projectView.fxml"));  	
 			Parent root = loader.load();
 			
 			ProjectController projectController =  loader.getController();
-			projectController.setDataModelProject(projectModel);
 			projectController.setNavigationController(this);
+			projectController.setDataModelProject(projectModel);
+			
 			
 			anchorPaneViews.getChildren().setAll(root);	
 			labelSelectedView.setText("Project Dashboard");			

@@ -20,8 +20,8 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Task implements Serializable{
 	
-	enum TaskStatus{
-		NEW, IN_PROGRESS, ON_HOLD, CLOSED;
+	public enum TaskStatus{
+		NEW, IN_PROGRESS, ON_HOLD, CLOSED, REJECTED;
 	}
 
 	/**
@@ -37,7 +37,7 @@ public class Task implements Serializable{
 	private int duration;
 	@Enumerated(EnumType.STRING)
 	private TaskStatus status;
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "FKStoryID", referencedColumnName = "STORYID")
 	private Story story;
 		
