@@ -87,9 +87,11 @@ public class Task implements Serializable{
 	}
 
 	public void setStory(Story story) {
+		System.out.println("[model.Task] !story.getTasks().contains(this) " + this.story);
 		this.story = story;
-		System.out.println("[database.Task] Story: " + story.getStoryName());
+		System.out.println("[model.Task] Story: " + story.getStoryName());
 		if(!story.getTasks().contains(this)) {
+			System.out.println("[model.Task] !story.getTasks().contains(this) " + story);
 			story.addTasktoStory(this);
 		}
 	}

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -22,9 +23,14 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -45,10 +51,10 @@ public class TaskController {
 	private DataModelStory storyModel;
 	private Project selectedProject;
 	private NavigationController navigationController;
+	private List<Story> storyList;
 	
 	private Story selectedStory;
 	private Task selectedTask;
-//	private String taskOrStory;
     @FXML
     private GridPane gridPane;
     @FXML
@@ -62,6 +68,7 @@ public class TaskController {
     @FXML
     void initialize() {
     	mouseActivities();
+    	mouseDragActivities();
     	addStoryButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
     		System.out.println("[controller.TaskController] Add-Story-Button pressed");
     		laodCreateStoryPopUp();	
@@ -98,9 +105,10 @@ public class TaskController {
     
     public void closePopUpWindow() {
     	popUpWindow.close();
+    	navigationController.laodTaskView();
     }
             
-    private void createVBox(List<Story> storyList) {
+    private void createVBox() {
 
     	for(Story s : storyList) {
     		Label storyNameLabel = new Label();
@@ -140,6 +148,8 @@ public class TaskController {
     		for(Task t : taskListStory) {
     			//getting tasks from taskList bc same tasks are saved under other reference in storyList
     			t = storyModel.getTaskWithID(t.getTaskID());
+    			
+    			System.out.println("[controller.TaskController] Tasks for VBox: " + t);
     			    			
     			Label taskNameLabel = new Label();
     			taskNameLabel.setText(t.getTaskName());
@@ -166,28 +176,24 @@ public class TaskController {
     			}
 
     		}    
-    		//    	t.getStory().getPositionGridPane()
     		
     		gridPane.add(vboxNEW, 2, s.getPositionGridPane());
     		gridPane.add(vboxINPROGRESS, 3, s.getPositionGridPane());
     		gridPane.add(vboxONHOLD, 4, s.getPositionGridPane());
     		gridPane.add(vboxREJECTED, 5, s.getPositionGridPane());
-    		gridPane.add(vboxCLOSED, 6, s.getPositionGridPane());
-    		
-    		
+    		gridPane.add(vboxCLOSED, 6, s.getPositionGridPane());	
     	}
-
     	System.out.println("[controller.TaskController] Row Count: " + getRowCount());
     }
     
     public void updateTasks() {
     	System.out.println("[controller.TaskController] Selected Project: " + selectedProject.getProjectName());
-    	List<Story> storyList = storyModel.getStoriesFromSelectedProject(selectedProject);
+    	this.storyList = storyModel.getStoriesFromSelectedProject(selectedProject);
 //    	List<Task> taskList = storyModel.getTasksFromSelectedStory(selectedProject.getStory());
     	for(Story s : storyList) {
     		System.out.println("[controller.TaskController] Stories: " + s);
     	}
-    	createVBox(storyList);	
+    	createVBox();	
     }
     
     /* Returns the number of rows in the GridPane
@@ -214,7 +220,6 @@ public class TaskController {
     
     //Not Finished -- ON WORK -- 
     public void mouseActivities() {
-
     	gridPane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {   
     		selectedStory = null;
     		selectedTask = null;
@@ -223,7 +228,6 @@ public class TaskController {
     		try {
     			if(clickedNode.getId().equals("StoryBox")) {
     				selectedStory = (Story) clickedNode.getUserData();
-//    				taskOrStory = "Story";
     				System.out.println("[controller.TaskController] StoryName: " + selectedStory.getStoryName());
     			} else if(clickedNode.getId().equals("AddTaskButton")) {
     				System.out.println("[controller.TaskController] AddTaskButton was pressed " + clickedNode.getUserData());
@@ -231,7 +235,6 @@ public class TaskController {
     				addTaskToStory();    				
     			} else if(clickedNode.getId().equals("TaskBox")) {
     				selectedTask = (Task) clickedNode.getUserData();
-//    				taskOrStory = "Task";
     				System.out.println("[controller.TaskController] TaskName: " + selectedTask.getTaskName());
     			}
     		} catch(NullPointerException e) {
@@ -248,11 +251,9 @@ public class TaskController {
     				if(parent.getUserData() != null) {
     					if(parent.getId().equals("StoryBox")) {
     						selectedStory = (Story) parent.getUserData();
-//    						taskOrStory = "Story";
     						System.out.println("[controller.TaskController] StoryName: " + selectedStory.getStoryName());
     					} else if(parent.getId().equals("TaskBox")) {
     						selectedTask = (Task) parent.getUserData();
-//    						taskOrStory = "Task";
     						System.out.println("[controller.TaskController] TaskName: " + selectedTask.getTaskName());
     					}
     				}	
@@ -273,6 +274,119 @@ public class TaskController {
     			openContextMenu();
     		}
     	});
+    }
+    
+  
+    public void mouseDragActivities() {
+
+    	gridPane.setOnDragDetected((MouseEvent event)
+    			->{
+    				Dragboard db = gridPane.startDragAndDrop(TransferMode.MOVE);
+    				ClipboardContent content = new ClipboardContent();
+
+    				Node clickedNode = event.getPickResult().getIntersectedNode();
+    				System.out.println("[controller.TaskController] 1--DRAGDEROP clicked Node ID: " + clickedNode.getId());
+    				try {
+    					if (clickedNode.getId().equals("TaskBox")) {
+    						selectedTask = (Task) clickedNode.getUserData();
+    						System.out.println("[controller.TaskController] 1--DRAGDEROP TaskName: " + selectedTask.getTaskName());
+    					}
+    				} catch(NullPointerException e) {
+    					System.out.println("[controller.TaskController] 1--DRAGDEROP NullPointerException: " + e.getMessage());
+    				}
+    				if (clickedNode != gridPane) {
+    					// click on descendant node
+    					Node parent = clickedNode.getParent();
+    					while (parent != gridPane) {
+    						clickedNode = parent;
+    						parent = clickedNode.getParent();
+    						if(parent.getUserData() != null) {
+    							if(parent.getId().equals("TaskBox")) {
+    								selectedTask = (Task) parent.getUserData();
+
+    								System.out.println("[controller.TaskController] 1--setOnDragDetected: Task: " + selectedTask);
+    							}
+    						}	
+    					}
+    				}
+
+    				Integer colIndex = GridPane.getColumnIndex(clickedNode);
+    				Integer rowIndex = GridPane.getRowIndex(clickedNode);
+    				System.out.println("[controller.TaskController] 1--DRAGDEROP Mouse clicked cell: " + colIndex + " and: " + rowIndex);
+
+    				Image dragDropImage = new Image(getClass().getResourceAsStream("../assets/rectangle.png"),150,30,false,true);
+    				content.put(DataFormat.IMAGE, dragDropImage);
+    				db.setContent(content);   		
+
+    				event.consume();
+    			});
+
+    	gridPane.setOnDragDone((DragEvent event) -> {
+    		System.out.println("[controller.TaskController] 5--setOnDragDone");
+    		event.consume();
+    	});
+
+
+    	gridPane.setOnDragOver((DragEvent event)
+    			-> {
+    				if (event.getDragboard().hasImage()) {
+    					event.acceptTransferModes(TransferMode.ANY);
+//    					System.out.println("[controller.TaskController] --setOnDragOver");
+    				}
+    				event.consume();
+    			});    	
+
+    	gridPane.setOnDragEntered((DragEvent event) -> {
+    		event.acceptTransferModes(TransferMode.ANY);
+    		System.out.println("[controller.TaskController] 2--setOnDragEntered");
+    		event.consume();
+    	});
+
+    	gridPane.setOnDragExited((DragEvent event) -> {
+    		event.acceptTransferModes(TransferMode.ANY);
+    		System.out.println("[controller.TaskController] 3--setOnDragExited");
+    		event.consume();
+    	});
+
+    	gridPane.setOnDragDropped((DragEvent event) -> {
+    		System.out.println("[controller.TaskController] 4--setOnDragDropped"); 
+    		Dragboard db = event.getDragboard();
+    		boolean success = false;
+    		Node clickedNode = event.getPickResult().getIntersectedNode();
+    		success = executeDragDrop(GridPane.getRowIndex(clickedNode), GridPane.getColumnIndex(clickedNode));		
+    		event.setDropCompleted(success);
+    		event.consume();
+    	});
+    }
+    
+    private boolean executeDragDrop(int targetROW, int targetCOL) {
+		System.out.println("[controller.TaskController] executeDragDrop: targetROW: " + targetROW + " targetCOL: " + targetCOL);
+
+		TaskStatus targetTaskStatus;
+		boolean validStatus = false;
+		switch(targetCOL) {
+		case 2: targetTaskStatus = TaskStatus.NEW; validStatus = true; break;
+		case 3: targetTaskStatus = TaskStatus.IN_PROGRESS; validStatus = true; break;
+		case 4: targetTaskStatus = TaskStatus.ON_HOLD; validStatus = true; break;
+		case 5: targetTaskStatus = TaskStatus.REJECTED; validStatus = true; break; 
+		case 6: targetTaskStatus = TaskStatus.CLOSED; validStatus = true; break;
+		default: targetTaskStatus = null; break;					
+		}
+
+		Story targetStory = null;
+		for( Story s : storyList) {
+			if(s.getPositionGridPane() == targetROW) {
+				targetStory = s;
+			}
+		}
+		System.out.println("[controller.TaskController] executeDragDrop: " + selectedTask + " Story: " + targetStory + " Status: " + targetTaskStatus);
+		if(validStatus == true && targetStory != null) {	
+			System.out.println("[controller.TaskController] executeDragDrop: " + targetStory + " Status: " + targetTaskStatus);
+			storyModel.updateTaskStatusStory(selectedTask, targetStory, targetTaskStatus);
+			navigationController.laodTaskView();
+			return true;
+		}
+		return false;
     }
     
     private void loadStoryDetailPopUp() {
@@ -350,7 +464,6 @@ public class TaskController {
     		});	
     		contextMenu.getItems().addAll(item1);
     	}
-
     	
     	gridPane.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
             @Override
@@ -400,9 +513,7 @@ public class TaskController {
     	    alert.close();
     	}
     }
-    
-    
-    
+        
     private void addTaskToStory() {
     	System.out.println("[controller.TaskController] addTaskToStory()");
     	try {

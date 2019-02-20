@@ -23,7 +23,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField prefHeight="32.0" prefWidth="230.0">
+                  <TextField fx:id="textFieldProjectSponsor" prefHeight="32.0" prefWidth="230.0">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -43,7 +43,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </Label>
-                  <ComboBox fx:id="projectStatusComboBox1" prefHeight="32.0" prefWidth="230.0">
+                  <ComboBox fx:id="projectManagerComboBox" prefHeight="32.0" prefWidth="230.0">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -60,7 +60,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </Label>
-                  <TableView prefHeight="200.0" prefWidth="200.0">
+                  <TableView fx:id="projectMemberTable" prefHeight="200.0" prefWidth="200.0">
                     <columns>
                       <TableColumn prefWidth="75.0" text="C1" />
                       <TableColumn prefWidth="75.0" text="C2" />
@@ -74,7 +74,7 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="65.0" prefWidth="400.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#projectDetailView" prefHeight="32.0" prefWidth="146.0" text="&lt; Project Details">
+                  <Button mnemonicParsing="false" onAction="#projectDetailViewButtonPressed" prefHeight="32.0" prefWidth="146.0" text="&lt; Project Details">
                      <font>
                         <Font size="15.0" />
                      </font>

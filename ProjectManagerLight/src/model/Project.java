@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class Project implements Serializable{
 
 	public enum ProjectStatus {
-		IN_DEVELOPMENT, CLOSED, NOT_STARTET
+		IN_DEVELOPMENT, CLOSED, NOT_STARTED
 	}
 	
 	private static final long serialVersionUID = 1L;

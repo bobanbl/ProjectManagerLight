@@ -1,11 +1,13 @@
 package model;
 
+import java.util.Date;
 import java.util.List;
 
 import database.DatabaseController;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import model.Project.ProjectStatus;
 import javafx.collections.ListChangeListener.Change;
 
 public class DataModelProject {
@@ -59,11 +61,16 @@ public class DataModelProject {
     	}
     }
     
-    public void createProject( String ProjectName, String description) {
+    public void createProject( String ProjectName, String description, ProjectStatus projectStatus, 
+    		Date projectStartDate, Date projectFinishDate, String projectSponsor) {
     	System.out.println("[model.DataModelProject] Adding new Project to List");
     	Project newProject = new Project();
     	newProject.setDescription(description);
 		newProject.setProjectName(ProjectName);
+		newProject.setProjectStatus(projectStatus);
+		newProject.setStartDate(projectStartDate);
+		newProject.setPlanedFinishDate(projectFinishDate);
+		newProject.setProjectSponsor(projectSponsor);
 		projectList.add(newProject);
 		printProjectData();    	
     }
@@ -83,11 +90,17 @@ public class DataModelProject {
     	printProjectData();
     }
     
-    public void updateProject(Project updateProject, String ProjectName, String description) {
+    public void updateProject(Project updateProject, String ProjectName, String description, 
+    		ProjectStatus projectStatus, Date startDate, Date planedFinishDate, String projectSponsor) {
     	System.out.println("[mdoel.DataModelProject] Update project" + updateProject.getProjectName());
     	int userIndex = projectList.indexOf(updateProject);
     	updateProject.setDescription(description);
     	updateProject.setProjectName(ProjectName);
+    	updateProject.setProjectStatus(projectStatus);
+    	updateProject.setStartDate(startDate);
+    	updateProject.setProjectSponsor(projectSponsor);
+    	System.out.println("[model.DataModelProject] UpdateProject FinishDate: " + planedFinishDate);
+    	updateProject.setPlanedFinishDate(planedFinishDate);
 		projectList.set(userIndex, updateProject);
     	printProjectData();
     }

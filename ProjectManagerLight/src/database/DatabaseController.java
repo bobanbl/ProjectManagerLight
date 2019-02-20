@@ -188,16 +188,16 @@ public class DatabaseController {
 		em.close();			
 	}	
 	
-	public Story readStory(String storyName) {
+	public Story readStory(int storyID) {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
 		EntityManager em = emf.createEntityManager();
 		
 		EntityTransaction transaction = em.getTransaction();
 		
-		System.out.println("[database.DatabaseController] Read Story: " + storyName);
+		System.out.println("[database.DatabaseController] Read Story: " + storyID);
 		transaction.begin();
 		
-		Story story = (Story)em.createQuery("select s from Story s where s.storyName like '" + storyName + "'").getSingleResult();
+		Story story = (Story)em.createQuery("select s from Story s where s.storyID = '" + storyID + "'").getSingleResult();
 				
 		em.persist(story);
 		transaction.commit();
@@ -264,7 +264,7 @@ public class DatabaseController {
 		
 		EntityTransaction transaction = em.getTransaction();
 		
-		System.out.println("[DatabaseController] Create Story: " + taskName);
+		System.out.println("[DatabaseController] Create Task: " + taskName);
 		transaction.begin();
 		
 		Task newTask= new Task();
@@ -319,7 +319,7 @@ public class DatabaseController {
 		
 		EntityTransaction transaction = em.getTransaction();
 		
-		System.out.println("[database.DatabaseController] Read Story: " + TaskName);
+		System.out.println("[database.DatabaseController] Read Task: " + TaskName);
 		transaction.begin();
 		
 		Task task = (Task)em.createQuery("select s from Story s where s.storyName like '" + TaskName + "'").getSingleResult();
@@ -336,7 +336,7 @@ public class DatabaseController {
 		EntityManager em = emf.createEntityManager();	
 		EntityTransaction transaction = em.getTransaction();
 		
-		System.out.println("[DatabaseController] Update Story: " + updateTask.getTaskName());
+		System.out.println("[DatabaseController] Update Task: " + updateTask.getTaskName());
 		transaction.begin();		
 		
 		Task updatedTask = em.merge(updateTask);
