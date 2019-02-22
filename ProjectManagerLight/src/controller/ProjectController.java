@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import com.sun.javafx.property.PropertyReference;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,6 +28,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import model.DataModel;
 import model.DataModelProject;
 import model.Project;
 import model.ProjectUser;
@@ -35,6 +38,7 @@ public class ProjectController {
 	
 	private ProjectDetailController projectDetailController;
 	private NavigationController navigationController;
+	private DataModel userModel;
 	private boolean newProject;
 	private DataModelProject projectModel;
 	ObservableList<Project> selectedProjectList;
@@ -72,9 +76,11 @@ public class ProjectController {
 	    	FXMLLoader loader = new FXMLLoader();
 	    	loader.setLocation(getClass().getResource("../view/projectDetail.fxml"));
 			Parent root = loader.load();
-			this.projectDetailController = loader.getController();
-			this.projectDetailController.setProjectController(this);
-			this.projectDetailController.setDataModelProject(projectModel);
+			projectDetailController = loader.getController();
+			projectDetailController.setProjectController(this);
+			projectDetailController.setDataModelProject(projectModel);
+			System.err.println("---------------" + userModel);
+			projectDetailController.setDataModelUser(userModel);
 			
 			anchorPaneDetailView.getChildren().setAll(root);	
     	} catch (IOException e) {
@@ -101,12 +107,17 @@ public class ProjectController {
     	this.navigationController = navigationController;
     }
     
+    public void setDataModelUser(DataModel userModel) {
+    	this.userModel = userModel;
+    }
+    
     public void initializeTable() {
     	System.out.println("[controller.ProjectController] Initializing table view"); 	
     	projectTable.setItems(projectModel.getProjectList());
     	projectTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
     	colProjectName.setCellValueFactory(new PropertyValueFactory<Project, String>("projectName"));
     	colProjectStatus.setCellValueFactory(new PropertyValueFactory<Project, String>("projectStatus"));
+    	
     	//Select first project in table at the first opening of the application
     	if(navigationController.getSelectedProject() == null) {
     		navigationController.setSelectedProject(projectTable.getItems().get(0));
@@ -144,6 +155,7 @@ public class ProjectController {
 			projectDetailController.setProjectController(this);
 			projectDetailController.setDataModelProject(projectModel);
 			projectDetailController.setSelectedProject(selectedProjectList.get(0));
+			projectDetailController.setDataModelUser(userModel);
 			
 			anchorPaneDetailView.getChildren().setAll(root);	
     	} catch (IOException e) {

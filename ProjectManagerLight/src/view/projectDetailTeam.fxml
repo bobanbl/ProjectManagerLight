@@ -60,16 +60,17 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </Label>
-                  <TableView fx:id="projectMemberTable" prefHeight="200.0" prefWidth="200.0">
+                  <TableView fx:id="projectMemberTable" prefHeight="350.0" prefWidth="232.0">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="C1" />
-                      <TableColumn prefWidth="75.0" text="C2" />
+                        <TableColumn fx:id="colShortcut" prefWidth="45.0" text="Shortc." />
+                        <TableColumn fx:id="colFirstName" prefWidth="62.0" text="First Name" />
+                      <TableColumn fx:id="colLastName" prefWidth="57.0" text="Last Name" />
+                      <TableColumn fx:id="colRole" prefWidth="67.0" text="Role" />
                     </columns>
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
                   </TableView>
-                  <ScrollBar orientation="VERTICAL" pickOnBounds="false" prefHeight="342.0" prefWidth="14.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="65.0" prefWidth="400.0">

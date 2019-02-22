@@ -69,28 +69,28 @@ public class UserManController {
     
     @FXML
     void initialize() {
-//Method loadUserDetailPopUp() is called, when addUserButton is pressed
+    	//Method loadUserDetailPopUp() is called, when addUserButton is pressed
     	addUserButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-    		System.out.println("Add-User-Button pressed");
+    		System.out.println("[controller.UserManController] Add-User-Button pressed");
     		laodUserCreatePopUp();
     	});
-    	
+
     	tablesChanges();
-    	
     }
-//opens User Detail Pop Up Window - Create User    
+    
+    //opens User Detail Pop Up Window - Create User    
     private void laodUserCreatePopUp() {
     	try {
-	    	FXMLLoader loader = new FXMLLoader();
-	    	loader.setLocation(getClass().getResource("../view/userCreatePopUp.fxml"));  	
-			Parent root = loader.load();
-			
-			UserCreateController userCreateController =  loader.getController();
-			userCreateController.setDataModel(model);
-			userCreateController.setUserManController(this);
-			
-	    	Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));	
-	    	popUpWindow = new Stage();
+    		FXMLLoader loader = new FXMLLoader();
+    		loader.setLocation(getClass().getResource("../view/userCreatePopUp.fxml"));  	
+    		Parent root = loader.load();
+
+    		UserCreateController userCreateController =  loader.getController();
+    		userCreateController.setDataModel(model);
+    		userCreateController.setUserManController(this);
+
+    		Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));	
+    		popUpWindow = new Stage();
 	    	
 	    	popUpWindow.setTitle("Create User");
 	    	popUpWindow.setScene(scene);
@@ -102,16 +102,13 @@ public class UserManController {
     
     public void setDataModel(DataModel model) {
     	this.model = model;
-    	System.out.println("opened: " + this);
     	initializeTable();
     }
     
     private void initializeTable() {
-    	System.out.println("initialize table view");
-    	System.out.println(model);
+    	System.out.println("[controller.UserManController] initialize table view");
     	
     	userTable.setItems(model.getUserList());
-//    	userTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     	userTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
     	colShortcut.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("userShortcut"));
     	colFirstName.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("firstName"));
@@ -120,7 +117,7 @@ public class UserManController {
     	colRole.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("role"));
 //    	colProjects.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("projects"));
     }
-//Close Pop-up window - Create User   
+    //Close Pop-up window - Create User   
     public void closePopUpWindow() {
     	popUpWindow.close();
     }
@@ -218,7 +215,7 @@ public class UserManController {
     	alert.setHeaderText("Deleting user: " + selectedUserList.get(0).getUserShortcut() + " Are you sure?");
     	Optional<ButtonType> result = alert.showAndWait();
     	if(result.get() == ButtonType.OK) {
-    		System.out.println("[UserManController] User deleted!");
+    		System.out.println("[controller.UserManController] User deleted!");
     		model.deleteUser(selectedUserList.get(0));	
     	}
     	else if(result.get() == ButtonType.CANCEL) {

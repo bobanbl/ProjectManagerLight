@@ -11,7 +11,7 @@ public class DatabaseTest {
 		
 		DatabaseController databaseTestController = new DatabaseController();
 		databaseTestController.createUserDatabase("a", "Franz", "Mayer", "franz@company.com", "Developer", "a");
-		databaseTestController.createProjectDirectInDatabase("FirstProject", "test Project");
+//		databaseTestController.createProjectDirectInDatabase("FirstProject", "test Project");
 //		Project project = databaseTestController.readProject("FirstProject#1");
 //		databaseTestController.createStoryDirectInDatabase("TestStory", 99, "Story99", project, 1);
 //		Story story = databaseTestController.readStory("Story99");

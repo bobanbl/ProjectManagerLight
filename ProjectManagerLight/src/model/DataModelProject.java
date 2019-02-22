@@ -62,7 +62,7 @@ public class DataModelProject {
     }
     
     public void createProject( String ProjectName, String description, ProjectStatus projectStatus, 
-    		Date projectStartDate, Date projectFinishDate, String projectSponsor) {
+    		Date projectStartDate, Date projectFinishDate, String projectSponsor, ProjectUser projectManager) {
     	System.out.println("[model.DataModelProject] Adding new Project to List");
     	Project newProject = new Project();
     	newProject.setDescription(description);
@@ -71,6 +71,7 @@ public class DataModelProject {
 		newProject.setStartDate(projectStartDate);
 		newProject.setPlanedFinishDate(projectFinishDate);
 		newProject.setProjectSponsor(projectSponsor);
+		newProject.setProjectManager(projectManager);
 		projectList.add(newProject);
 		printProjectData();    	
     }
@@ -91,7 +92,7 @@ public class DataModelProject {
     }
     
     public void updateProject(Project updateProject, String ProjectName, String description, 
-    		ProjectStatus projectStatus, Date startDate, Date planedFinishDate, String projectSponsor) {
+    		ProjectStatus projectStatus, Date startDate, Date planedFinishDate, String projectSponsor, ProjectUser projectManager) {
     	System.out.println("[mdoel.DataModelProject] Update project" + updateProject.getProjectName());
     	int userIndex = projectList.indexOf(updateProject);
     	updateProject.setDescription(description);
@@ -99,6 +100,7 @@ public class DataModelProject {
     	updateProject.setProjectStatus(projectStatus);
     	updateProject.setStartDate(startDate);
     	updateProject.setProjectSponsor(projectSponsor);
+    	updateProject.setProjectManager(projectManager);
     	System.out.println("[model.DataModelProject] UpdateProject FinishDate: " + planedFinishDate);
     	updateProject.setPlanedFinishDate(planedFinishDate);
 		projectList.set(userIndex, updateProject);

@@ -16,7 +16,17 @@ import javax.persistence.*;
 public class Project implements Serializable{
 
 	public enum ProjectStatus {
-		IN_DEVELOPMENT, CLOSED, NOT_STARTED
+		IN_DEVELOPMENT("In development"), CLOSED("Closed"), NOT_STARTED("Not started");
+		
+		String name;
+		
+		private ProjectStatus(String name) {
+			this.name = name;
+		}
+		
+		public String getName() {			
+			return this.name;
+		}
 	}
 	
 	private static final long serialVersionUID = 1L;
@@ -31,8 +41,11 @@ public class Project implements Serializable{
 	private Date planedFinishDate;
 	private String projectSponsor;
 	private ProjectUser projectManager;
-	@OneToMany
-	private List<ProjectUser> projectMember = new ArrayList<>();
+	@ManyToMany(fetch=FetchType.EAGER, cascade = {CascadeType.ALL})
+	private List<ProjectUser> projectMembers = new ArrayList<>();
+//	@JoinColumn(name = "FKUSERID", JoinColumns = { @JoinColumns"USERID")
+	
+	
 	@OneToMany(mappedBy = "project", orphanRemoval=true, cascade = CascadeType.ALL)
 	private List<Story> story = new ArrayList<>();
 	
@@ -105,16 +118,28 @@ public class Project implements Serializable{
 	}
 
 	public List<ProjectUser> getProjectMember() {
-		return projectMember;
+		return projectMembers;
 	}
 
-	public void setProjectMember(List<ProjectUser> projectMember) {
-		this.projectMember = projectMember;
+	public void setProjectMembers(List<ProjectUser> projectMember) {
+		this.projectMembers = projectMember;
 	}
 	
-	public void addProjectMember(ProjectUser user) {
-		user.getInvolvedProjects().add(this);
-		this.projectMember.add(user);
+	public void addProjectMembers(ProjectUser user) {
+		//		if(!this.getProjectMember().contains(user)) {
+		this.projectMembers.add(user);
+		System.out.println("[model.Project] addProjectMembers: " + user);
+
+		//			user.addProjectToUser(this);
+		//		}
+	}
+	
+	public void deleteMemberFromProject(ProjectUser user) {
+		for(ProjectUser u : projectMembers) {
+			if(u.getUserID() == user.getUserID()) {
+				projectMembers.remove(u);
+			}
+		}
 	}
 
 	public List<Story> getStory() {

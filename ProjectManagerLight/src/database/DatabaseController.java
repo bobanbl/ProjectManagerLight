@@ -137,8 +137,7 @@ public class DatabaseController {
 	
 	public ProjectUser updateUser(ProjectUser updateUser) {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
-		EntityManager em = emf.createEntityManager();
-		
+		EntityManager em = emf.createEntityManager();	
 		EntityTransaction transaction = em.getTransaction();
 		
 		System.out.println("[DatabaseController] Update User: " + updateUser.getUserShortcut());
@@ -148,7 +147,7 @@ public class DatabaseController {
 		
 		transaction.commit();
 		em.close();
-		
+
 		return updatedUser;
 	}
 	//-------------Story--------------------------------

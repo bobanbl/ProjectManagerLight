@@ -231,7 +231,7 @@ public class DataModelStory {
     	}
     	selectedTask.setStatus(targetTaskStatus);
     	taskList.set(taskIndex, selectedTask);
-
+//    	loadStoryData();
     	printTaskData();	
     	printStoryData();
     }

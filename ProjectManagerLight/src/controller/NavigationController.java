@@ -61,32 +61,32 @@ public class NavigationController {
     	 * and in this Controller "@FXML	ProjectController projectController;" was included
     	 */
     	projectController.setNavigationController(this);
-    	
+
 
     	labelSelectedView.setText("Project Dashboard");
-//click on Navigation Button Dashboard View calls method loadProjectView()    	
+    	//click on Navigation Button Dashboard View calls method loadProjectView()    	
     	navigationButtonDashboardView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
     		System.out.println("Project Dashboard Navigation Button pressed");
     		laodProjectView();
     	});
-//click on Navigation Button Task View calls method loadTaskView()        	
+    	//click on Navigation Button Task View calls method loadTaskView()        	
     	navigationButtonTaskView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
     		System.out.println("Task Navigation Button pressed");
     		laodTaskView();		
     	});
-//click on Navigation Button User Management calls method loadUserManView()        	
+    	//click on Navigation Button User Management calls method loadUserManView()        	
     	navigationButtonUserManView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
     		System.out.println("User Man. Navigation Button pressed");
     		laodUserManView();
     	});   	
     }
-    
+
     public void setModels(DataModel userModel, DataModelStory storyModel, DataModelProject projectModel) {
     	this.userModel = userModel;
     	this.storyModel = storyModel;
     	this.projectModel = projectModel;
     	projectController.setDataModelProject(projectModel);
-    	
+    	projectController.setDataModelUser(userModel);
     }
     
     public void setSelectedProject(Project selectedProject) {
@@ -157,7 +157,7 @@ public class NavigationController {
 			ProjectController projectController =  loader.getController();
 			projectController.setNavigationController(this);
 			projectController.setDataModelProject(projectModel);
-			
+			projectController.setDataModelUser(userModel);
 			
 			anchorPaneViews.getChildren().setAll(root);	
 			labelSelectedView.setText("Project Dashboard");			

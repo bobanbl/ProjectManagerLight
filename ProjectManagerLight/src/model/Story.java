@@ -36,10 +36,10 @@ public class Story implements Serializable{
 	private int positionGridPane;
 	@OneToMany(mappedBy = "story", orphanRemoval=true, cascade = CascadeType.ALL)
 	private List<Task> tasks = new ArrayList<>();
-	//(fetch=FetchType.LAZY)
 	@OneToOne
 	@JoinColumn(name = "FKProjectID", referencedColumnName = "PROJECTID")
 	private Project project;
+	
 //	private List<Task> tasks = new ArrayList<>();
 	
 	public int getStoryID() {
@@ -79,16 +79,13 @@ public class Story implements Serializable{
 		this.tasks = tasks;
 	}
 	
-	public void removeTaskFromStory(int taskID) {
-		for(Task t : tasks) {
-			if(t.getTaskID() == taskID) {
-				tasks.remove(t);
-			}
-		}	
-	}
-	
-//	public void removeTask(Task task) {
-//		tasks.remove(task);
+	//For testing
+//	public void removeTaskFromStory(int taskID) {
+//		for(Task t : tasks) {
+//			if(t.getTaskID() == taskID) {
+//				tasks.remove(t);
+//			}
+//		}	
 //	}
 	
 	public void addTasktoStory(Task newTask) {

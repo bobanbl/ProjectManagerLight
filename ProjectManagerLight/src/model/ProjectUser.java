@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 /**
@@ -30,11 +33,13 @@ public class ProjectUser implements Serializable{
 	private String eMail;
 	private String role;
 	private String password;
-	@OneToMany
+	@ManyToMany(mappedBy = "projectMembers", fetch=FetchType.EAGER, cascade = {CascadeType.ALL})
 	private List<Project> involvedProjects = new ArrayList<>();
-
+	
+	@OneToMany
 	private List<Story> involvedStories = new ArrayList<>();
-
+	
+	@OneToMany
 	private List<Task> involvedTasks = new ArrayList<>();
 	
 	public ProjectUser() {
@@ -92,7 +97,26 @@ public class ProjectUser implements Serializable{
 	}
 	public void setInvolvedProjects(List<Project> involvedProjects) {
 		this.involvedProjects = involvedProjects;
+		
 	}
+	
+	public void addProjectToUser(Project project) {	
+		if(!project.getProjectMember().contains(this)) {
+			System.out.println("[model.ProjectUser] addProjectToUser, Project: " + project);
+			this.involvedProjects.add(project);
+			project.addProjectMembers(this);
+		}
+	}
+	
+	public void deleteProjectFromUser(Project project) {
+		for(Project p : involvedProjects) {
+			if(p.getProjectID() == project.getProjectID()) {
+				involvedProjects.remove(p);
+				p.deleteMemberFromProject(this);
+			}
+		}
+	}
+		
 	public String getPassword() {
 		return password;
 	}

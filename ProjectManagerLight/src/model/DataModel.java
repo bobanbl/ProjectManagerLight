@@ -141,7 +141,7 @@ public class DataModel {
      * @param password
      */
     public void updateUser(ProjectUser updateUser, String userShortcut, String firstName, String lastName, String eMail, String role, String password) {
-    	System.out.println("[DataModel] Update user" + updateUser.getUserShortcut());
+    	System.out.println("[model.DataModel] Update user" + updateUser.getUserShortcut());
     	int userIndex = userList.indexOf(updateUser);
     	updateUser.setFirstName(firstName);
     	updateUser.setLastName(lastName);
@@ -151,6 +151,41 @@ public class DataModel {
 		updateUser.setRole(role);
 		userList.set(userIndex, updateUser);
     	printUserData();
+    }
+    
+    public void setProjectToUser(ProjectUser updateUser, Project project) {
+    	System.out.println("[model.DataModel] Set project to user: " + updateUser);
+    	for(Project p : updateUser.getInvolvedProjects()) {
+    		if(!(p.getProjectID() == project.getProjectID())) {
+    			System.out.println("[model.DataModel] Set project to user" + updateUser + " Project: " + project);
+    			int userIndex = userList.indexOf(updateUser);
+    	    	updateUser.addProjectToUser(project);
+    			userList.set(userIndex, updateUser);
+    		} 
+    	}    	
+    	printUserData();
+    }
+    
+    public void removeProjectFromAllUser(Project project) {
+    	System.out.println("[model.DataModel] Remove project from all user. Project: " + project);
+    	for(ProjectUser u : userList) {
+    		u.deleteProjectFromUser(project);
+    	}
+    	printUserData();
+    }
+    
+    public ObservableList<ProjectUser> getUserBelongingToProject(Project project) {
+    	System.out.println("[model.DataModel] getUserBelongingToProject Project" + project);
+    	ObservableList<ProjectUser> list = FXCollections.observableArrayList();
+    	for(ProjectUser u : userList) {
+    		for(Project p : u.getInvolvedProjects()) {
+    			
+    			if(p.getProjectID() == project.getProjectID()) {
+    				list.add(u);
+    			}
+    		}
+    	}
+    	return list;
     }
     
     

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import org.w3c.dom.events.EventException;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -67,8 +69,6 @@ public class TaskController {
     private ImageView addStoryButton;
     @FXML
     void initialize() {
-    	mouseActivities();
-    	mouseDragActivities();
     	addStoryButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
     		System.out.println("[controller.TaskController] Add-Story-Button pressed");
     		laodCreateStoryPopUp();	
@@ -127,12 +127,29 @@ public class TaskController {
     		gridPane.add(vbox, 0, s.getPositionGridPane());
     		vbox.setUserData(s);
     		vbox.setId("StoryBox");
+    		
+    		vbox.setOnMouseClicked(event ->{
+			System.out.println("[controller.TaskController] StoryName: " + vbox.getId());
+			selectedStory = s;
+			selectedTask = null;
+			if (event.getClickCount() == 2) {
+    				loadStoryDetailPopUp();
+    		} else if (event.getButton() == MouseButton.SECONDARY) {
+    			System.out.println("[controller.TaskController] Right Mouse Button clicked");
+    			openContextMenu();
+    		}	
+    		});
 
     		Image addImage = new Image(getClass().getResourceAsStream("../assets/AddProject.png"),20,20,false,true);
     		ImageView addTaskButton = new ImageView();
     		addTaskButton.setImage(addImage);
     		addTaskButton.setUserData(s);
     		addTaskButton.setId("AddTaskButton");
+    		addTaskButton.setOnMouseClicked(event ->{
+    			System.out.println("[controller.TaskController] AddTaskButton was pressed " + addTaskButton.getUserData());
+				selectedStory = (Story) addTaskButton.getUserData();
+				addTaskToStory();  
+    		});
 
     		gridPane.add(addTaskButton, 1, s.getPositionGridPane());
 
@@ -166,6 +183,67 @@ public class TaskController {
     			vbox1.getStyleClass().add("vboxTasks");
     			vbox1.setUserData(t);
     			vbox1.setId("TaskBox");
+    			
+    			vbox1.setOnMouseClicked(event ->{
+    				System.out.println("[controller.TaskController] StoryName: " + vbox.getId());
+    				selectedStory = null;
+    				selectedTask = (Task) vbox1.getUserData();
+    				if (event.getClickCount() == 2) {
+    					loadTaskDetailPopUp();
+    				} else if (event.getButton() == MouseButton.SECONDARY) {
+    					System.out.println("[controller.TaskController] Right Mouse Button clicked");
+    					openContextMenu();
+    				}	
+    			});
+    			
+    			vbox1.setOnDragDetected((MouseEvent event) -> {
+    				Dragboard db = vbox1.startDragAndDrop(TransferMode.MOVE);
+    				ClipboardContent content = new ClipboardContent();
+    				selectedTask = (Task) vbox1.getUserData();
+    				Image dragDropImage = new Image(getClass().getResourceAsStream("../assets/rectangle.png"),150,30,false,true);
+    				content.put(DataFormat.IMAGE, dragDropImage);
+    				db.setContent(content);   		
+
+    				event.consume();
+    			});
+    			
+    			gridPane.setOnDragDone((DragEvent event) -> {
+    				System.out.println("[controller.TaskController] 5--setOnDragDone");
+    				event.consume();
+    			});
+
+
+    			gridPane.setOnDragOver((DragEvent event)
+    					-> {
+    						if (event.getDragboard().hasImage()) {
+    							event.acceptTransferModes(TransferMode.ANY);
+    						}
+    						event.consume();
+    					});    	
+
+    			gridPane.setOnDragEntered((DragEvent event) -> {
+    				event.acceptTransferModes(TransferMode.ANY);
+    				System.out.println("[controller.TaskController] 2--setOnDragEntered");
+    				event.consume();
+    			});
+
+    			gridPane.setOnDragExited((DragEvent event) -> {
+    				event.acceptTransferModes(TransferMode.ANY);
+    				System.out.println("[controller.TaskController] 3--setOnDragExited");
+    				event.consume();
+    			});
+
+    			gridPane.setOnDragDropped((DragEvent event) -> {
+    				System.out.println("[controller.TaskController] 4--setOnDragDropped"); 
+    				Dragboard db = event.getDragboard();
+    				boolean success = false;
+    				Node clickedNode = event.getPickResult().getIntersectedNode();
+    				success = executeDragDrop(GridPane.getRowIndex(clickedNode), GridPane.getColumnIndex(clickedNode));		
+    				event.setDropCompleted(success);
+    				event.consume();
+    			});
+    			
+    			
 
     			switch(t.getStatus()) {
     			case NEW: vboxNEW.getChildren().add(vbox1); break;
@@ -217,148 +295,7 @@ public class TaskController {
     	this.selectedProject = selectedProject;
     	updateTasks();
     }
-    
-    //Not Finished -- ON WORK -- 
-    public void mouseActivities() {
-    	gridPane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {   
-    		selectedStory = null;
-    		selectedTask = null;
-    		Node clickedNode = event.getPickResult().getIntersectedNode();
-    		System.out.println("[controller.TaskController] clicked Node ID: " + clickedNode.getId());
-    		try {
-    			if(clickedNode.getId().equals("StoryBox")) {
-    				selectedStory = (Story) clickedNode.getUserData();
-    				System.out.println("[controller.TaskController] StoryName: " + selectedStory.getStoryName());
-    			} else if(clickedNode.getId().equals("AddTaskButton")) {
-    				System.out.println("[controller.TaskController] AddTaskButton was pressed " + clickedNode.getUserData());
-    				selectedStory = (Story) clickedNode.getUserData();
-    				addTaskToStory();    				
-    			} else if(clickedNode.getId().equals("TaskBox")) {
-    				selectedTask = (Task) clickedNode.getUserData();
-    				System.out.println("[controller.TaskController] TaskName: " + selectedTask.getTaskName());
-    			}
-    		} catch(NullPointerException e) {
-    			System.out.println("[controller.TaskController] NullPointerException: " + e.getMessage());
-    		}
-    		
-    		if (clickedNode != gridPane) {
-    			// click on descendant node
-    			Node parent = clickedNode.getParent();
-
-    			while (parent != gridPane) {
-    				clickedNode = parent;
-    				parent = clickedNode.getParent();
-    				if(parent.getUserData() != null) {
-    					if(parent.getId().equals("StoryBox")) {
-    						selectedStory = (Story) parent.getUserData();
-    						System.out.println("[controller.TaskController] StoryName: " + selectedStory.getStoryName());
-    					} else if(parent.getId().equals("TaskBox")) {
-    						selectedTask = (Task) parent.getUserData();
-    						System.out.println("[controller.TaskController] TaskName: " + selectedTask.getTaskName());
-    					}
-    				}	
-    			}
-    			Integer colIndex = GridPane.getColumnIndex(clickedNode);
-    			Integer rowIndex = GridPane.getRowIndex(clickedNode);
-    			System.out.println("[controller.TaskController] Mouse clicked cell: " + colIndex + " and: " + rowIndex);
-    		}
-    		
-    		if (event.getClickCount() == 2 && (selectedStory != null || selectedTask != null)) {
-    			if(selectedStory != null ) {
-    				loadStoryDetailPopUp();
-    			} else if(selectedTask != null) {
-    				loadTaskDetailPopUp();
-    			}
-    		} else if (event.getButton() == MouseButton.SECONDARY && (selectedStory != null || selectedTask != null)) {
-    			System.out.println("[controller.TaskController] Right Mouse Button clicked");
-    			openContextMenu();
-    		}
-    	});
-    }
-    
-  
-    public void mouseDragActivities() {
-
-    	gridPane.setOnDragDetected((MouseEvent event)
-    			->{
-    				Dragboard db = gridPane.startDragAndDrop(TransferMode.MOVE);
-    				ClipboardContent content = new ClipboardContent();
-
-    				Node clickedNode = event.getPickResult().getIntersectedNode();
-    				System.out.println("[controller.TaskController] 1--DRAGDEROP clicked Node ID: " + clickedNode.getId());
-    				try {
-    					if (clickedNode.getId().equals("TaskBox")) {
-    						selectedTask = (Task) clickedNode.getUserData();
-    						System.out.println("[controller.TaskController] 1--DRAGDEROP TaskName: " + selectedTask.getTaskName());
-    					}
-    				} catch(NullPointerException e) {
-    					System.out.println("[controller.TaskController] 1--DRAGDEROP NullPointerException: " + e.getMessage());
-    				}
-    				if (clickedNode != gridPane) {
-    					// click on descendant node
-    					Node parent = clickedNode.getParent();
-    					while (parent != gridPane) {
-    						clickedNode = parent;
-    						parent = clickedNode.getParent();
-    						if(parent.getUserData() != null) {
-    							if(parent.getId().equals("TaskBox")) {
-    								selectedTask = (Task) parent.getUserData();
-
-    								System.out.println("[controller.TaskController] 1--setOnDragDetected: Task: " + selectedTask);
-    							}
-    						}	
-    					}
-    				}
-
-    				Integer colIndex = GridPane.getColumnIndex(clickedNode);
-    				Integer rowIndex = GridPane.getRowIndex(clickedNode);
-    				System.out.println("[controller.TaskController] 1--DRAGDEROP Mouse clicked cell: " + colIndex + " and: " + rowIndex);
-
-    				Image dragDropImage = new Image(getClass().getResourceAsStream("../assets/rectangle.png"),150,30,false,true);
-    				content.put(DataFormat.IMAGE, dragDropImage);
-    				db.setContent(content);   		
-
-    				event.consume();
-    			});
-
-    	gridPane.setOnDragDone((DragEvent event) -> {
-    		System.out.println("[controller.TaskController] 5--setOnDragDone");
-    		event.consume();
-    	});
-
-
-    	gridPane.setOnDragOver((DragEvent event)
-    			-> {
-    				if (event.getDragboard().hasImage()) {
-    					event.acceptTransferModes(TransferMode.ANY);
-//    					System.out.println("[controller.TaskController] --setOnDragOver");
-    				}
-    				event.consume();
-    			});    	
-
-    	gridPane.setOnDragEntered((DragEvent event) -> {
-    		event.acceptTransferModes(TransferMode.ANY);
-    		System.out.println("[controller.TaskController] 2--setOnDragEntered");
-    		event.consume();
-    	});
-
-    	gridPane.setOnDragExited((DragEvent event) -> {
-    		event.acceptTransferModes(TransferMode.ANY);
-    		System.out.println("[controller.TaskController] 3--setOnDragExited");
-    		event.consume();
-    	});
-
-    	gridPane.setOnDragDropped((DragEvent event) -> {
-    		System.out.println("[controller.TaskController] 4--setOnDragDropped"); 
-    		Dragboard db = event.getDragboard();
-    		boolean success = false;
-    		Node clickedNode = event.getPickResult().getIntersectedNode();
-    		success = executeDragDrop(GridPane.getRowIndex(clickedNode), GridPane.getColumnIndex(clickedNode));		
-    		event.setDropCompleted(success);
-    		event.consume();
-    	});
-    }
-    
+        
     private boolean executeDragDrop(int targetROW, int targetCOL) {
 		System.out.println("[controller.TaskController] executeDragDrop: targetROW: " + targetROW + " targetCOL: " + targetCOL);
 
@@ -374,7 +311,7 @@ public class TaskController {
 		}
 
 		Story targetStory = null;
-		for( Story s : storyList) {
+		for(Story s : storyList) {
 			if(s.getPositionGridPane() == targetROW) {
 				targetStory = s;
 			}

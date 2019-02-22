@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,9 +22,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.DataModel;
 import model.DataModelProject;
 import model.Project;
 import model.Project.ProjectStatus;
+import model.ProjectUser;
 
 //Controller for projectDetail.fxml
 public class ProjectDetailController {
@@ -31,23 +34,32 @@ public class ProjectDetailController {
 	private ProjectController projectController;
 	private ProjectDetailTeamController projectDetailTeamController;
 	private DataModelProject projectModel;
+	private DataModel userModel;
 	private boolean newProject;
 	private Project selectedProject;
 	private Date projectStartDateNEW = null;
 	private Date projectFinishDateNEW  = null;
 	private Date projectStartDateOLD = null;
 	private Date projectFinishDateOLD = null;
+	private ProjectUser projectManagerOLD = null;
+	private ObservableList<ProjectUser> projectMembersListOLD = null;
 	
 	private String projectNameNEW;
 	private String descriptionNEW;
 	private ProjectStatus projectStatusNEW;
 	private String projectSponsorNEW;
+	private ProjectUser projectManagerNEW = null;
+	private ObservableList<ProjectUser> projectMembersListNEW = null;
 	
 	private String projectNameTemp;
 	private String descriptionTemp;
 	private ProjectStatus projectStatusTemp;
 	private Date projectStartDateTEMP = null;
 	private Date projectFinishDateTEMP = null;
+	private String projectSponsorTemp;
+	private ProjectUser projectManagerTemp = null;
+	private boolean firstOpeningTeamWindow = true;
+	private ObservableList<ProjectUser> projectMembersListTemp = null;
 
 	@FXML
 	ProjectDetailMainController projectDetailMainController;
@@ -82,10 +94,10 @@ public class ProjectDetailController {
 		projectFinishDate = projectDetailMainController.getprojectFinishDate();
 		
 		String projectSponsor = projectDetailTeamController.getProjectSponsor();
-		
+		ProjectUser projectManager = projectDetailTeamController.getProjectManager();
 
 
-		projectModel.createProject(ProjectName, description, projectStatus, projectStartDate, projectFinishDate, projectSponsor);
+		projectModel.createProject(ProjectName, description, projectStatus, projectStartDate, projectFinishDate, projectSponsor, projectManager);
 		projectController.closeDetailWindow();	
 	}
 
@@ -96,41 +108,43 @@ public class ProjectDetailController {
 		 * and in this Controller "@FXML	ProjectDetailMainController projectDetailMainController;" was included
 		 */
 		projectDetailMainController.setProjectDetailController(this);
+		
 
 		//clicking on the Close-Detail-Window-Button calls the method closeDetailWindow in ProjectController   	
 		closeDetailViewButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			System.out.println("[controller.ProjectDetailCOntroller] Close-Detail-Window-Button pressed");
-			if(checkIfChangesExists()) {
-				confirmClosingProjectDetailWindowChanges();
-			} else {
-				projectController.closeDetailWindow();
+			if(checkIfValuesValid()) {
+				if(checkIfChangesExists()) {
+					confirmClosingProjectDetailWindowChanges();
+				} else {
+					projectController.closeDetailWindow();
+				}
 			}
 		});
 	}
 	//loads the Detail-Main-Window in the AnchorPane of the Detail-Window
 	public void loadDetailMainWindow() {
+		saveValuesTemporaryTeamWindow();
 		try {
 			anchorPaneDetailViews.getChildren().clear();
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource("../view/projectDetailMain.fxml"));  	
 			Parent root = loader.load();
+			
 			this.projectDetailMainController = loader.getController();
 			this.projectDetailMainController.setProjectDetailController(this);
 			projectDetailMainController.setValuesFromTemp(selectedProject, projectNameTemp, descriptionTemp, projectStatusTemp, projectStartDateTEMP, projectFinishDateTEMP);
-//			projectDetailMainController.setIfNewProject(newProject);
-//			if(!newProject) {
-//				projectDetailMainController.setSelectedProject(selectedProject);
-//			}
+			
 			
 			anchorPaneDetailViews.getChildren().setAll(root);  	
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	//loads the Detail-Team-Window in the AnchorPane of the Detail-Window    
 	public void loadDetailTeamWindow() {
-		saveValuesTemporary();
+		saveValuesTemporaryMainWindow();
 		try {
 			anchorPaneDetailViews.getChildren().clear();
 			FXMLLoader loader = new FXMLLoader();
@@ -138,23 +152,43 @@ public class ProjectDetailController {
 			Parent root = loader.load();
 			projectDetailTeamController = loader.getController();
 			projectDetailTeamController.setProjectDetailController(this);
+			projectDetailTeamController.setDataModelUser(userModel);
+			
 			if(!newProject) {
 				projectDetailTeamController.setSelectedProject(selectedProject);
 			}
+			
+			if(projectMembersListTemp == null) {
+				projectDetailTeamController.setUserListFromModel();
+			}
+			
+			if(!firstOpeningTeamWindow) {
+				projectDetailTeamController.setValuesFromTemp(projectSponsorTemp, projectManagerTemp, projectMembersListTemp);
+			}
+			
+			
+			firstOpeningTeamWindow = false;
 			anchorPaneDetailViews.getChildren().setAll(root);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}  
-	
-	private void saveValuesTemporary() {
+
+	private void saveValuesTemporaryMainWindow() {
 		projectNameTemp = projectDetailMainController.getProjectNameTextField();
 		descriptionTemp = projectDetailMainController.getProjectDescriptionTextField();
 		projectStatusTemp = projectDetailMainController.getProjectStatus();
+
 		projectStartDateTEMP = projectDetailMainController.getprojectStartDate();
 		projectFinishDateTEMP = projectDetailMainController.getprojectFinishDate();
-				
-//		projectSponsorTemp = projectDetailTeamController.getProjectSponsor();
+
+	}
+
+	private void saveValuesTemporaryTeamWindow() {
+			projectSponsorTemp = projectDetailTeamController.getProjectSponsor();
+			projectManagerTemp = projectDetailTeamController.getProjectManager();
+			projectMembersListTemp = projectDetailTeamController.getProjectMembers();
+
 	}
 	
 	//sets the ProjectController projectController    
@@ -174,6 +208,10 @@ public class ProjectDetailController {
 	public void setDataModelProject(DataModelProject projectModel) {
 		this.projectModel = projectModel;
 	}
+	
+    public void setDataModelUser(DataModel userModel) {
+    	this.userModel = userModel;
+    }
 
 	private void errorWindow(String message) {
 		System.out.println("[controller.PojectDetailController] Print User Error-Message");
@@ -203,34 +241,52 @@ public class ProjectDetailController {
 		projectDetailMainController.setSelectedProject(selectedProject);	
 	}
 
+	private boolean checkIfValuesValid() {
+		//if value null, field gets red in ProjectDetailMainController
+		if(projectDetailMainController.getprojectStartDate() != null && projectDetailMainController.getprojectFinishDate() != null
+				&& projectDetailMainController.getProjectNameTextField() != null) {
+			projectStartDateNEW = projectDetailMainController.getprojectStartDate();
+			projectFinishDateNEW = projectDetailMainController.getprojectFinishDate();
+			projectNameNEW = projectDetailMainController.getProjectNameTextField();
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public boolean checkIfChangesExists() {
 		System.out.println("[controller.ProjectDetailController] checkIfChangesExists");
-
+		
+		//Values from Main Detail Window
 		String projectNameOLD = selectedProject.getProjectName().trim();
 		String descriptionOLD = selectedProject.getDescription().trim();
 		ProjectStatus projectStatusOLD = selectedProject.getProjectStatus();
-//		String projectSponsorOLD = selectedProject.getProjectSponsor();
-//		System.out.println("-----PROJECTSPONSOR OLD: " + projectSponsorOLD);
-		projectNameNEW = projectDetailMainController.getProjectNameTextField();
+		projectStartDateOLD = selectedProject.getStartDate();
+		projectFinishDateOLD = selectedProject.getPlanedFinishDate();
+		projectMembersListOLD = userModel.getUserBelongingToProject(selectedProject);
+		
 		descriptionNEW = projectDetailMainController.getProjectDescriptionTextField();
 		projectStatusNEW = projectDetailMainController.getProjectStatus();
-//		projectSponsorNEW = projectDetailTeamController.getProjectSponsor();
 		
-
-		try {
-			projectStartDateNEW = projectDetailMainController.getprojectStartDate();
-			projectFinishDateNEW = projectDetailMainController.getprojectFinishDate();
-
-			projectStartDateOLD = selectedProject.getStartDate();
-			projectFinishDateOLD = selectedProject.getPlanedFinishDate();
-		} catch(NullPointerException e) {
-
+		//Values from Team Detail Window
+		String projectSponsorOLD = selectedProject.getProjectSponsor();
+		projectManagerOLD = selectedProject.getProjectManager();
+		
+		//if Team Button was not pressed --> projectDetailTeamController doesn`t exists
+		if(projectDetailTeamController != null) {
+			projectSponsorNEW = projectDetailTeamController.getProjectSponsor();
+			projectManagerNEW = projectDetailTeamController.getProjectManager();
+			projectMembersListNEW = projectDetailTeamController.getProjectMembers();
+		} else {
+			projectSponsorNEW = projectSponsorOLD;
+			projectManagerNEW = projectManagerOLD;
+			projectMembersListNEW = projectMembersListOLD;
 		}
-		
+				
 		if(projectNameNEW.equals(projectNameOLD) && descriptionNEW.equals(descriptionOLD) 
 				&& projectStatusNEW.equals(projectStatusOLD) && projectStartDateNEW.equals(projectStartDateOLD)
-				&& projectFinishDateNEW.equals(projectFinishDateOLD)) {
+				&& projectFinishDateNEW.equals(projectFinishDateOLD) && projectSponsorNEW.equals(projectSponsorOLD)
+				&& projectManagerNEW.equals(projectManagerOLD) && projectMembersListNEW.equals(projectMembersListOLD)) {
 			return false;
 		} else {
 			return true;
@@ -247,7 +303,18 @@ public class ProjectDetailController {
 			System.out.println("[controller.PojectDetailController] Update Project Confirm!");
 
 			projectModel.updateProject(selectedProject, projectNameNEW, descriptionNEW, projectStatusNEW,
-					projectStartDateNEW, projectFinishDateNEW, projectSponsorNEW);
+					projectStartDateNEW, projectFinishDateNEW, projectSponsorNEW, projectManagerNEW);
+			
+			//delete the selected project from all user
+//			userModel.removeProjectFromAllUser(selectedProject);
+			
+			//add project to user
+			for(ProjectUser u : projectMembersListNEW) {
+				System.out.println("[controller.PojectDetailController] Update User: " + u.getFirstName() + ", adding Project: " + selectedProject);
+				userModel.setProjectToUser(u, selectedProject);
+			}
+			
+			
 			projectController.closeDetailWindow();	
 		}
 		else if(result.get() == ButtonType.CANCEL) {
