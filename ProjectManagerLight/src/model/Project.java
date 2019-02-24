@@ -12,7 +12,6 @@ import javax.persistence.*;
  *
  */
 @Entity
-
 public class Project implements Serializable{
 
 	public enum ProjectStatus {
@@ -40,7 +39,11 @@ public class Project implements Serializable{
 	private Date startDate;
 	private Date planedFinishDate;
 	private String projectSponsor;
+	@OneToOne
+	@JoinColumn(name = "FK_USERID", referencedColumnName = "USERID")
 	private ProjectUser projectManager;
+	//(fetch=FetchType.EAGER, cascade = {CascadeType.ALL})
+	//
 	@ManyToMany(fetch=FetchType.EAGER, cascade = {CascadeType.ALL})
 	private List<ProjectUser> projectMembers = new ArrayList<>();
 //	@JoinColumn(name = "FKUSERID", JoinColumns = { @JoinColumns"USERID")
@@ -134,9 +137,11 @@ public class Project implements Serializable{
 		//		}
 	}
 	
-	public void deleteMemberFromProject(ProjectUser user) {
+	//TEST__________________________________________________
+	public void removeUserFromProject(ProjectUser user) {
 		for(ProjectUser u : projectMembers) {
 			if(u.getUserID() == user.getUserID()) {
+				System.out.println("[model.Project] removeUserFromProject: " + u);
 				projectMembers.remove(u);
 			}
 		}

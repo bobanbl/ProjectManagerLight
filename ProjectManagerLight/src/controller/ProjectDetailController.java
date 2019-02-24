@@ -2,7 +2,9 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -37,13 +39,13 @@ public class ProjectDetailController {
 	private DataModel userModel;
 	private boolean newProject;
 	private Project selectedProject;
-	private Date projectStartDateNEW = null;
-	private Date projectFinishDateNEW  = null;
 	private Date projectStartDateOLD = null;
 	private Date projectFinishDateOLD = null;
 	private ProjectUser projectManagerOLD = null;
 	private ObservableList<ProjectUser> projectMembersListOLD = null;
 	
+	private Date projectStartDateNEW = null;
+	private Date projectFinishDateNEW  = null;
 	private String projectNameNEW;
 	private String descriptionNEW;
 	private ProjectStatus projectStatusNEW;
@@ -84,20 +86,38 @@ public class ProjectDetailController {
 	void createProjectButtonPressed(ActionEvent event) {
 		Date projectStartDate = null;
 		Date projectFinishDate = null;
-		
+				
+		//values from Project Detail Main Windows
 		System.out.println("[controller.ProjectDetailController] createProjectButtonPressed");
-		String ProjectName = projectDetailMainController.getProjectNameTextField();
-		String description = projectDetailMainController.getProjectDescriptionTextField();
-		ProjectStatus projectStatus = projectDetailMainController.getProjectStatus();
+		projectNameNEW = projectDetailMainController.getProjectNameTextField();
+		descriptionNEW = projectDetailMainController.getProjectDescriptionTextField();
+		projectStatusNEW = projectDetailMainController.getProjectStatus();
 
-		projectStartDate = projectDetailMainController.getprojectStartDate();
-		projectFinishDate = projectDetailMainController.getprojectFinishDate();
+		projectStartDateNEW = projectDetailMainController.getprojectStartDate();
+		projectFinishDateNEW = projectDetailMainController.getprojectFinishDate();
+				
+		//values from Project Team Main Windows
+		if(projectDetailTeamController != null) {
+			projectSponsorNEW = projectDetailTeamController.getProjectSponsor();
+			projectManagerNEW = projectDetailTeamController.getProjectManager();
+			projectMembersListNEW = projectDetailTeamController.getProjectMembers();	
+		} else {
+			projectSponsorNEW = "";
+			projectManagerNEW = null;
+			projectMembersListNEW = null;
+		}
+
+		projectModel.updateProject(selectedProject, projectNameNEW, descriptionNEW, projectStatusNEW, projectStartDateNEW,
+				projectFinishDateNEW, projectSponsorNEW, projectManagerNEW);
 		
-		String projectSponsor = projectDetailTeamController.getProjectSponsor();
-		ProjectUser projectManager = projectDetailTeamController.getProjectManager();
+		//add project to user
+		if(projectMembersListNEW != null) {
+			for(ProjectUser u : projectMembersListNEW) {
+				System.out.println("[controller.PojectDetailController] Update User: " + u.getFirstName() + ", adding Project: " + selectedProject);
+				userModel.setProjectToUser(u, selectedProject);
+			}
+		}
 
-
-		projectModel.createProject(ProjectName, description, projectStatus, projectStartDate, projectFinishDate, projectSponsor, projectManager);
 		projectController.closeDetailWindow();	
 	}
 
@@ -153,19 +173,16 @@ public class ProjectDetailController {
 			projectDetailTeamController = loader.getController();
 			projectDetailTeamController.setProjectDetailController(this);
 			projectDetailTeamController.setDataModelUser(userModel);
-			
-			if(!newProject) {
-				projectDetailTeamController.setSelectedProject(selectedProject);
-			}
-			
+
+			projectDetailTeamController.setSelectedProject(selectedProject);
 			if(projectMembersListTemp == null) {
 				projectDetailTeamController.setUserListFromModel();
 			}
-			
+
 			if(!firstOpeningTeamWindow) {
 				projectDetailTeamController.setValuesFromTemp(projectSponsorTemp, projectManagerTemp, projectMembersListTemp);
 			}
-			
+
 			
 			firstOpeningTeamWindow = false;
 			anchorPaneDetailViews.getChildren().setAll(root);
@@ -201,7 +218,14 @@ public class ProjectDetailController {
 			cancelButton.setVisible(true);
 			createProjectButton.setVisible(true);
 			closeDetailViewButton.setVisible(false);
-			projectDetailMainController.setIfNewProject(newProject);
+
+			//------Setting local Date now
+			LocalDate localDate = LocalDate.now(ZoneId.systemDefault());
+			Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+			Date date = Date.from(instant);	
+			
+			selectedProject = projectModel.createProject("", "", ProjectStatus.NOT_STARTED, date, date, "", null);
+			projectDetailMainController.setSelectedProject(selectedProject);
 		} 
 	}
 
@@ -229,6 +253,7 @@ public class ProjectDetailController {
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() == ButtonType.OK) {
 			System.out.println("[controller.PojectDetailController] Creating Project canceled!");
+			projectModel.deleteProject(selectedProject);
 			projectController.closeDetailWindow();	
 		}
 		else if(result.get() == ButtonType.CANCEL) {
@@ -271,26 +296,37 @@ public class ProjectDetailController {
 		//Values from Team Detail Window
 		String projectSponsorOLD = selectedProject.getProjectSponsor();
 		projectManagerOLD = selectedProject.getProjectManager();
-		
+
 		//if Team Button was not pressed --> projectDetailTeamController doesn`t exists
 		if(projectDetailTeamController != null) {
 			projectSponsorNEW = projectDetailTeamController.getProjectSponsor();
 			projectManagerNEW = projectDetailTeamController.getProjectManager();
-			projectMembersListNEW = projectDetailTeamController.getProjectMembers();
+			if(projectDetailTeamController.getProjectMembers() != null) {
+				projectMembersListNEW = projectDetailTeamController.getProjectMembers();
+			} else {
+				projectMembersListNEW = null;
+			}
 		} else {
 			projectSponsorNEW = projectSponsorOLD;
 			projectManagerNEW = projectManagerOLD;
 			projectMembersListNEW = projectMembersListOLD;
 		}
-				
+
+		
+		boolean changesOnPRojectManager = false;
+		if(projectManagerNEW == projectManagerOLD ||  (projectManagerNEW != null && projectManagerNEW.equals(projectManagerOLD))) {
+			changesOnPRojectManager = true;			
+		}
+
 		if(projectNameNEW.equals(projectNameOLD) && descriptionNEW.equals(descriptionOLD) 
 				&& projectStatusNEW.equals(projectStatusOLD) && projectStartDateNEW.equals(projectStartDateOLD)
 				&& projectFinishDateNEW.equals(projectFinishDateOLD) && projectSponsorNEW.equals(projectSponsorOLD)
-				&& projectManagerNEW.equals(projectManagerOLD) && projectMembersListNEW.equals(projectMembersListOLD)) {
+				&& changesOnPRojectManager && projectMembersListNEW.equals(projectMembersListOLD) ) {
 			return false;
 		} else {
 			return true;
 		}
+
 	}
 
 	private void confirmClosingProjectDetailWindowChanges() {
@@ -304,9 +340,10 @@ public class ProjectDetailController {
 
 			projectModel.updateProject(selectedProject, projectNameNEW, descriptionNEW, projectStatusNEW,
 					projectStartDateNEW, projectFinishDateNEW, projectSponsorNEW, projectManagerNEW);
-			
-			//delete the selected project from all user
+			//TEST__________________________________________________
+//			delete the selected project from all user
 //			userModel.removeProjectFromAllUser(selectedProject);
+			projectModel.removeAllUserFromProject(selectedProject);
 			
 			//add project to user
 			for(ProjectUser u : projectMembersListNEW) {

@@ -97,7 +97,7 @@ public class DataModelStory {
     	return null;
     }
         
-    public void createStory(String description, int duration, String storyName, int positionGridPane, Project project) {
+    public void createStory(String description, int duration, String storyName, int positionGridPane, Project project, ProjectUser responsibility) {
     	System.out.println("[model.DataModelStory] Adding new Story to List");
     	Story newStory = new Story();
     	newStory.setDescription(description);
@@ -105,6 +105,7 @@ public class DataModelStory {
 		newStory.setStoryName(storyName);
 		newStory.setPositionGridPane(positionGridPane);
 		newStory.setProject(project);
+		newStory.setResponsibility(responsibility);
 		storyList.add(newStory);
 		printStoryData();    	
     }
@@ -235,5 +236,29 @@ public class DataModelStory {
     	printTaskData();	
     	printStoryData();
     }
+    
+//    public void updateTaskStatusStory(Task selectedTask, Story targetStory, TaskStatus targetTaskStatus) {
+//
+//    	System.out.println("[model.DataModelStory] UpdateTask Drag&Drop: " + selectedTask);
+//    	int storyIndex = storyList.indexOf(targetStory);
+//    	Story storyOLD = selectedTask.getStory();
+//    	int storyINdexOLD = storyList.indexOf(storyOLD);
+//    	int taskIndex = taskList.indexOf(selectedTask);
+//    	if(selectedTask.getStory().getStoryID() != targetStory.getStoryID()){
+//    		System.out.println("[model.DataModelStory] UpdateTask Drag&Drop: " + selectedTask.getStory().getStoryID() + " " + targetStory.getStoryID());
+////    		int taskID = selectedTask.getTaskID();
+//    		targetStory.addTasktoStory(selectedTask);
+//    		storyOLD.removeTaskFromStory(selectedTask);
+//
+//    		
+//    	}
+//    	selectedTask.setStatus(targetTaskStatus);
+//    	storyList.set(storyIndex, targetStory);
+//    	storyList.set(storyINdexOLD, storyOLD);
+//    	taskList.set(taskIndex, selectedTask);
+////    	loadStoryData();
+//    	printTaskData();	
+//    	printStoryData();
+//    }
 	
 }

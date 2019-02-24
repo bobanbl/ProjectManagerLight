@@ -153,23 +153,31 @@ public class DataModel {
     	printUserData();
     }
     
-    public void setProjectToUser(ProjectUser updateUser, Project project) {
+    public void setProjectToUser(ProjectUser updateUser, Project project) {  
+    	
     	System.out.println("[model.DataModel] Set project to user: " + updateUser);
-    	for(Project p : updateUser.getInvolvedProjects()) {
-    		if(!(p.getProjectID() == project.getProjectID())) {
-    			System.out.println("[model.DataModel] Set project to user" + updateUser + " Project: " + project);
-    			int userIndex = userList.indexOf(updateUser);
-    	    	updateUser.addProjectToUser(project);
-    			userList.set(userIndex, updateUser);
-    		} 
-    	}    	
+    	boolean userAlreadyContainsProject = false;
+    	for(Project p : updateUser.getInvolvedProjects()) {		
+    		if((p.getProjectID() == project.getProjectID())) {
+    			userAlreadyContainsProject = true;
+    		}
+    	}
+    	if(updateUser.getInvolvedProjects().isEmpty() || !userAlreadyContainsProject) {
+    		System.out.println("[model.DataModel] This project to user: " + project);    			
+    		int userIndex = userList.indexOf(updateUser);
+    		updateUser.addProjectToUser(project);
+    		userList.set(userIndex, updateUser);
+    	} 
+
     	printUserData();
     }
-    
+      
     public void removeProjectFromAllUser(Project project) {
     	System.out.println("[model.DataModel] Remove project from all user. Project: " + project);
+//    	project.getProjectMember().removeAll(userList);
     	for(ProjectUser u : userList) {
-    		u.deleteProjectFromUser(project);
+    		System.out.println("[model.DataModel] Remove project from user: " + u);
+    		u.removeProjectFromUser(project);
     	}
     	printUserData();
     }
@@ -179,35 +187,11 @@ public class DataModel {
     	ObservableList<ProjectUser> list = FXCollections.observableArrayList();
     	for(ProjectUser u : userList) {
     		for(Project p : u.getInvolvedProjects()) {
-    			
     			if(p.getProjectID() == project.getProjectID()) {
     				list.add(u);
     			}
     		}
     	}
     	return list;
-    }
-    
-    
-    
-
-
-    
-    
-
-//    public void loadAllData() {
-//    	List<Object> projectList = database.readAllData();
-//		projectList = FXCollections.observableArrayList(projectList);	
-//    }   
-//    
-//    public void printAllData() {
-//    	for(Object u : projectList) {
-//    		if(u != null) {
-//    			System.out.println(u.getClass());
-//    		}
-//    	}
-//    }
-    
-    
-	
+    }	
 }

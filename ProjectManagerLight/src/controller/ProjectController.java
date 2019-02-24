@@ -77,23 +77,23 @@ public class ProjectController {
 	    	loader.setLocation(getClass().getResource("../view/projectDetail.fxml"));
 			Parent root = loader.load();
 			projectDetailController = loader.getController();
-			projectDetailController.setProjectController(this);
-			projectDetailController.setDataModelProject(projectModel);
-			System.err.println("---------------" + userModel);
 			projectDetailController.setDataModelUser(userModel);
-			
+			projectDetailController.setDataModelProject(projectModel);
+			projectDetailController.setProjectController(this);
+									
 			anchorPaneDetailView.getChildren().setAll(root);	
     	} catch (IOException e) {
 			e.printStackTrace();
 		}
     }
-    
-//closes the Detail Window    
+
+    //closes the Detail Window    
     public void closeDetailWindow() {
     	anchorPaneDetailView.getChildren().clear();
     	addProjectButton.setVisible(true);
+    	initializeTable();
     } 
-    
+
     public boolean getIfNewProject() {
     	return this.newProject;
     }
@@ -112,18 +112,21 @@ public class ProjectController {
     }
     
     public void initializeTable() {
-    	System.out.println("[controller.ProjectController] Initializing table view"); 	
-    	projectTable.setItems(projectModel.getProjectList());
-    	projectTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
-    	colProjectName.setCellValueFactory(new PropertyValueFactory<Project, String>("projectName"));
-    	colProjectStatus.setCellValueFactory(new PropertyValueFactory<Project, String>("projectStatus"));
-    	
-    	//Select first project in table at the first opening of the application
-    	if(navigationController.getSelectedProject() == null) {
-    		navigationController.setSelectedProject(projectTable.getItems().get(0));
+    	System.out.println("[controller.ProjectController] Initializing table view"); 
+    	System.out.println("[controller.ProjectController]: " + projectModel.getProjectList());
+    	if(!projectModel.getProjectList().isEmpty()) {
+    		projectTable.setItems(projectModel.getProjectList());
+    		projectTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+    		colProjectName.setCellValueFactory(new PropertyValueFactory<Project, String>("projectName"));
+    		colProjectStatus.setCellValueFactory(new PropertyValueFactory<Project, String>("projectStatus"));
+
+    		//Select first project in table at the first opening of the application
+    		if(navigationController.getSelectedProject() == null) {
+    			navigationController.setSelectedProject(projectTable.getItems().get(0));
+    		}
     	}
     }
-    
+
     public void tablesChanges() { 	
     	projectTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
     		selectedProjectList = projectTable.getSelectionModel().getSelectedItems();

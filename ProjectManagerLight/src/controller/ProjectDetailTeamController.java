@@ -165,6 +165,7 @@ public class ProjectDetailTeamController {
     
     public void setUserListFromModel() {
     	userList = userModel.getUserBelongingToProject(selectedProject);
+    	System.out.println("[controller.ProjectDetailTeamCotnroller] userList: " + userList);
     	updateProjectMemberTable();
     }
         

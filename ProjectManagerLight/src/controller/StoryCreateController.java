@@ -3,6 +3,7 @@ package controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -11,6 +12,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.util.StringConverter;
 import model.DataModel;
 import model.DataModelStory;
 import model.Project;
@@ -19,8 +21,11 @@ import model.ProjectUser;
 public class StoryCreateController {
 	
 	private DataModelStory storyModel;
+	private DataModel userModel;
 	private TaskController taskController;
 	private Project selectedProject;
+	
+	ObservableList<ProjectUser> userList = null;
 	
     @FXML
     private ResourceBundle resources;
@@ -52,7 +57,9 @@ public class StoryCreateController {
     	if(storyName.equals("") || description.equals("")) {
     		errorWindow("Empty field!");
     	} else {
-    		storyModel.createStory(description, duration, storyName, taskController.getRowCount(), selectedProject);
+    		storyModel.createStory(description, duration, storyName, taskController.getRowCount(), selectedProject, getResponsibleUser());
+    		System.out.println("[controller.StoryCreateController] Responsible User: " + getResponsibleUser());
+    		 		
     		taskController.updateTasks();
     		taskController.closePopUpWindow();
     	}
@@ -81,6 +88,39 @@ public class StoryCreateController {
     	alert.setTitle("Creating Story Failed!");
     	alert.setHeaderText(message);
     	alert.showAndWait();
+    }
+    
+    public void setDataModelUser(DataModel userModel) {
+    	this.userModel = userModel;
+    	setUserListFromModel();
+    }
+    
+    public void setUserListFromModel() {
+    	userList = userModel.getUserBelongingToProject(selectedProject);
+    	
+    	System.out.println("[controller.StroryCreateController] userList: " + userList);
+    	updateResponsibilityComboBox();
+    }
+    
+    private void updateResponsibilityComboBox() {
+    	responsibilityComboBox.setItems(userList);
+    	responsibilityComboBox.setConverter( new StringConverter<ProjectUser>() {
+
+			@Override
+			public ProjectUser fromString(String useShortcut) {
+				 return responsibilityComboBox.getItems().stream().filter(u ->
+				 u.getUserShortcut().equals(useShortcut)).findFirst().orElse(null);
+			}
+
+			@Override
+			public String toString(ProjectUser u) {
+				return u.getFirstName() + " " + u.getLastName() + " (" + u.getUserShortcut() + ")";
+			}	
+		}); 
+    }
+    
+    public ProjectUser getResponsibleUser() {
+    	return responsibilityComboBox.getSelectionModel().getSelectedItem();
     }
 }
 

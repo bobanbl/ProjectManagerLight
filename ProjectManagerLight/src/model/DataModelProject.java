@@ -61,7 +61,7 @@ public class DataModelProject {
     	}
     }
     
-    public void createProject( String ProjectName, String description, ProjectStatus projectStatus, 
+    public Project createProject( String ProjectName, String description, ProjectStatus projectStatus, 
     		Date projectStartDate, Date projectFinishDate, String projectSponsor, ProjectUser projectManager) {
     	System.out.println("[model.DataModelProject] Adding new Project to List");
     	Project newProject = new Project();
@@ -73,7 +73,8 @@ public class DataModelProject {
 		newProject.setProjectSponsor(projectSponsor);
 		newProject.setProjectManager(projectManager);
 		projectList.add(newProject);
-		printProjectData();    	
+		printProjectData();
+		return newProject;
     }
     
     public ObservableList<Project> getProjectList(){
@@ -104,6 +105,13 @@ public class DataModelProject {
     	System.out.println("[model.DataModelProject] UpdateProject FinishDate: " + planedFinishDate);
     	updateProject.setPlanedFinishDate(planedFinishDate);
 		projectList.set(userIndex, updateProject);
+    	printProjectData();
+    }
+    
+    public void removeAllUserFromProject(Project project) {
+    	int projectIndex = projectList.indexOf(project);
+    	project.getProjectMember().clear();
+    	projectList.set(projectIndex, project);
     	printProjectData();
     }
 

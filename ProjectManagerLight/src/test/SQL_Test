@@ -4,3 +4,10 @@ SELECT * FROM PROJECTUSER
 SELECT * FROM PROJECTUSER
 DELETE from STORY where STORYID = 51
 DELETE * from TASK
+
+drop table task
+drop table story
+drop table project_projectuser
+drop table project
+drop table projectuser
+drop table sequence

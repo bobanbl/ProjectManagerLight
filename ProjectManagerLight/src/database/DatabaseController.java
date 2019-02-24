@@ -406,6 +406,8 @@ public class DatabaseController {
 		@SuppressWarnings("unchecked")
 		List<Project> project = (List<Project>)em.createQuery("select u from Project u").getResultList();
 		
+		System.out.println("[database.DatabaseController] Read all Projects " + project);
+		
 		transaction.commit();
 		em.close();
 		

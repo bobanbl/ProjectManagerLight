@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -31,11 +32,15 @@ public class Story implements Serializable{
 	private int storyID;
 	private String storyName;
 	private String description;
+	@ManyToOne
+	@JoinColumn(name = "FK_USERID", referencedColumnName = "USERID")
 	private ProjectUser responsibility;
 	private int duration;
 	private int positionGridPane;
+	
 	@OneToMany(mappedBy = "story", orphanRemoval=true, cascade = CascadeType.ALL)
 	private List<Task> tasks = new ArrayList<>();
+	
 	@OneToOne
 	@JoinColumn(name = "FKProjectID", referencedColumnName = "PROJECTID")
 	private Project project;
@@ -80,13 +85,16 @@ public class Story implements Serializable{
 	}
 	
 	//For testing
-//	public void removeTaskFromStory(int taskID) {
-//		for(Task t : tasks) {
-//			if(t.getTaskID() == taskID) {
-//				tasks.remove(t);
-//			}
-//		}	
-//	}
+	public void removeTaskFromStory(Task removeTask) {
+		System.out.println("[model.Story] Remove Task 1 from Story: " + removeTask);
+		
+		for(Task t : tasks) {
+			if(t.getTaskID() == removeTask.getTaskID()) {
+				System.out.println("[model.Story] Remove Task from Story: " + t);
+				tasks.remove(t);
+			}
+		}	
+	}
 	
 	public void addTasktoStory(Task newTask) {
 		this.tasks.add(newTask);

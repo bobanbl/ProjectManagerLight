@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  * Entity implementation class for Entity: Task
@@ -33,6 +34,8 @@ public class Task implements Serializable{
 	private int taskID;
 	private String taskName;
 	private String description;
+	@ManyToOne
+	@JoinColumn(name = "FK_USERID", referencedColumnName = "USERID")
 	private ProjectUser responsibility;
 	private int duration;
 	@Enumerated(EnumType.STRING)

@@ -51,6 +51,7 @@ public class TaskController {
 	
 	private Stage popUpWindow;
 	private DataModelStory storyModel;
+	private DataModel userModel;
 	private Project selectedProject;
 	private NavigationController navigationController;
 	private List<Story> storyList;
@@ -85,6 +86,7 @@ public class TaskController {
 			storyCreateController.setDataModelStory(storyModel);
 			storyCreateController.setTaskController(this);
 			storyCreateController.setSelectedProject(selectedProject);
+			storyCreateController.setDataModelUser(userModel);
 			
 			
 	    	Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));    	
@@ -101,6 +103,10 @@ public class TaskController {
     
     public void setDataModelStory(DataModelStory storyModel) {
     	this.storyModel = storyModel;
+    }
+    
+    public void setDataModelUser(DataModel userModel) {
+    	this.userModel = userModel;
     }
     
     public void closePopUpWindow() {
