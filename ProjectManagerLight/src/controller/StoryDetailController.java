@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import org.apache.derby.impl.store.replication.net.SlaveAddress;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -15,6 +16,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.util.StringConverter;
 import model.DataModel;
 import model.DataModelStory;
 import model.Project;
@@ -24,6 +26,7 @@ import model.Story;
 public class StoryDetailController {
 	
 	private DataModelStory storyModel;
+	private DataModel userModel;
 	private TaskController taskController;
 	private Story selectedStory;
 	
@@ -33,6 +36,10 @@ public class StoryDetailController {
 	private String storyNameNEW;
 	private String descriptionNEW;
 	private String durationNEW;
+	private ProjectUser responsibleUserOLD;
+	private ProjectUser responsibleUserNEW;
+	
+	ObservableList<ProjectUser> userList = null;
     @FXML
     private ResourceBundle resources;
 
@@ -47,7 +54,7 @@ public class StoryDetailController {
     @FXML
     private TextArea descriptionTextField;
     @FXML
-    private ComboBox<?> responsibilityComboBox;
+    private ComboBox<ProjectUser> responsibilityComboBox;
 
     @FXML
     void assumeButtonPressed(ActionEvent event) {
@@ -81,6 +88,8 @@ public class StoryDetailController {
     	nameTextField.setText(storyNameOLD);
     	descriptionTextField.setText(descriptionOLD);
     	durationTextField.setText(durationOLD);
+    	
+    	setResponsibilityComboBox();
     }
     
     private boolean checkIfChangesExists() {
@@ -88,8 +97,10 @@ public class StoryDetailController {
     	storyNameNEW = nameTextField.getText().trim();
     	descriptionNEW = descriptionTextField.getText().trim();
     	durationNEW = durationTextField.getText().trim();
+    	responsibleUserNEW = responsibilityComboBox.getSelectionModel().getSelectedItem();
     	
-    	if(storyNameOLD.equals(storyNameNEW) && descriptionOLD.equals(descriptionNEW) && durationOLD.equals(durationNEW)) {
+    	if(storyNameOLD.equals(storyNameNEW) && descriptionOLD.equals(descriptionNEW) && durationOLD.equals(durationNEW)
+    			&& responsibleUserNEW.equals(responsibleUserOLD)) {
     		return false;
     	} else {
     		return true;
@@ -104,7 +115,7 @@ public class StoryDetailController {
     	Optional<ButtonType> result = alert.showAndWait();
     	if(result.get() == ButtonType.OK) {
     		System.out.println("[controller.StoryDetailController] Update Story Confirm!");
-    		storyModel.updateStory(selectedStory, storyNameNEW, descriptionNEW, Integer.parseInt(durationNEW));
+    		storyModel.updateStory(selectedStory, storyNameNEW, descriptionNEW, Integer.parseInt(durationNEW), responsibleUserNEW);
     		taskController.updateTasks();
     		taskController.closePopUpWindow();	
     	}
@@ -113,6 +124,43 @@ public class StoryDetailController {
     	}
     }
     
+    public void setDataModelUser(DataModel userModel) {
+    	this.userModel = userModel;
+    	setUserListFromModel();
+    }
+    
+    public void setUserListFromModel() {
+    	userList = userModel.getUserBelongingToProject(selectedStory.getProject());   	
+    	System.out.println("[controller.StrorySetailController] userList: " + userList);   	
+    	updateResponsibilityComboBox();
+    }
+    
+    
+    private void updateResponsibilityComboBox() {
+    	responsibleUserOLD = selectedStory.getResponsibility();
+    	responsibilityComboBox.setItems(userList);
+    	responsibilityComboBox.setValue(responsibleUserOLD);
+    	responsibilityComboBox.setConverter( new StringConverter<ProjectUser>() {
+
+			@Override
+			public ProjectUser fromString(String useShortcut) {
+				 return responsibilityComboBox.getItems().stream().filter(u ->
+				 u.getUserShortcut().equals(useShortcut)).findFirst().orElse(null);
+			}
+
+			@Override
+			public String toString(ProjectUser u) {
+				return u.getFirstName() + " " + u.getLastName() + " (" + u.getUserShortcut() + ")";
+			}	
+		}); 
+    	
+    }
+    
+    private void setResponsibilityComboBox() {
+    	ProjectUser selectedUser = selectedStory.getResponsibility();
+    }
 
 }
+
+
 

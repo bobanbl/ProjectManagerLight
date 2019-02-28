@@ -342,6 +342,7 @@ public class TaskController {
 			storyDetailController.setDataModelStory(storyModel);
 			storyDetailController.setTaskController(this);
 			storyDetailController.setSelectedStory(selectedStory);
+			storyDetailController.setDataModelUser(userModel);
 			
 	    	Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));    	
 	    	popUpWindow = new Stage();
@@ -365,6 +366,7 @@ public class TaskController {
 			taskDetailController.setDataModelStory(storyModel);
 			taskDetailController.setTaskController(this);
 			taskDetailController.setSelectedTask(selectedTask);
+			taskDetailController.setDataModelUser(userModel);
 			
 	    	Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));    	
 	    	popUpWindow = new Stage();
@@ -465,9 +467,11 @@ public class TaskController {
 			Parent root = loader.load();	
 			
 			TaskCreateController taskCreateController =  loader.getController();
+			taskCreateController.setSelectedStory(selectedStory);
 			taskCreateController.setDataModelStory(storyModel);
 			taskCreateController.setTaskController(this);
-			taskCreateController.setSelectedStory(selectedStory);
+			taskCreateController.setDataModelUser(userModel);
+			
 			
 			
 	    	Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));    	
@@ -484,3 +488,5 @@ public class TaskController {
     	
     
 }
+
+

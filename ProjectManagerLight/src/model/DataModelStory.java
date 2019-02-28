@@ -131,12 +131,13 @@ public class DataModelStory {
     	printStoryData();
     }    
     
-    public void updateStory(Story updateStory, String storyName, String description, int duration) {
+    public void updateStory(Story updateStory, String storyName, String description, int duration, ProjectUser responsibility) {
     	System.out.println("[model.DataModelStory] UpdateStory: " + updateStory.getStoryName());
     	int storyIndex = storyList.indexOf(updateStory);
     	updateStory.setStoryName(storyName);
     	updateStory.setDescription(description);
     	updateStory.setDuration(duration);
+    	updateStory.setResponsibility(responsibility);
     	storyList.set(storyIndex, updateStory);
     	printStoryData();
     }
@@ -159,7 +160,7 @@ public class DataModelStory {
     	}
     }
     
-    public void createTask(String description, int duration, String TaskName, Story story) {
+    public void createTask(String description, int duration, String TaskName, Story story, ProjectUser responsibility) {
     	System.out.println("[model.DataModelStory] Adding new Task to List");
     	Task newTask = new Task();
     	newTask.setDescription(description);
@@ -167,6 +168,7 @@ public class DataModelStory {
 		newTask.setTaskName(TaskName);
 		newTask.setStory(story);
 		newTask.setStatus(TaskStatus.NEW);
+		newTask.setResponsibility(responsibility);
 		taskList.add(newTask);
 //		loadStoryData();
 		printTaskData();    	
@@ -207,7 +209,7 @@ public class DataModelStory {
     	printTaskData();
     }    
       
-    public void updateTask(Task updateTask, String TaskName, String description, int duration, TaskStatus taskStatus) {
+    public void updateTask(Task updateTask, String TaskName, String description, int duration, TaskStatus taskStatus, ProjectUser responsibility) {
     	System.out.println("[model.DataModelStory] UpdateTask: " + updateTask);
     	int taskIndex = taskList.indexOf(updateTask);
     	updateTask.setTaskName(TaskName);
@@ -215,6 +217,7 @@ public class DataModelStory {
     	updateTask.setDuration(duration);
 //		updateTask.setStory(story);
 		updateTask.setStatus(taskStatus);
+		updateTask.setResponsibility(responsibility);
     	taskList.set(taskIndex, updateTask);
 //    	loadStoryData();
     	printStoryData();
@@ -262,3 +265,5 @@ public class DataModelStory {
 //    }
 	
 }
+
+

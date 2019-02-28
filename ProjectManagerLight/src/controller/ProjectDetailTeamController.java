@@ -190,8 +190,10 @@ public class ProjectDetailTeamController {
 
     public void clickOnTable() {
     	projectMemberTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-    		selectedUserList = projectMemberTable.getSelectionModel().getSelectedItems();
-    		System.out.println(selectedUserList.get(0).getLastName());
+    		System.out.println("[controller.ProjectUserAddController] click on table");
+    		if(projectMemberTable.getSelectionModel().getSelectedItems() != null) {
+    			selectedUserList = projectMemberTable.getSelectionModel().getSelectedItems();
+    		}
 
     		if (event.getButton() == MouseButton.SECONDARY && selectedUserList.get(0) != null) {
     			System.out.println("Right Mouse Button clicked");
@@ -229,3 +231,5 @@ public class ProjectDetailTeamController {
     
     
 }
+
+
