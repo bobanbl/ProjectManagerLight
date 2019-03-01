@@ -99,4 +99,16 @@ public class Task implements Serializable{
 		}
 	}
 	
+	@Override public boolean equals(Object o) {
+
+		if (this == o) return true;
+
+		if ((o instanceof Task) == true) {
+			Task u = (Task)o;
+			return this.taskID == u.taskID;
+		} else {
+			return false;
+		}
+	}
+	
 }

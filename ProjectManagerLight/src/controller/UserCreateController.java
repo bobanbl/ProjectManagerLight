@@ -15,12 +15,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import model.DataModel;
+import model.DataModelUser;
+import model.ProjectUser;
 
 //The Controller for userDetailPopUp.fxml
 public class UserCreateController {
 
-	private DataModel model;
+	private DataModelUser model;
 	private UserManController userManController;
     @FXML
     private ResourceBundle resources;
@@ -60,7 +61,14 @@ public class UserCreateController {
     	} else if(shortcut.equals("") || eMail.equals("") || firstName.equals("") || lastName.equals("") || role.equals("") || password.equals("")) {
     		errorWindow("Empty field!");
     	} else {
-    		model.createUser(shortcut, firstName, lastName,	eMail, role, password);
+        	ProjectUser newUser = new ProjectUser();
+        	newUser.setFirstName(firstName);
+        	newUser.setLastName(lastName);
+        	newUser.seteMail(eMail);
+        	newUser.setUserShortcut(shortcut);
+    		newUser.setPassword(password);
+    		newUser.setRole(role);
+    		model.createUser(newUser);
     		userManController.closePopUpWindow();
     	}
     }
@@ -74,9 +82,7 @@ public class UserCreateController {
     	}); 
     	
     	userDetailShortcutField.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
-//    		if(userDetailShortcutField.getText().trim().indexOf("") != 0) {
     			evaluateuserDetailShortcutField(userDetailShortcutField.getText().trim());
-//    		}
     	}); 
     	
     	userDetailEmailField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
@@ -92,25 +98,26 @@ public class UserCreateController {
     	});    		
     }
     
-    public void setDataModel(DataModel model) {
+    public void setDataModel(DataModelUser model) {
     	this.model = model;
     }
     
     public void setUserManController(UserManController controller) {
     	this.userManController = controller;
     }
-    
-//return true if Shortcut already exists in database, otherwise false     
+
+    //return true is shortcut does NOT exist!! because this the 'everything is fine' case   
     private boolean evaluateuserDetailShortcutField(String shortcut) {
-    	if(model.userShortcutExistis(shortcut)) {
-    		System.out.println("User-Shortcut already exists");
-    		userDetailShortcutField.setStyle("-fx-control-inner-background: #FF0000");
-    		return true;    		
-    	} else {
-    		System.out.println("User-Shortcut is free");
-    		userDetailShortcutField.setStyle("-fx-control-inner-background: #FFFFFF");
-    		return false;
-    	}	
+    	for(ProjectUser u : model.getUserList()) {
+    		if(u.getUserShortcut().toLowerCase().contains(shortcut.toLowerCase())) {
+    			System.out.println("User-Shortcut already exists");
+    			userDetailShortcutField.setStyle("-fx-control-inner-background: #FF0000");
+    			return true;    		
+    		}
+    	}
+    	System.out.println("User-Shortcut is free");
+    	userDetailShortcutField.setStyle("-fx-control-inner-background: #FFFFFF");
+    	return false;
     }
     //returns true if eMail has right syntax, otherwise false
     private boolean validEMail(String eMail) {

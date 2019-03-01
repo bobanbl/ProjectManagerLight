@@ -17,13 +17,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import model.DataModel;
+import model.DataModelUser;
 import model.ProjectUser;
 
 //The Controller for userDetailPopUp.fxml
 public class UserDetailController {
 
-	private DataModel model;
+	private DataModelUser model;
 	private UserManController userManController;
 	private ProjectUser selectedUser;
     @FXML
@@ -63,8 +63,14 @@ public class UserDetailController {
     		errorWindow("eMail has false syntax!");
     	} else if(shortcut.equals("") || eMail.equals("") || firstName.equals("") || lastName.equals("") || role.equals("") || password.equals("")) {
     		errorWindow("Empty field!");
-    	} else {
-    		model.updateUser(selectedUser, shortcut, firstName, lastName,	eMail, role, password);
+    	} else {  		
+    		selectedUser.setFirstName(firstName);
+    		selectedUser.setLastName(lastName);
+    		selectedUser.seteMail(eMail);
+    		selectedUser.setUserShortcut(shortcut);
+    		selectedUser.setPassword(password);
+    		selectedUser.setRole(role);
+    		model.updateUser(selectedUser);
     		userManController.closePopUpWindow();
     	}
     }
@@ -78,9 +84,7 @@ public class UserDetailController {
     	}); 
     	
     	userDetailShortcutField.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
-//    		if(userDetailShortcutField.getText().trim().indexOf("") != 0) {
     			evaluateuserDetailShortcutField(userDetailShortcutField.getText().trim());
-//    		}
     	}); 
     	
     	userDetailEmailField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
@@ -96,7 +100,7 @@ public class UserDetailController {
     	});    		
     }
     
-    public void setDataModel(DataModel model) {
+    public void setDataModel(DataModelUser model) {
     	this.model = model;
     }
     
@@ -113,18 +117,23 @@ public class UserDetailController {
     	userDetailRoleField.setText(selectedUser.getRole());
     	userDetailPasswordField.setText(selectedUser.getPassword());    	
     }
-    
-//return true if Shortcut already exists in database, otherwise false     
+
+    //return true is shortcut does NOT exist!! because this the 'everything is fine' case  
     private boolean evaluateuserDetailShortcutField(String shortcut) {
-    	if(model.userShortcutExistis(shortcut) && !shortcut.equals(selectedUser.getUserShortcut())) {
-    		System.out.println("User-Shortcut already exists");
-    		userDetailShortcutField.setStyle("-fx-control-inner-background: #FF0000");
-    		return true;    		
-    	} else {
-    		System.out.println("User-Shortcut is free");
-    		userDetailShortcutField.setStyle("-fx-control-inner-background: #FFFFFF");
-    		return false;
-    	}	
+    	for(ProjectUser u : model.getUserList()) {
+    		if(u.getUserShortcut().toLowerCase().contains(shortcut.toLowerCase()) &&
+    				!shortcut.equals(selectedUser.getUserShortcut())){
+    			System.out.println("User-Shortcut already exists");
+    			userDetailShortcutField.setStyle("-fx-control-inner-background: #FF0000");
+    			return true;    
+    		}	
+    	}
+
+    	System.out.println("User-Shortcut is free");
+    	userDetailShortcutField.setStyle("-fx-control-inner-background: #FFFFFF");
+    	return false;
+
+
     }
     //returns true if eMail has right syntax, otherwise false
     private boolean validEMail(String eMail) {
@@ -153,7 +162,4 @@ public class UserDetailController {
     	alert.setHeaderText(message);
     	alert.showAndWait();
     }
-    
- 
-    
 }

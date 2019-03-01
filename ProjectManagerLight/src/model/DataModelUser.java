@@ -9,14 +9,14 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
 
-public class DataModel {
+public class DataModelUser {
 
 	private final DatabaseController database = DatabaseController.getInstance();
 	
     private ObservableList<ProjectUser> userList;
 //    private ObservableList<Object> projectList;
 	
-    public DataModel() {
+    public DataModelUser() {
 		loadUserData();
 		printUserData();
 		
@@ -91,35 +91,14 @@ public class DataModel {
     	System.out.println("[model.DataModel] User: " + loginShortcut + " does not exist");
     	return 3;
     }
-    
-    /** proves is userShortcut already exists in userList
-     * 	
-     * @param shortcut
-     * @return true...userShortcut exists in userList false...userShortcut does not exist in userList
-     */
-    public boolean userShortcutExistis(String shortcut) {
-    	for(ProjectUser u : userList) {
-    		if(u.getUserShortcut().toLowerCase().equals(shortcut.toLowerCase())) {
-    			return true;
-    		}
-    	}
-    	return false;
-    }
-    /* Creating new ProjectUser and adding to userList
-     *     
-    */
-    public void createUser(String userShortcut, String firstName, String lastName, String eMail, String role, String password) {
+
+    //creating new user
+    public void createUser(ProjectUser newUser) {
     	System.out.println("[model.DataModel] Adding new User to List");
-    	ProjectUser newUser = new ProjectUser();
-    	newUser.setFirstName(firstName);
-    	newUser.setLastName(lastName);
-    	newUser.seteMail(eMail);
-    	newUser.setUserShortcut(userShortcut);
-		newUser.setPassword(password);
-		newUser.setRole(role);
     	userList.add(newUser);
     	printUserData();    	
     }
+    
     /** Deleting existing ProjectUser in userList
      * 
      * @param deleteUser 
@@ -130,68 +109,11 @@ public class DataModel {
     	printUserData();
     }
 
-    /** Update existing projectUser in userList
-     * 
-     * @param updateUser	Object: existing User
-     * @param userShortcut	
-     * @param firstName
-     * @param lastName
-     * @param eMail
-     * @param role
-     * @param password
-     */
-    public void updateUser(ProjectUser updateUser, String userShortcut, String firstName, String lastName, String eMail, String role, String password) {
+    //Update existing projectUser in userList
+    public void updateUser(ProjectUser updateUser) {
     	System.out.println("[model.DataModel] Update user" + updateUser.getUserShortcut());
     	int userIndex = userList.indexOf(updateUser);
-    	updateUser.setFirstName(firstName);
-    	updateUser.setLastName(lastName);
-    	updateUser.seteMail(eMail);
-    	updateUser.setUserShortcut(userShortcut);
-		updateUser.setPassword(password);
-		updateUser.setRole(role);
 		userList.set(userIndex, updateUser);
     	printUserData();
-    }
-    
-    public void setProjectToUser(ProjectUser updateUser, Project project) {  
-    	
-    	System.out.println("[model.DataModel] Set project to user: " + updateUser);
-    	boolean userAlreadyContainsProject = false;
-    	for(Project p : updateUser.getInvolvedProjects()) {		
-    		if((p.getProjectID() == project.getProjectID())) {
-    			userAlreadyContainsProject = true;
-    		}
-    	}
-    	if(updateUser.getInvolvedProjects().isEmpty() || !userAlreadyContainsProject) {
-    		System.out.println("[model.DataModel] This project to user: " + project);    			
-    		int userIndex = userList.indexOf(updateUser);
-    		updateUser.addProjectToUser(project);
-    		userList.set(userIndex, updateUser);
-    	} 
-
-    	printUserData();
-    }
-      
-    public void removeProjectFromAllUser(Project project) {
-    	System.out.println("[model.DataModel] Remove project from all user. Project: " + project);
-//    	project.getProjectMember().removeAll(userList);
-    	for(ProjectUser u : userList) {
-    		System.out.println("[model.DataModel] Remove project from user: " + u);
-    		u.removeProjectFromUser(project);
-    	}
-    	printUserData();
-    }
-    
-    public ObservableList<ProjectUser> getUserBelongingToProject(Project project) {
-    	System.out.println("[model.DataModel] getUserBelongingToProject Project" + project);
-    	ObservableList<ProjectUser> list = FXCollections.observableArrayList();
-    	for(ProjectUser u : userList) {
-    		for(Project p : u.getInvolvedProjects()) {
-    			if(p.getProjectID() == project.getProjectID()) {
-    				list.add(u);
-    			}
-    		}
-    	}
-    	return list;
-    }	
+    }  
 }

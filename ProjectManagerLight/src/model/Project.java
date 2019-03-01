@@ -44,7 +44,7 @@ public class Project implements Serializable{
 	private ProjectUser projectManager;
 	//(fetch=FetchType.EAGER, cascade = {CascadeType.ALL})
 	//
-	@ManyToMany(fetch=FetchType.EAGER, cascade = {CascadeType.ALL})
+	@ManyToMany(fetch=FetchType.EAGER)
 	private List<ProjectUser> projectMembers = new ArrayList<>();
 //	@JoinColumn(name = "FKUSERID", JoinColumns = { @JoinColumns"USERID")
 	
@@ -128,16 +128,6 @@ public class Project implements Serializable{
 		this.projectMembers = projectMember;
 	}
 	
-	public void addProjectMembers(ProjectUser user) {
-		//		if(!this.getProjectMember().contains(user)) {
-		this.projectMembers.add(user);
-		System.out.println("[model.Project] addProjectMembers: " + user);
-
-		//			user.addProjectToUser(this);
-		//		}
-	}
-	
-	//TEST__________________________________________________
 	public void removeUserFromProject(ProjectUser user) {
 		for(ProjectUser u : projectMembers) {
 			if(u.getUserID() == user.getUserID()) {
@@ -159,7 +149,16 @@ public class Project implements Serializable{
 		this.story.add(story);
 		System.out.println("[model.Project] Story List: " + this.getStory());
 	}
-	
-	
-	
+
+	@Override public boolean equals(Object o) {
+		if (this == o) return true;
+		if ((o instanceof Project) == true) {
+			Project u = (Project)o;
+			return this.projectID == u.projectID;
+		} else {
+			return false;
+		}
+	}
+
+
 }

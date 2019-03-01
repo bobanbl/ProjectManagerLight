@@ -3,7 +3,7 @@ package test;
 import java.util.List;
 
 import database.DatabaseController;
-import model.DataModel;
+import model.DataModelUser;
 import model.DataModelProject;
 import model.DataModelStory;
 import model.Project;
@@ -13,7 +13,7 @@ import model.Task;
 public class DataModelTest {
 
 	public static void main(String[] args) {
-		DataModel model = new DataModel();
+		DataModelUser model = new DataModelUser();
 		DataModelStory modelStory = new DataModelStory();
 		DataModelProject modelProject = new DataModelProject();
 		DatabaseController database = new DatabaseController();

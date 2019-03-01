@@ -36,18 +36,18 @@ public class ProjectUser implements Serializable{
 	private String password;
 	
 
-	@OneToMany(mappedBy = "projectManager", orphanRemoval=true, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "projectManager", orphanRemoval=true)
 	private List<Project> projectManger = new ArrayList<Project>();
 	
-	@OneToMany(mappedBy = "responsibility", orphanRemoval=true, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "responsibility", orphanRemoval=true)
 	private List<Story> involvedStories = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "responsibility", orphanRemoval=true, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "responsibility", orphanRemoval=true)
 	private List<Task> involvedTasks = new ArrayList<>();
 
 	//(mappedBy = "projectMembers", fetch=FetchType.EAGER, cascade = {CascadeType.ALL})
 	//(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@ManyToMany(mappedBy = "projectMembers", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "projectMembers", fetch=FetchType.EAGER)
 	private List<Project> involvedProjects = new ArrayList<>();
 //	@JoinTable(name = "user_project", 
 //	joinColumns = {@JoinColumn(name="fk_userID_project")},
@@ -125,13 +125,21 @@ public class ProjectUser implements Serializable{
 	}
 	
 	public void addProjectToUser(Project project) {	
-		if(!project.getProjectMember().contains(this)) {
+		if(!(this.getInvolvedProjects().contains(project))) {
 			System.out.println("[model.ProjectUser] addProjectToUser, Project: " + project);
-			project.addProjectMembers(this);
+//			project.addProjectMembers(this);
 //			project.getProjectMember().add(this);
 			this.involvedProjects.add(project);
 		}
 	}
+	
+	public void addProject(Project project) {	
+		System.err.println("[model.ProjectUser] 1 addProjectToUser, Project: " + project);
+		if(!project.getProjectMember().contains(this)) {
+			System.out.println("[model.ProjectUser] addProjectToUser, Project: " + project);
+			this.involvedProjects.add(project);
+		}
+	}	
 	//TEST__________________________________________________
 //	public void deleteProjectFromUser(Project project) {
 //		for(Project p : involvedProjects) {
@@ -177,7 +185,17 @@ public class ProjectUser implements Serializable{
 				+ involvedTasks + "]";
 	}
 	
-	
+	@Override public boolean equals(Object o) {
+
+		if (this == o) return true;
+
+		if ((o instanceof ProjectUser) == true) {
+			ProjectUser u = (ProjectUser)o;
+			return this.userID == u.userID;
+		} else {
+			return false;
+		}
+	}
 
 
 }

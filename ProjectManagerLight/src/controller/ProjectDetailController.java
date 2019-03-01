@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,7 +25,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import model.DataModel;
+import model.DataModelUser;
 import model.DataModelProject;
 import model.Project;
 import model.Project.ProjectStatus;
@@ -36,7 +37,7 @@ public class ProjectDetailController {
 	private ProjectController projectController;
 	private ProjectDetailTeamController projectDetailTeamController;
 	private DataModelProject projectModel;
-	private DataModel userModel;
+	private DataModelUser userModel;
 	private boolean newProject;
 	private Project selectedProject;
 	private Date projectStartDateOLD = null;
@@ -106,17 +107,8 @@ public class ProjectDetailController {
 			projectManagerNEW = null;
 			projectMembersListNEW = null;
 		}
-
-		projectModel.updateProject(selectedProject, projectNameNEW, descriptionNEW, projectStatusNEW, projectStartDateNEW,
-				projectFinishDateNEW, projectSponsorNEW, projectManagerNEW);
 		
-		//add project to user
-		if(projectMembersListNEW != null) {
-			for(ProjectUser u : projectMembersListNEW) {
-				System.out.println("[controller.PojectDetailController] Update User: " + u.getFirstName() + ", adding Project: " + selectedProject);
-				userModel.setProjectToUser(u, selectedProject);
-			}
-		}
+		updateProject();
 
 		projectController.closeDetailWindow();	
 	}
@@ -128,7 +120,6 @@ public class ProjectDetailController {
 		 * and in this Controller "@FXML	ProjectDetailMainController projectDetailMainController;" was included
 		 */
 		projectDetailMainController.setProjectDetailController(this);
-		
 
 		//clicking on the Close-Detail-Window-Button calls the method closeDetailWindow in ProjectController   	
 		closeDetailViewButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -154,8 +145,7 @@ public class ProjectDetailController {
 			this.projectDetailMainController = loader.getController();
 			this.projectDetailMainController.setProjectDetailController(this);
 			projectDetailMainController.setValuesFromTemp(selectedProject, projectNameTemp, descriptionTemp, projectStatusTemp, projectStartDateTEMP, projectFinishDateTEMP);
-			
-			
+	
 			anchorPaneDetailViews.getChildren().setAll(root);  	
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -195,17 +185,14 @@ public class ProjectDetailController {
 		projectNameTemp = projectDetailMainController.getProjectNameTextField();
 		descriptionTemp = projectDetailMainController.getProjectDescriptionTextField();
 		projectStatusTemp = projectDetailMainController.getProjectStatus();
-
 		projectStartDateTEMP = projectDetailMainController.getprojectStartDate();
 		projectFinishDateTEMP = projectDetailMainController.getprojectFinishDate();
-
 	}
 
 	private void saveValuesTemporaryTeamWindow() {
 			projectSponsorTemp = projectDetailTeamController.getProjectSponsor();
 			projectManagerTemp = projectDetailTeamController.getProjectManager();
 			projectMembersListTemp = projectDetailTeamController.getProjectMembers();
-
 	}
 	
 	//sets the ProjectController projectController    
@@ -219,12 +206,21 @@ public class ProjectDetailController {
 			createProjectButton.setVisible(true);
 			closeDetailViewButton.setVisible(false);
 
-			//------Setting local Date now
+			//setting local Date now
 			LocalDate localDate = LocalDate.now(ZoneId.systemDefault());
 			Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
 			Date date = Date.from(instant);	
+						
+			Project newProject = new Project();
+	    	newProject.setDescription("");
+			newProject.setProjectName("");
+			newProject.setProjectStatus(ProjectStatus.NOT_STARTED);
+			newProject.setStartDate(date);
+			newProject.setPlanedFinishDate(date);
+			newProject.setProjectSponsor("");
+			newProject.setProjectManager(null);
 			
-			selectedProject = projectModel.createProject("", "", ProjectStatus.NOT_STARTED, date, date, "", null);
+			selectedProject = projectModel.createProject(newProject);
 			projectDetailMainController.setSelectedProject(selectedProject);
 		} 
 	}
@@ -233,7 +229,7 @@ public class ProjectDetailController {
 		this.projectModel = projectModel;
 	}
 	
-    public void setDataModelUser(DataModel userModel) {
+    public void setDataModelUser(DataModelUser userModel) {
     	this.userModel = userModel;
     }
 
@@ -288,7 +284,7 @@ public class ProjectDetailController {
 		ProjectStatus projectStatusOLD = selectedProject.getProjectStatus();
 		projectStartDateOLD = selectedProject.getStartDate();
 		projectFinishDateOLD = selectedProject.getPlanedFinishDate();
-		projectMembersListOLD = userModel.getUserBelongingToProject(selectedProject);
+		projectMembersListOLD = FXCollections.observableArrayList(selectedProject.getProjectMember());
 		
 		descriptionNEW = projectDetailMainController.getProjectDescriptionTextField();
 		projectStatusNEW = projectDetailMainController.getProjectStatus();
@@ -311,7 +307,6 @@ public class ProjectDetailController {
 			projectManagerNEW = projectManagerOLD;
 			projectMembersListNEW = projectMembersListOLD;
 		}
-
 		
 		boolean changesOnPRojectManager = false;
 		if(projectManagerNEW == projectManagerOLD ||  (projectManagerNEW != null && projectManagerNEW.equals(projectManagerOLD))) {
@@ -328,6 +323,20 @@ public class ProjectDetailController {
 		}
 
 	}
+	
+	private void updateProject() {
+		//set new parameters in selected project
+		selectedProject.setDescription(descriptionNEW);
+		selectedProject.setProjectName(projectNameNEW);
+		selectedProject.setProjectStatus(projectStatusNEW);
+		selectedProject.setStartDate(projectStartDateNEW);
+		selectedProject.setProjectSponsor(projectSponsorNEW);
+		selectedProject.setProjectManager(projectManagerNEW);
+		selectedProject.setProjectMembers(projectMembersListNEW);
+		selectedProject.setPlanedFinishDate(projectFinishDateNEW);
+		//update project in projectModel projectList
+		projectModel.updateProject(selectedProject);
+	}
 
 	private void confirmClosingProjectDetailWindowChanges() {
 		System.out.println("[controller.PojectDetailController] Open Confirm Update Project Window");
@@ -337,26 +346,25 @@ public class ProjectDetailController {
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() == ButtonType.OK) {
 			System.out.println("[controller.PojectDetailController] Update Project Confirm!");
+			
+			updateProject();
+			addProjectToUser();	
 
-			projectModel.updateProject(selectedProject, projectNameNEW, descriptionNEW, projectStatusNEW,
-					projectStartDateNEW, projectFinishDateNEW, projectSponsorNEW, projectManagerNEW);
-			//TEST__________________________________________________
-//			delete the selected project from all user
-//			userModel.removeProjectFromAllUser(selectedProject);
-			projectModel.removeAllUserFromProject(selectedProject);
-			
-			//add project to user
-			for(ProjectUser u : projectMembersListNEW) {
-				System.out.println("[controller.PojectDetailController] Update User: " + u.getFirstName() + ", adding Project: " + selectedProject);
-				userModel.setProjectToUser(u, selectedProject);
-			}
-			
-			
 			projectController.closeDetailWindow();	
 		}
 		else if(result.get() == ButtonType.CANCEL) {
 			alert.close();
 			projectController.closeDetailWindow();	
+		}
+	}
+	
+	private void addProjectToUser() {
+		for(ProjectUser u : projectMembersListNEW) {
+			System.out.println("[controller.PojectDetailController] Update User: " + u.getFirstName() + ", adding Project: " + selectedProject);
+			if(!(u.getInvolvedProjects().contains(selectedProject))) {
+				u.addProjectToUser(selectedProject);
+				userModel.updateUser(u);
+			}
 		}
 	}
 }

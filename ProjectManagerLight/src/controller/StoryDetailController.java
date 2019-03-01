@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import org.apache.derby.impl.store.replication.net.SlaveAddress;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,7 +18,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.util.StringConverter;
-import model.DataModel;
+import model.DataModelUser;
 import model.DataModelStory;
 import model.Project;
 import model.ProjectUser;
@@ -26,9 +27,10 @@ import model.Story;
 public class StoryDetailController {
 	
 	private DataModelStory storyModel;
-	private DataModel userModel;
+//	private DataModelUser userModel;
 	private TaskController taskController;
 	private Story selectedStory;
+	private Project selectedProject;
 	
 	private String storyNameOLD;
 	private String descriptionOLD;
@@ -59,7 +61,9 @@ public class StoryDetailController {
     @FXML
     void assumeButtonPressed(ActionEvent event) {
     	System.out.println("[controller.StoryDetailController] assumeButtonPressed");
-    	if(checkIfChangesExists()) {
+    	if(!checkCorrectData()) {
+    		errorWindow("Duration has to be a Number");
+    	} else if(checkIfChangesExists()) {
     		confirmClosingStoryDetailWindowChanges();
     	} else {
     		taskController.closePopUpWindow();
@@ -68,7 +72,7 @@ public class StoryDetailController {
 
     @FXML
     void initialize() {
-  
+    	descriptionTextField.setWrapText(true);
     }
     
     public void setDataModelStory(DataModelStory storyModel) {
@@ -81,6 +85,7 @@ public class StoryDetailController {
     
     public void setSelectedStory(Story selectedStory) {
     	this.selectedStory = selectedStory;
+    	selectedProject = selectedStory.getProject();
     	storyNameOLD = selectedStory.getStoryName();
     	descriptionOLD = selectedStory.getDescription();
     	durationOLD = String.valueOf(selectedStory.getDuration());
@@ -89,22 +94,45 @@ public class StoryDetailController {
     	descriptionTextField.setText(descriptionOLD);
     	durationTextField.setText(durationOLD);
     	
-    	setResponsibilityComboBox();
+    	setUserListFromModel();
     }
     
     private boolean checkIfChangesExists() {
     	System.out.println("[controller.StoryDetailController] checkIfChangesExists");
     	storyNameNEW = nameTextField.getText().trim();
     	descriptionNEW = descriptionTextField.getText().trim();
-    	durationNEW = durationTextField.getText().trim();
     	responsibleUserNEW = responsibilityComboBox.getSelectionModel().getSelectedItem();
     	
+    	boolean changesOnProjectResponsibility = false;
+		if(responsibleUserNEW == responsibleUserOLD ||  (responsibleUserNEW != null && responsibleUserNEW.equals(responsibleUserOLD))) {
+			changesOnProjectResponsibility = true;			
+		}
+    	
     	if(storyNameOLD.equals(storyNameNEW) && descriptionOLD.equals(descriptionNEW) && durationOLD.equals(durationNEW)
-    			&& responsibleUserNEW.equals(responsibleUserOLD)) {
+    			&& changesOnProjectResponsibility) {
     		return false;
     	} else {
     		return true;
     	}
+    }
+    
+    private boolean checkCorrectData() {
+    	durationNEW = durationTextField.getText().trim();
+    	if(!isNumeric(durationNEW)) {		 		
+    		durationTextField.setStyle("-fx-control-inner-background: #FF0000");
+    		return false;
+    	}
+    	return true;
+    }
+    
+    public boolean isNumeric(String str)  
+    {  
+    	try {  
+    		int i = Integer.parseInt(str);  
+    	} catch(NumberFormatException nfe) {  
+    		return false;  
+    	}  
+    	return true;  
     }
     
     private void confirmClosingStoryDetailWindowChanges() {
@@ -115,7 +143,12 @@ public class StoryDetailController {
     	Optional<ButtonType> result = alert.showAndWait();
     	if(result.get() == ButtonType.OK) {
     		System.out.println("[controller.StoryDetailController] Update Story Confirm!");
-    		storyModel.updateStory(selectedStory, storyNameNEW, descriptionNEW, Integer.parseInt(durationNEW), responsibleUserNEW);
+    		
+    		selectedStory.setStoryName(storyNameNEW);
+    		selectedStory.setDescription(descriptionNEW);
+    		selectedStory.setDuration(Integer.parseInt(durationNEW));
+    		selectedStory.setResponsibility(responsibleUserNEW);
+    		storyModel.updateStory(selectedStory);
     		taskController.updateTasks();
     		taskController.closePopUpWindow();	
     	}
@@ -124,13 +157,10 @@ public class StoryDetailController {
     	}
     }
     
-    public void setDataModelUser(DataModel userModel) {
-    	this.userModel = userModel;
-    	setUserListFromModel();
-    }
-    
     public void setUserListFromModel() {
-    	userList = userModel.getUserBelongingToProject(selectedStory.getProject());   	
+    	System.out.println("[controller.StroyDetailController] Project: " + selectedProject);
+    	ObservableList<ProjectUser> userProjectList = FXCollections.observableArrayList(selectedProject.getProjectMember());
+    	userList = userProjectList;
     	System.out.println("[controller.StrorySetailController] userList: " + userList);   	
     	updateResponsibilityComboBox();
     }
@@ -152,14 +182,16 @@ public class StoryDetailController {
 			public String toString(ProjectUser u) {
 				return u.getFirstName() + " " + u.getLastName() + " (" + u.getUserShortcut() + ")";
 			}	
-		}); 
-    	
+		}); 	
     }
     
-    private void setResponsibilityComboBox() {
-    	ProjectUser selectedUser = selectedStory.getResponsibility();
+    private void errorWindow(String message) {
+    	System.out.println("Print User Error-Message");
+    	Alert alert = new Alert(AlertType.ERROR);
+    	alert.setTitle("Error!");
+    	alert.setHeaderText(message);
+    	alert.showAndWait();
     }
-
 }
 
 

@@ -3,6 +3,7 @@ package controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,51 +14,55 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.util.StringConverter;
-import model.DataModel;
+import model.DataModelUser;
 import model.DataModelStory;
 import model.Project;
 import model.ProjectUser;
+import model.Story;
 
 public class StoryCreateController {
 	
 	private DataModelStory storyModel;
-	private DataModel userModel;
 	private TaskController taskController;
 	private Project selectedProject;
+	private int duration;
 	
 	ObservableList<ProjectUser> userList = null;
 	
     @FXML
     private ResourceBundle resources;
-
     @FXML
     private URL location;
-
     @FXML
     private TextField durationTextField;
-
     @FXML
     private TextField nameTextField;
-
     @FXML
     private Button createButton;
-
     @FXML
     private TextArea descriptionTextField;
-
     @FXML
     private ComboBox<ProjectUser> responsibilityComboBox;
-
+    
     @FXML
     void assumeButtonPressed(ActionEvent event) {
     	String storyName = nameTextField.getText().trim();
-    	int duration = Integer.parseInt(durationTextField.getText().trim());
+    	
     	String description = descriptionTextField.getText().trim();
     	
     	if(storyName.equals("") || description.equals("")) {
     		errorWindow("Empty field!");
+    	} else if(!checkCorrectData()) {
+    		errorWindow("Duration has to be a Number");
     	} else {
-    		storyModel.createStory(description, duration, storyName, taskController.getRowCount(), selectedProject, getResponsibleUser());
+        	Story newStory = new Story();
+        	newStory.setDescription(description);
+    		newStory.setDuration(duration);
+    		newStory.setStoryName(storyName);
+    		newStory.setPositionGridPane(taskController.getRowCount());
+    		newStory.setProject(selectedProject);
+    		newStory.setResponsibility(getResponsibleUser());
+    		storyModel.createStory(newStory);
     		System.out.println("[controller.StoryCreateController] Responsible User: " + getResponsibleUser());
     		 		
     		taskController.updateTasks();
@@ -67,7 +72,25 @@ public class StoryCreateController {
 
     @FXML
     void initialize() {
-
+    	descriptionTextField.setWrapText(true);
+    }
+    
+    private boolean checkCorrectData() {
+    	if(!isNumeric(durationTextField.getText().trim())) {		 		
+    		durationTextField.setStyle("-fx-control-inner-background: #FF0000");
+    		return false;
+    	}
+    	return true;
+    }
+    
+    public boolean isNumeric(String str)  
+    {  
+    	try {  
+    		duration = Integer.parseInt(durationTextField.getText().trim()); 
+    	} catch(NumberFormatException nfe) {  
+    		return false;  
+    	}  
+    	return true;  
     }
     
     public void setDataModelStory(DataModelStory storyModel) {
@@ -80,6 +103,7 @@ public class StoryCreateController {
     
     public void setSelectedProject(Project selectedProject) {
     	this.selectedProject = selectedProject;
+    	setUserListFromModel();
     }
     
     private void errorWindow(String message) {
@@ -89,14 +113,11 @@ public class StoryCreateController {
     	alert.setHeaderText(message);
     	alert.showAndWait();
     }
-    
-    public void setDataModelUser(DataModel userModel) {
-    	this.userModel = userModel;
-    	setUserListFromModel();
-    }
-    
+        
     public void setUserListFromModel() {
-    	userList = userModel.getUserBelongingToProject(selectedProject);
+    	System.out.println("[controller.StroyCreateController] Project: " + selectedProject);
+    	ObservableList<ProjectUser> userProjectList = FXCollections.observableArrayList(selectedProject.getProjectMember());
+    	userList = userProjectList;
     	
     	System.out.println("[controller.StroryCreateController] userList: " + userList);
     	updateResponsibilityComboBox();

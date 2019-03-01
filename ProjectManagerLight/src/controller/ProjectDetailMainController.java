@@ -56,6 +56,7 @@ public class ProjectDetailMainController {
 
 	@FXML
 	void initialize() {
+		projectDescriptionTextField.setWrapText(true);
 		projectStatusComboBox.getItems().addAll(ProjectStatus.values());
 		projectStatusComboBox.setConverter(new StringConverter<ProjectStatus>() {
 

@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -21,7 +22,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -33,13 +36,14 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
-import model.DataModel;
+import model.DataModelUser;
+import model.Project;
 import model.ProjectUser;
 
 //The Controller for userManView.fxml
 public class UserManController {
 	
-	private DataModel model;
+	private DataModelUser model;
 	ObservableList<ProjectUser> selectedUserList;
 	
     @FXML
@@ -47,7 +51,7 @@ public class UserManController {
     @FXML
     private URL location;
     @FXML
-    private TableColumn<ProjectUser, String> colProjects;
+    private TableColumn<ProjectUser, List<Project>> colProjects;
     @FXML
     private TableColumn<ProjectUser, String> colLastName;
     @FXML
@@ -74,7 +78,6 @@ public class UserManController {
     		System.out.println("[controller.UserManController] Add-User-Button pressed");
     		laodUserCreatePopUp();
     	});
-
     	tablesChanges();
     }
     
@@ -100,7 +103,7 @@ public class UserManController {
 		}
     }
     
-    public void setDataModel(DataModel model) {
+    public void setDataModel(DataModelUser model) {
     	this.model = model;
     	initializeTable();
     }
@@ -115,22 +118,17 @@ public class UserManController {
     	colLastName.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("lastName"));
     	colEmail.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("eMail"));
     	colRole.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("role"));
-//    	colProjects.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("projects"));
+    	//@priebj is there a simple to show just the projectID from the projects
+    	colProjects.setCellValueFactory(new PropertyValueFactory<ProjectUser, List<Project>>("involedProjects"));
+
     }
+    	
     //Close Pop-up window - Create User   
     public void closePopUpWindow() {
     	popUpWindow.close();
     }
     
     public void tablesChanges() {
-//    	userTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ProjectUser>() {
-//
-//    		@Override
-//    		public void changed(ObservableValue<? extends ProjectUser> observable, ProjectUser oldValue, ProjectUser newValue) {
-//    			laodUserDetailPopUp1(newValue);
-//    		}
-//    	});
-//    	
     	userTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
     		selectedUserList = userTable.getSelectionModel().getSelectedItems();
     		System.out.println(selectedUserList.get(0).getLastName());
@@ -141,19 +139,7 @@ public class UserManController {
     			System.out.println("Right Mouse Button clicked");
     			openContextMenu();
     		}
-    	});
-    	
-//    	userTable.getSelectionModel().selectedItemProperty().
-//    	setRowFactory(tv -> {
-//            TableRow<ProjectUser> row = new TableRow<>();
-//            row.setOnMouseClicked(event -> {
-//                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-//                	ProjectUser rowData = row.getItem();
-//                    System.out.println("Double click on: ");
-//                }
-//            });
-//    	}
-            
+    	}); 
     }
     
     //opens User Detail Pop Up Window - User Details  
@@ -178,8 +164,7 @@ public class UserManController {
     		e.printStackTrace();
     	}
     } 
-     
-    
+       
     private void openContextMenu() {
     	Label label = new Label();
     	ContextMenu contextMenu = new ContextMenu();

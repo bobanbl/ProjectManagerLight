@@ -1,9 +1,13 @@
 package controller;
 
+import java.awt.Color;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import org.apache.derby.iapi.util.StringUtil;
+
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,9 +17,11 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.util.StringConverter;
-import model.DataModel;
+import model.DataModelUser;
 import model.DataModelStory;
+import model.Project;
 import model.ProjectUser;
 import model.Task;
 import model.Task.TaskStatus;
@@ -24,9 +30,9 @@ import model.Task.TaskStatus;
 public class TaskDetailController {
 	
 	private DataModelStory storyModel;
-	private DataModel userModel;
 	private TaskController taskController;
 	private Task selectedTask;
+	private Project selectedProject;
 	
 	private String taskNameOLD;
 	private String descriptionOLD;
@@ -61,7 +67,9 @@ public class TaskDetailController {
     @FXML
     void assumeButtonPressed(ActionEvent event) {
     	System.out.println("[controller.TaskDetailController] assumeButtonPressed");
-    	if(checkIfChangesExists()) {
+    	if(!checkCorrectData()) {
+    		errorWindow("Duration has to be a Number");
+    	} else if(checkIfChangesExists()) {
     		confirmClosingTaskDetailWindowChanges();
     	} else {
     		taskController.closePopUpWindow();
@@ -71,10 +79,11 @@ public class TaskDetailController {
     @FXML
     void initialize() {
     	taskStatusComboBox.getItems().addAll(TaskStatus.values());
- 
+    	descriptionTextField.setWrapText(true);
     }
+    
     public void setDataModelStory(DataModelStory storyModel) {
-    	this.storyModel = storyModel;
+    	this.storyModel = storyModel;	
     }
     
     public void setTaskController(TaskController taskController) {
@@ -83,6 +92,7 @@ public class TaskDetailController {
     
     public void setSelectedTask(Task selectedTask) {
     	this.selectedTask = selectedTask;
+    	selectedProject = selectedTask.getStory().getProject();
     	taskNameOLD = selectedTask.getTaskName();
     	descriptionOLD = selectedTask.getDescription();
     	durationOLD = String.valueOf(selectedTask.getDuration());
@@ -93,24 +103,46 @@ public class TaskDetailController {
     	durationTextField.setText(durationOLD);
     	taskStatusComboBox.setValue(taskStatusOLD);
     	
-    	setResponsibilityComboBox();
-    	
+    	setUserListFromModel();    	
     }
-    
+        
     private boolean checkIfChangesExists() {
     	System.out.println("[controller.StoryDetailController] checkIfChangesExists");
     	taskNameNEW = nameTextField.getText().trim();
     	descriptionNEW = descriptionTextField.getText().trim();
-    	durationNEW = durationTextField.getText().trim();
     	taskStatusNEW = taskStatusComboBox.getValue();
-    	responsibleUserNEW = responsibilityComboBox.getSelectionModel().getSelectedItem();
     	
+    	responsibleUserNEW = responsibilityComboBox.getSelectionModel().getSelectedItem();
+		boolean changesOnProjectResponsibility = false;
+		if(responsibleUserNEW == responsibleUserOLD ||  (responsibleUserNEW != null && responsibleUserNEW.equals(responsibleUserOLD))) {
+			changesOnProjectResponsibility = true;			
+		}
+	    	
     	if(taskNameOLD.equals(taskNameNEW) && descriptionOLD.equals(descriptionNEW) && durationOLD.equals(durationNEW) 
-    			&& taskStatusOLD.equals(taskStatusNEW) && responsibleUserNEW.equals(responsibleUserOLD)) {
+    			&& taskStatusOLD.equals(taskStatusNEW) && changesOnProjectResponsibility) {
     		return false;
     	} else {
     		return true;
     	}
+    }
+    
+    private boolean checkCorrectData() {
+    	durationNEW = durationTextField.getText().trim();
+    	if(!isNumeric(durationNEW)) {		 		
+    		durationTextField.setStyle("-fx-control-inner-background: #FF0000");
+    		return false;
+    	}
+    	return true;
+    }
+        
+    public static boolean isNumeric(String str)  
+    {  
+    	try {  
+    		int i = Integer.parseInt(str);  
+    	} catch(NumberFormatException nfe) {  
+    		return false;  
+    	}  
+    	return true;  
     }
     
     private void confirmClosingTaskDetailWindowChanges() {
@@ -121,7 +153,12 @@ public class TaskDetailController {
     	Optional<ButtonType> result = alert.showAndWait();
     	if(result.get() == ButtonType.OK) {
     		System.out.println("[controller.TaskDetailController] Update Task Confirm!");
-    		storyModel.updateTask(selectedTask, taskNameNEW, descriptionNEW, Integer.parseInt(durationNEW), taskStatusNEW, responsibleUserNEW);
+    		selectedTask.setTaskName(taskNameNEW);
+    		selectedTask.setDescription(descriptionNEW);
+    		selectedTask.setDuration(Integer.parseInt(durationNEW));
+    		selectedTask.setStatus(taskStatusNEW);
+    		selectedTask.setResponsibility(responsibleUserNEW);
+    		storyModel.updateTask(selectedTask);
     		taskController.updateTasks();
     		taskController.closePopUpWindow();	
     	}
@@ -129,19 +166,14 @@ public class TaskDetailController {
     	    alert.close();
     	}
     }
-    
-    public void setDataModelUser(DataModel userModel) {
-    	this.userModel = userModel;
-    	setUserListFromModel();
-    }
-    
+        
     public void setUserListFromModel() {
-    	userList = userModel.getUserBelongingToProject(selectedTask.getStory().getProject());   	
+    	ObservableList<ProjectUser> userProjectList = FXCollections.observableArrayList(selectedProject.getProjectMember());
+    	userList = userProjectList;
     	System.out.println("[controller.TaskDetailController] userList: " + userList);   	
     	updateResponsibilityComboBox();
     }
-    
-    
+       
     private void updateResponsibilityComboBox() {
     	responsibleUserOLD = selectedTask.getResponsibility();
     	responsibilityComboBox.setItems(userList);
@@ -159,13 +191,13 @@ public class TaskDetailController {
 				return u.getFirstName() + " " + u.getLastName() + " (" + u.getUserShortcut() + ")";
 			}	
 		}); 
-    	
+    }  
+    
+    private void errorWindow(String message) {
+    	System.out.println("Print User Error-Message");
+    	Alert alert = new Alert(AlertType.ERROR);
+    	alert.setTitle("Error!");
+    	alert.setHeaderText(message);
+    	alert.showAndWait();
     }
-    
-    private void setResponsibilityComboBox() {
-    	ProjectUser selectedUser = selectedTask.getResponsibility();
-    }
-    
-    
-    
 }

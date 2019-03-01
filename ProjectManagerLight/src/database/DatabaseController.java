@@ -42,7 +42,8 @@ public class DatabaseController {
 	 * D... delete
 	 */
 	
-//-------------Project User--------------------------	
+//-------------Project User--------------------------
+	//for testing 
 	public void createUserDatabase(String userShortcut, String firstName, String lastName, String eMail, String role, String password) {
 		System.out.println("Start creating user");
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
@@ -165,6 +166,8 @@ public class DatabaseController {
 		transaction.commit();
 		em.close();			
 	}
+	
+	//for testing 
 	public void createStoryDirectInDatabase(String description, int duration, String storyName, Project toProject, int positionGridPane) {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
 		EntityManager em = emf.createEntityManager();
@@ -186,25 +189,7 @@ public class DatabaseController {
 		transaction.commit();
 		em.close();			
 	}	
-	
-	public Story readStory(int storyID) {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
-		EntityManager em = emf.createEntityManager();
 		
-		EntityTransaction transaction = em.getTransaction();
-		
-		System.out.println("[database.DatabaseController] Read Story: " + storyID);
-		transaction.begin();
-		
-		Story story = (Story)em.createQuery("select s from Story s where s.storyID = '" + storyID + "'").getSingleResult();
-				
-		em.persist(story);
-		transaction.commit();
-		em.close();	
-		
-		return story;
-	}
-	
 	public List<Story> readAllStories(){
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
 		EntityManager em = emf.createEntityManager();
@@ -257,6 +242,7 @@ public class DatabaseController {
 		em.close();
 	}	
 	//-------------Task--------------------------------
+	//for testing 
 	public void createTaskDirectInDatabase(String taskName, String description, int duration, Story toStory) {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
 		EntityManager em = emf.createEntityManager();
@@ -363,6 +349,7 @@ public class DatabaseController {
 	}	
 
 //------------Project--------------------------------
+	//for testing 
 	public void createProjectDirectInDatabase(String projectName, String description) {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
 		EntityManager em = emf.createEntityManager();
@@ -412,24 +399,6 @@ public class DatabaseController {
 		em.close();
 		
 		return project;		
-	}
-	
-	public Project readProject(String projectName) {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProjectManagerLight");
-		EntityManager em = emf.createEntityManager();
-		
-		EntityTransaction transaction = em.getTransaction();
-		
-		System.out.println("[database.DatabaseController] Read Project: " + projectName);
-		transaction.begin();
-		
-		Project project = (Project)em.createQuery("select s from Project s where s.projectName like '" + projectName + "'").getSingleResult();
-				
-		em.persist(project);		
-		transaction.commit();
-		em.close();	
-		
-		return project;
 	}
 	
 	public Project updateProject(Project updateProject) {

@@ -35,13 +35,13 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import model.Project;
 import model.ProjectUser;
-import model.DataModel;
+import model.DataModelUser;
 
 //Controller for projectDetailTeam.fxml
 public class ProjectDetailTeamController {
 	
 	private Project selectedProject;
-	private DataModel userModel;
+	private DataModelUser userModel;
 	private ProjectDetailController projectDetailController;	
 	private Stage popUpWindow;
 	ObservableList<ProjectUser> userList = null;
@@ -53,6 +53,9 @@ public class ProjectDetailTeamController {
     @FXML
     private URL location;
     @FXML
+    /*Project Sponsor is a TextField bc it could be also an external Person 
+     * and so its not necessary to add the sponsor in the user list
+     */
     private TextField textFieldProjectSponsor;
     @FXML
     private ComboBox<ProjectUser> projectManagerComboBox;
@@ -70,7 +73,7 @@ public class ProjectDetailTeamController {
     private TableColumn<ProjectUser, String> colRole;
     
    
-//click on Project-Detail-View-Button calls method loadDetailMainWindow in ProjectDetailController    
+    //click on Project-Detail-View-Button calls method loadDetailMainWindow in ProjectDetailController    
     @FXML
     void projectDetailViewButtonPressed(ActionEvent event) {
     	System.out.println("[controller.ProjectDetailTeamController] Project-Detail-View-Button Pressed");
@@ -85,8 +88,6 @@ public class ProjectDetailTeamController {
     		laodUserSelectPopUp();
     	});
     	clickOnTable();
-
-
     }
     
     //opens User Select Pop Up Window - Create User    
@@ -99,7 +100,6 @@ public class ProjectDetailTeamController {
     		ProjectUserAddController projectUserAddController =  loader.getController();
     		projectUserAddController.setUserModel(userModel);
     		projectUserAddController.setProjectDetailTeamController(this);
-    		projectUserAddController.setSelectedProject(selectedProject);
 
     		Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));	
     		popUpWindow = new Stage();
@@ -112,7 +112,7 @@ public class ProjectDetailTeamController {
 		}
     }
     
-    //Close Pop-up window - Select User   
+    //close Pop-up window - Select User   
     public void closePopUpWindow() {
     	popUpWindow.close();
     }
@@ -136,7 +136,7 @@ public class ProjectDetailTeamController {
     	return projectManagerComboBox.getSelectionModel().getSelectedItem();
     }
     
-    public void setDataModelUser(DataModel userModel) {
+    public void setDataModelUser(DataModelUser userModel) {
     	this.userModel = userModel;
     	ObservableList<ProjectUser> userList = FXCollections.observableArrayList();
     	userList = userModel.getUserList();
@@ -164,7 +164,8 @@ public class ProjectDetailTeamController {
     }
     
     public void setUserListFromModel() {
-    	userList = userModel.getUserBelongingToProject(selectedProject);
+    	ObservableList<ProjectUser> userProjectList = FXCollections.observableArrayList(selectedProject.getProjectMember());
+    	userList = userProjectList;
     	System.out.println("[controller.ProjectDetailTeamCotnroller] userList: " + userList);
     	updateProjectMemberTable();
     }

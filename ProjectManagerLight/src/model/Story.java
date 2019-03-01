@@ -38,7 +38,7 @@ public class Story implements Serializable{
 	private int duration;
 	private int positionGridPane;
 	
-	@OneToMany(mappedBy = "story", orphanRemoval=true, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "story", orphanRemoval=true)
 	private List<Task> tasks = new ArrayList<>();
 	
 	@OneToOne
@@ -117,7 +117,17 @@ public class Story implements Serializable{
 		}
 	}
 	
-	
+	@Override public boolean equals(Object o) {
+
+		if (this == o) return true;
+
+		if ((o instanceof Story) == true) {
+			Story u = (Story)o;
+			return this.storyID == u.storyID;
+		} else {
+			return false;
+		}
+	}
 		
 	
 }
