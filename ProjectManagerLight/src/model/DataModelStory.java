@@ -111,12 +111,13 @@ public class DataModelStory {
     }
   //----------------------------Task------------------------------------------
     public void loadTaskData() {
-    	List<Task> list = new ArrayList<Task>();
-    	for(Story s : storyList) {
-    		for(Task t : s.getTasks()) {
-    			list.add(t);
-    		}
-    	}
+//    	List<Task> list = new ArrayList<Task>();
+//    	for(Story s : storyList) {
+//    		for(Task t : s.getTasks()) {
+//    			list.add(t);
+//    		}
+//    	}
+    	List<Task> list = database.readAllTasks();
 		taskList = FXCollections.observableArrayList(list);	
 		printTaskData();
     }
@@ -135,12 +136,12 @@ public class DataModelStory {
         
     //deleting existing Task in TaskList
     public void deleteTask(Task deleteTask) {
-    	System.out.println("[model.DataModelStory] Deleting Task: " + deleteTask);
-    	
+    	System.out.println("[model.DataModelStory] 1 Deleting Task: " + deleteTask);
+    	Story story = deleteTask.getStory();
+    	story.removeTaskFromStory(deleteTask);
     	taskList.remove(deleteTask);
-    	loadStoryData();
-    	printStoryData();
-    	printTaskData();
+
+       	printTaskData();
     }    
     
   //updating existing Task in TaskList
@@ -148,11 +149,9 @@ public class DataModelStory {
     	System.out.println("[model.DataModelStory] UpdateTask: " + updateTask);
     	int taskIndex = taskList.indexOf(updateTask);
     	taskList.set(taskIndex, updateTask);
-
-    	printStoryData();
     	printTaskData();
     } 
-
+    
 }
 
 

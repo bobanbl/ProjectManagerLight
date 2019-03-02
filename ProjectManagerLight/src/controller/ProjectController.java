@@ -125,6 +125,8 @@ public class ProjectController {
 					navigationController.setSelectedProject(projectTable.getItems().get(0));
 				}
 		}
+		
+		projectTable.getSelectionModel().select(navigationController.getSelectedProject());
 	}
 
 	public void tablesChanges() { 	

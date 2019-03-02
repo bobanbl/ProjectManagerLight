@@ -125,7 +125,6 @@ public class NavigationController {
 			taskController.setDataModelStory(storyModel);
 			taskController.setNavigationController(this);
 			taskController.setSelectedProject(selectedProject);
-			taskController.setDataModelUser(userModel);
 
 			anchorPaneViews.getChildren().setAll(root);
 			labelSelectedView.setText("Tasks");			

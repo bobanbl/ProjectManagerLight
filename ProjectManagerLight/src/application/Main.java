@@ -11,7 +11,7 @@ import model.DataModelProject;
 import model.DataModelStory;
 /** This is the main Class from the tool "ProjectManagerLight" which opens the Login Window
 @author Boblaz
-@version 0.4 <I>Java Project 2019</I>
+@version 0.5 <I>Java Project 2019</I>
  */
 
 public class Main extends Application {

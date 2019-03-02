@@ -85,16 +85,23 @@ public class Story implements Serializable{
 	}
 	
 	//For testing
+//	public void removeTaskFromStory(Task removeTask) {
+//		System.out.println("[model.Story] Remove Task 1 from Story: " + removeTask);
+//		
+//		for(Task t : this.tasks) {
+//			if(t.getTaskID() == removeTask.getTaskID()) {
+//				System.out.println("[model.Story] Remove Task from Story: " + t);
+//				tasks.remove(t);
+//			}
+//		}	
+//	}
+	
 	public void removeTaskFromStory(Task removeTask) {
 		System.out.println("[model.Story] Remove Task 1 from Story: " + removeTask);
-		
-		for(Task t : tasks) {
-			if(t.getTaskID() == removeTask.getTaskID()) {
-				System.out.println("[model.Story] Remove Task from Story: " + t);
-				tasks.remove(t);
-			}
-		}	
+		tasks.remove(removeTask);
+
 	}
+	
 	
 	public void addTasktoStory(Task newTask) {
 		this.tasks.add(newTask);

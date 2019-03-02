@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TaskCreateController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StoryTaskDetailController">
    <children>
       <VBox alignment="TOP_CENTER" layoutX="-1.0" layoutY="-5.0" prefHeight="400.0" prefWidth="400.0">
          <children>
@@ -85,7 +85,7 @@
                   </TextField>
                </children>
             </HBox>
-            <Button fx:id="createButton" mnemonicParsing="false" onAction="#createButtonPressed" prefHeight="51.0" prefWidth="146.0" style="-fx-background-color: #86C232;" text="Create" textFill="WHITE">
+            <Button fx:id="assumeButton" mnemonicParsing="false" onAction="#assumeButtonPressed" prefHeight="51.0" prefWidth="146.0" style="-fx-background-color: #86C232;" text="Assume" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>

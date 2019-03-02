@@ -13,14 +13,14 @@
             <Image url="@../../bin/assets/AddUser.png" />
          </image>
       </ImageView>
-      <TableView fx:id="userTable" layoutX="4.0" layoutY="117.0" prefHeight="429.0" prefWidth="932.0">
+      <TableView fx:id="userTable" layoutX="4.0" layoutY="117.0" prefHeight="429.0" prefWidth="925.0">
         <columns>
-          <TableColumn fx:id="colShortcut" prefWidth="75.0" text="Shortcut" />
-          <TableColumn fx:id="colFirstName" prefWidth="75.0" text="FirstName" />
-            <TableColumn fx:id="colLastName" prefWidth="75.0" text="LastName" />
-            <TableColumn fx:id="colEmail" prefWidth="75.0" text="Email" />
-            <TableColumn fx:id="colRole" prefWidth="75.0" text="Role" />
-            <TableColumn fx:id="colProjects" prefWidth="75.0" text="Projects" />
+          <TableColumn fx:id="colShortcut" prefWidth="105.0" text="Shortcut" />
+          <TableColumn fx:id="colFirstName" prefWidth="159.0" text="FirstName" />
+            <TableColumn fx:id="colLastName" minWidth="0.0" prefWidth="153.0" text="LastName" />
+            <TableColumn fx:id="colEmail" prefWidth="155.0" text="Email" />
+            <TableColumn fx:id="colRole" prefWidth="169.0" text="Role" />
+            <TableColumn fx:id="colProjects" prefWidth="180.0" text="Projects" />
         </columns>
       </TableView>
    </children>

@@ -42,170 +42,162 @@ import model.ProjectUser;
 
 //The Controller for userManView.fxml
 public class UserManController {
-	
+
 	private DataModelUser model;
 	ObservableList<ProjectUser> selectedUserList;
-	
-    @FXML
-    private ResourceBundle resources;
-    @FXML
-    private URL location;
-    @FXML
-    private TableColumn<ProjectUser, List<Project>> colProjects;
-    @FXML
-    private TableColumn<ProjectUser, String> colLastName;
-    @FXML
-    private ImageView addUserButton;
-    @FXML
-    private TableView<ProjectUser> userTable;
-    @FXML
-    private TableColumn<ProjectUser, String> colRole;
-    @FXML
-    private TableColumn<ProjectUser, String> colShortcut;
-    @FXML
-    private TableColumn<ProjectUser, String> colFirstName;
-    @FXML
-    private TableColumn<ProjectUser, String> colEmail;
-    
-    private Stage popUpWindow;
-    
-    
-    
-    @FXML
-    void initialize() {
-    	//Method loadUserDetailPopUp() is called, when addUserButton is pressed
-    	addUserButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-    		System.out.println("[controller.UserManController] Add-User-Button pressed");
-    		laodUserCreatePopUp();
-    	});
-    	tablesChanges();
-    }
-    
-    //opens User Detail Pop Up Window - Create User    
-    private void laodUserCreatePopUp() {
-    	try {
-    		FXMLLoader loader = new FXMLLoader();
-    		loader.setLocation(getClass().getResource("../view/userCreatePopUp.fxml"));  	
-    		Parent root = loader.load();
 
-    		UserCreateController userCreateController =  loader.getController();
-    		userCreateController.setDataModel(model);
-    		userCreateController.setUserManController(this);
+	@FXML
+	private ResourceBundle resources;
+	@FXML
+	private URL location;
+	@FXML
+	private TableColumn<ProjectUser, List<Project>> colProjects;
+	@FXML
+	private TableColumn<ProjectUser, String> colLastName;
+	@FXML
+	private ImageView addUserButton;
+	@FXML
+	private TableView<ProjectUser> userTable;
+	@FXML
+	private TableColumn<ProjectUser, String> colRole;
+	@FXML
+	private TableColumn<ProjectUser, String> colShortcut;
+	@FXML
+	private TableColumn<ProjectUser, String> colFirstName;
+	@FXML
+	private TableColumn<ProjectUser, String> colEmail;
 
-    		Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));	
-    		popUpWindow = new Stage();
-	    	
-	    	popUpWindow.setTitle("Create User");
-	    	popUpWindow.setScene(scene);
-	    	popUpWindow.showAndWait();	    	
-    	} catch (IOException e) {
-			e.printStackTrace();
+	private Stage popUpWindow;
+
+
+
+	@FXML
+	void initialize() {
+		//Method loadUserDetailPopUp() is called, when addUserButton is pressed
+		addUserButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+			System.out.println("[controller.UserManController] Add-User-Button pressed");
+			laodUserDetailPopUp(true);
+		});
+		tablesChanges();
+	}
+
+	public void setDataModel(DataModelUser model) {
+		this.model = model;
+		initializeTable();
+	}
+
+	private void initializeTable() {
+		System.out.println("[controller.UserManController] initialize table view");
+
+		userTable.setItems(model.getUserList());
+		colShortcut.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("userShortcut"));
+		colFirstName.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("firstName"));
+		colLastName.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("lastName"));
+		colEmail.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("eMail"));
+		colRole.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("role"));
+		//@priebj is there a simple to show just the projectID from the projects
+		colProjects.setCellValueFactory(new PropertyValueFactory<ProjectUser, List<Project>>("involedProjects"));
+
+	}
+
+	//Close Pop-up window - Create User   
+	public void closePopUpWindow() {
+		popUpWindow.close();
+	}
+
+	public void tablesChanges() {
+		userTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+			selectedUserList = userTable.getSelectionModel().getSelectedItems();
+			System.out.println(selectedUserList.get(0).getLastName());
+			if (event.getClickCount() == 2) {
+				laodUserDetailPopUp(false);
+			}
+			if (event.getButton() == MouseButton.SECONDARY && selectedUserList.get(0) != null) {
+				System.out.println("Right Mouse Button clicked");
+				openContextMenu();
+			}
+		}); 
+	}
+
+	//opens User Detail Pop Up Window - User Details  
+	private void laodUserDetailPopUp(boolean addUser) {
+		if(popUpWindow == null) {
+			try {
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(getClass().getResource("../view/userDetailPopUp.fxml"));  	
+				Parent root = loader.load();
+
+				UserDetailController userDetailController =  loader.getController();
+				userDetailController.setDataModel(model);
+				userDetailController.setUserManController(this);
+				ProjectUser selectedUser = null;
+				if(addUser == false) {
+					selectedUser = selectedUserList.get(0);
+				}
+
+				userDetailController.setSelectedUser(selectedUser);
+
+				Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));	
+				popUpWindow = new Stage();
+
+				String title;
+				if(addUser == false) {
+					title = "User Detail";
+				} else {
+					title = "Create User";
+				}
+
+				popUpWindow.setTitle(title);
+				popUpWindow.setScene(scene);
+				popUpWindow.setAlwaysOnTop(true);
+				popUpWindow.showAndWait();	    	
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-    }
-    
-    public void setDataModel(DataModelUser model) {
-    	this.model = model;
-    	initializeTable();
-    }
-    
-    private void initializeTable() {
-    	System.out.println("[controller.UserManController] initialize table view");
-    	
-    	userTable.setItems(model.getUserList());
-    	userTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
-    	colShortcut.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("userShortcut"));
-    	colFirstName.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("firstName"));
-    	colLastName.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("lastName"));
-    	colEmail.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("eMail"));
-    	colRole.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("role"));
-    	//@priebj is there a simple to show just the projectID from the projects
-    	colProjects.setCellValueFactory(new PropertyValueFactory<ProjectUser, List<Project>>("involedProjects"));
+	} 
 
-    }
-    	
-    //Close Pop-up window - Create User   
-    public void closePopUpWindow() {
-    	popUpWindow.close();
-    }
-    
-    public void tablesChanges() {
-    	userTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-    		selectedUserList = userTable.getSelectionModel().getSelectedItems();
-    		System.out.println(selectedUserList.get(0).getLastName());
-    		if (event.getClickCount() == 2) {
-    			laodUserDetailPopUp();
-    		}
-    		if (event.getButton() == MouseButton.SECONDARY && selectedUserList.get(0) != null) {
-    			System.out.println("Right Mouse Button clicked");
-    			openContextMenu();
-    		}
-    	}); 
-    }
-    
-    //opens User Detail Pop Up Window - User Details  
-    private void laodUserDetailPopUp() {
-    	try {
-    		FXMLLoader loader = new FXMLLoader();
-    		loader.setLocation(getClass().getResource("../view/userDetailPopUp.fxml"));  	
-    		Parent root = loader.load();
+	private void openContextMenu() {
+		Label label = new Label();
+		ContextMenu contextMenu = new ContextMenu();
 
-    		UserDetailController userDetailController =  loader.getController();
-    		userDetailController.setDataModel(model);
-    		userDetailController.setUserManController(this);
-    		userDetailController.setSelectedUser(selectedUserList.get(0));
+		MenuItem item1 = new MenuItem("Delete User: " + selectedUserList.get(0).getUserShortcut());
+		item1.setOnAction(new EventHandler<ActionEvent>() {
 
-    		Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));	
-    		popUpWindow = new Stage();
+			@Override
+			public void handle(ActionEvent event) {
+				label.setText("Select Menu Item 1");
+				confirmDeletingUserWindow();
+			}
 
-    		popUpWindow.setTitle("User Detail");
-    		popUpWindow.setScene(scene);
-    		popUpWindow.showAndWait();	    	
-    	} catch (IOException e) {
-    		e.printStackTrace();
-    	}
-    } 
-       
-    private void openContextMenu() {
-    	Label label = new Label();
-    	ContextMenu contextMenu = new ContextMenu();
+		});	
+		contextMenu.getItems().addAll(item1);
+		userTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+			@Override
+			public void handle(ContextMenuEvent event) {
+				contextMenu.show(userTable, event.getScreenX(), event.getScreenY());
+			}
+		});
 
-    	MenuItem item1 = new MenuItem("Delete User: " + selectedUserList.get(0).getUserShortcut());
-    	item1.setOnAction(new EventHandler<ActionEvent>() {
+		userTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+			System.out.println("Any button pressed hide context");
+			contextMenu.hide();
+		}); 
+	}
 
-    		@Override
-    		public void handle(ActionEvent event) {
-    			label.setText("Select Menu Item 1");
-    			confirmDeletingUserWindow();
-    		}
-    		
-    	});	
-    	contextMenu.getItems().addAll(item1);
-    	userTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-            @Override
-            public void handle(ContextMenuEvent event) {
-                contextMenu.show(userTable, event.getScreenX(), event.getScreenY());
-            }
-        });
-
-    	userTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-    		System.out.println("Any button pressed hide context");
-    		contextMenu.hide();
-    	}); 
-    }
-    
-    private void confirmDeletingUserWindow() {
-    	System.out.println("Print User Error-Message");
-    	Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-    	alert.setTitle("Delete User");
-    	alert.setHeaderText("Deleting user: " + selectedUserList.get(0).getUserShortcut() + " Are you sure?");
-    	Optional<ButtonType> result = alert.showAndWait();
-    	if(result.get() == ButtonType.OK) {
-    		System.out.println("[controller.UserManController] User deleted!");
-    		model.deleteUser(selectedUserList.get(0));	
-    	}
-    	else if(result.get() == ButtonType.CANCEL) {
-    	    alert.close();
-    	}
-    }   
+	private void confirmDeletingUserWindow() {
+		System.out.println("Print User Error-Message");
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle("Delete User");
+		alert.setHeaderText("Deleting user: " + selectedUserList.get(0).getUserShortcut() + " Are you sure?");
+		Optional<ButtonType> result = alert.showAndWait();
+		if(result.get() == ButtonType.OK) {
+			System.out.println("[controller.UserManController] User deleted!");
+			model.deleteUser(selectedUserList.get(0));	
+		}
+		else if(result.get() == ButtonType.CANCEL) {
+			alert.close();
+		}
+	}   
 
 }

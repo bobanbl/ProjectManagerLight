@@ -337,7 +337,7 @@ public class DatabaseController {
 		EntityManager em = emf.createEntityManager();	
 		EntityTransaction transaction = em.getTransaction();
 		
-		System.out.println("[database.DatabaseController] Delete Task: " + deletedTask.getTaskName());
+		System.out.println("[database.DatabaseController] Delete Task: " + deletedTask);
 		transaction.begin();		
 		
 		if (!em.contains(deletedTask)) {

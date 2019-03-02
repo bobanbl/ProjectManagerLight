@@ -172,7 +172,6 @@ public class ProjectDetailController {
 			if(!firstOpeningTeamWindow) {
 				projectDetailTeamController.setValuesFromTemp(projectSponsorTemp, projectManagerTemp, projectMembersListTemp);
 			}
-
 			
 			firstOpeningTeamWindow = false;
 			anchorPaneDetailViews.getChildren().setAll(root);
@@ -321,7 +320,6 @@ public class ProjectDetailController {
 		} else {
 			return true;
 		}
-
 	}
 	
 	private void updateProject() {
