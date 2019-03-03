@@ -99,7 +99,6 @@ public class Story implements Serializable{
 	public void removeTaskFromStory(Task removeTask) {
 		System.out.println("[model.Story] Remove Task 1 from Story: " + removeTask);
 		tasks.remove(removeTask);
-
 	}
 	
 	

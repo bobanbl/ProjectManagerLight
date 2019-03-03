@@ -46,9 +46,7 @@ public class DataModelUser {
                 }
 			}
 		});
-		
-//		loadAllData();
-//		printAllData();
+
     }
 //------------------ProjectUser--------------------------------------    
     public void loadUserData() {
@@ -111,7 +109,7 @@ public class DataModelUser {
 
     //Update existing projectUser in userList
     public void updateUser(ProjectUser updateUser) {
-    	System.out.println("[model.DataModel] Update user" + updateUser.getUserShortcut());
+    	System.out.println("[model.DataModel] Update user: " + updateUser.getUserShortcut() + " " + updateUser);
     	int userIndex = userList.indexOf(updateUser);
 		userList.set(userIndex, updateUser);
     	printUserData();

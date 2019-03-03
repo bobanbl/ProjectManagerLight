@@ -11,12 +11,12 @@
    <children>
       <VBox alignment="CENTER" prefHeight="400.0" prefWidth="400.0">
          <children>
-            <TableView fx:id="userTable" prefHeight="289.0" prefWidth="400.0">
+            <TableView fx:id="userTable" prefHeight="289.0" prefWidth="400.0" styleClass="table-view3">
               <columns>
                   <TableColumn fx:id="colShortcut" prefWidth="75.0" text="Shortcut" />
                 <TableColumn fx:id="colFirstName" prefWidth="112.0" text="First Name" />
-                <TableColumn fx:id="colLastName" prefWidth="76.0" text="Last Name" />
-                  <TableColumn fx:id="colRole" prefWidth="134.0" text="Role" />
+                <TableColumn fx:id="colLastName" prefWidth="94.0" text="Last Name" />
+                  <TableColumn fx:id="colRole" prefWidth="116.0" text="Role" />
               </columns>
             </TableView>
             <Button fx:id="AddButton" mnemonicParsing="false" onAction="#addButtonPressed" prefHeight="51.0" prefWidth="146.0" style="-fx-background-color: #86C232;" text="Add" textFill="WHITE">

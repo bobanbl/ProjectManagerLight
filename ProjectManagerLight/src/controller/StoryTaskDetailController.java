@@ -75,14 +75,19 @@ public class StoryTaskDetailController {
 		} else if(!checkCorrectData()) {
 			errorWindow("Duration has to be a Number");
 		} else if (selectedTask == null && selectedStory == null) {
-			createStory();		
+			createStory();
+			updateAndClose();
 		} else if (addTask == true) {
 			createTask();
+			updateAndClose();
 		} else if(checkIfChangesExists()) {
 			confirmClosingStoryDetailWindowChanges();
 		} else {
-			taskController.closePopUpWindow();
+			updateAndClose();
 		}
+	}
+	
+	private void updateAndClose() {
 		taskController.updateTasks();
 		taskController.closePopUpWindow();
 	}
@@ -214,6 +219,7 @@ public class StoryTaskDetailController {
 	}
 	
 	private void updateStory() {
+		System.err.println("updateStory");
 		selectedStory.setStoryName(nameNEW);
 		selectedStory.setDescription(descriptionNEW);
 		selectedStory.setDuration(Integer.parseInt(durationNEW));
@@ -222,6 +228,7 @@ public class StoryTaskDetailController {
 	}
 	
 	private void updateTask() {
+		System.err.println("updateTask");
 		selectedTask.setTaskName(nameNEW);
 		selectedTask.setDescription(descriptionNEW);
 		selectedTask.setDuration(Integer.parseInt(durationNEW));

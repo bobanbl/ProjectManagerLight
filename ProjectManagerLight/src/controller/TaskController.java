@@ -23,6 +23,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -37,6 +39,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -63,6 +66,10 @@ public class TaskController {
 	@FXML
 	private GridPane gridPane;
 	@FXML
+	private GridPane gridPaneHEADER;
+	@FXML
+	private ScrollPane scrollPane;
+	@FXML
 	private AnchorPane anchorPane;
 	@FXML
 	private ResourceBundle resources;
@@ -72,6 +79,11 @@ public class TaskController {
 	private ImageView addStoryButton;
 	@FXML
 	void initialize() {
+
+
+
+		scrollPane.setContent(gridPane);
+
 		addStoryButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			System.out.println("[controller.TaskController] Add-Story-Button pressed");
 			selectedStory = null;
@@ -89,39 +101,41 @@ public class TaskController {
 	}
 
 	private void loadDetailPopUp(boolean addTask) {
-		if(popUpWindow == null) {
-			try {
-				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("../view/storyTaskDetailPopUp.fxml"));  	
-				Parent root = loader.load();	
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("../view/storyTaskDetailPopUp.fxml"));  	
+			Parent root = loader.load();	
 
-				StoryTaskDetailController storyDetailController =  loader.getController();
-				storyDetailController.setDataModelStory(storyModel);
-				storyDetailController.setTaskController(this);
-				storyDetailController.setAddTaskTag(addTask);
-				storyDetailController.setSelectedTask(selectedTask);
-				storyDetailController.setSelectedStory(selectedStory);
-				storyDetailController.setSelectedProject(selectedProject);
+			StoryTaskDetailController storyDetailController =  loader.getController();
+			storyDetailController.setDataModelStory(storyModel);
+			storyDetailController.setTaskController(this);
+			storyDetailController.setAddTaskTag(addTask);
+			storyDetailController.setSelectedTask(selectedTask);
+			storyDetailController.setSelectedStory(selectedStory);
+			storyDetailController.setSelectedProject(selectedProject);
 
-				Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));    	
-				popUpWindow = new Stage();
+			Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));    	
+			popUpWindow = new Stage();
 
-				String title;
-				if(selectedStory != null || selectedTask != null) {
-					title = "Details";
-				} else {
-					title = "Create";
-				}
+			String title = null;
+			
+			if(addTask == true){
+				title = "Create Task";
+			} else if(selectedStory != null || selectedTask != null) {
+				title = "Details";
+			} else {
+				title = "Create Story";
+			}
 
-				popUpWindow.setTitle(title);
-				popUpWindow.setScene(scene);
-				popUpWindow.setAlwaysOnTop(true);
-				popUpWindow.showAndWait();
+			popUpWindow.setTitle(title);
+			popUpWindow.setScene(scene);
 
-			} catch (IOException e) {
-				e.printStackTrace();
-			}	
-		}
+			popUpWindow.showAndWait();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+
 	}
 
 	public void setDataModelStory(DataModelStory storyModel) {
@@ -138,16 +152,13 @@ public class TaskController {
 		for(Story s : storyList) {
 			Label storyNameLabel = new Label();
 			storyNameLabel.setText(s.getStoryName());
-			storyNameLabel.setTextFill(Color.BLACK);
-			storyNameLabel.setFont(new Font("Arial", 20));
-			storyNameLabel.setStyle("-fx-font-weight: bold");
-			
+			storyNameLabel.getStyleClass().add("storyNameLabel");
+
 
 			Label storyDurationLabel = new Label();
 			storyDurationLabel.setText(String.valueOf(s.getDuration()));
-			storyDurationLabel.setTextFill(Color.WHITE);
-			storyDurationLabel.setFont(new Font("Arial", 15));
-			
+			storyDurationLabel.getStyleClass().add("storyAnyLabel");
+
 			Label storyResponsibilityLabel = new Label();
 			String responsibleUserShortcut;
 			if(s.getResponsibility() != null) {
@@ -156,15 +167,12 @@ public class TaskController {
 				responsibleUserShortcut = "";
 			}
 			storyResponsibilityLabel.setText(responsibleUserShortcut);
-			storyResponsibilityLabel.setTextFill(Color.WHITE);
-			storyResponsibilityLabel.setFont(new Font("Arial", 15));
-			
+			storyResponsibilityLabel.getStyleClass().add("storyAnyLabel");
+
 			HBox hbox = new HBox(storyDurationLabel, storyResponsibilityLabel);
-			hbox.setAlignment(Pos.CENTER_LEFT);
-			hbox.setSpacing(30);
-			hbox.setPadding(new Insets(15, 0, 0, 5));
+			hbox.getStyleClass().add("storyHBox");
+			
 			VBox vbox = new VBox(storyNameLabel, hbox);
-			vbox.setAlignment(Pos.TOP_CENTER);
 			vbox.getStyleClass().add("vbox");
 			gridPane.add(vbox, 0, s.getPositionGridPane());
 			vbox.setUserData(s);
@@ -179,6 +187,7 @@ public class TaskController {
 				} else if (event.getButton() == MouseButton.SECONDARY) {
 					System.out.println("[controller.TaskController] Right Mouse Button clicked");
 					openContextMenu();
+
 				}	
 			});
 
@@ -196,6 +205,7 @@ public class TaskController {
 			gridPane.add(addTaskButton, 1, s.getPositionGridPane());
 
 			List<Task> taskListStory = s.getTasks();
+
 
 			//Creating VBoxes for every Status and every Story
 			VBox vboxNEW = new VBox();
@@ -232,31 +242,32 @@ public class TaskController {
 
 			//creates the Vboxes for the Tasks
 			for(Task t : taskListStory) {
-				System.out.println("[controller.TaskController] Tasks for VBox: " + t);
+
+				System.out.println("[controller.TaskController] Tasks for VBox from Stories: " + t);
 
 				Label taskNameLabel = new Label();
 				taskNameLabel.setText(t.getTaskName());
-				taskNameLabel.setTextFill(Color.BLACK);
-				taskNameLabel.setFont(new Font("Arial", 18));
-				taskNameLabel.setStyle("-fx-font-weight: bold");
+				taskNameLabel.getStyleClass().add("taskNameLabel");
+				taskNameLabel.setId("TaskBoxChildren");
 
 				Label taskDurationLabel = new Label();
 				taskDurationLabel.setText(String.valueOf(t.getDuration()));
-				taskDurationLabel.setTextFill(Color.WHITE);
-				taskDurationLabel.setFont(new Font("Arial", 15));
-				
+				taskDurationLabel.getStyleClass().add("storyAnyLabel");	
+				taskDurationLabel.setId("TaskBoxChildren");
+
 				Label taskResponsibilityLabel = new Label();
+				taskResponsibilityLabel.setId("TaskBoxChildren");
 				String taskResponsibleUserShortcut;
 				if(t.getResponsibility() != null) {
 					taskResponsibleUserShortcut = t.getResponsibility().getUserShortcut();
 				} else {
 					taskResponsibleUserShortcut = "";
 				}
-				storyResponsibilityLabel.setText(responsibleUserShortcut);
-				storyResponsibilityLabel.setTextFill(Color.WHITE);
-				storyResponsibilityLabel.setFont(new Font("Arial", 15));
-				
-				HBox hbox1 = new HBox(taskDurationLabel, storyResponsibilityLabel);
+				taskResponsibilityLabel.setText(taskResponsibleUserShortcut);
+				taskResponsibilityLabel.getStyleClass().add("storyAnyLabel");	
+
+				HBox hbox1 = new HBox(taskDurationLabel, taskResponsibilityLabel);
+				hbox1.setId("TaskBoxChildren");
 				hbox1.setAlignment(Pos.CENTER);
 				hbox1.setSpacing(40);
 				hbox1.setPadding(new Insets(10, 0, 0, 4));
@@ -323,7 +334,9 @@ public class TaskController {
 			gridPane.add(vboxINPROGRESS, 3, s.getPositionGridPane());
 			gridPane.add(vboxONHOLD, 4, s.getPositionGridPane());
 			gridPane.add(vboxREJECTED, 5, s.getPositionGridPane());
-			gridPane.add(vboxCLOSED, 6, s.getPositionGridPane());	
+			gridPane.add(vboxCLOSED, 6, s.getPositionGridPane());
+			gridPane.getStyleClass().add("gridPane1");
+
 		}
 	}
 
@@ -369,11 +382,27 @@ public class TaskController {
 		/*proving if the task is dragged on an other task
 		 * if YES: the parent of the TaskBox is set on the given clickedNode
 		 */
+		
 		if(clickedNode.getId() != null) {
 			if(clickedNode.getId().equals("TaskBox")) {
 				clickedNode = clickedNode.getParent();
+			} 
+		}
+		
+		if(clickedNode.getParent().getId() != null) {
+			if(clickedNode.getParent().getId().equals("TaskBox")) {
+				clickedNode =  clickedNode.getParent().getParent();
+				System.err.println("Dragged on Box in TaskBox");
 			}
 		}
+		
+		if(clickedNode.getParent().getParent().getId() != null) {
+			if(clickedNode.getParent().getParent().getId().equals("TaskBox")) {
+				clickedNode =  clickedNode.getParent().getParent().getParent();
+				System.err.println("Dragged on LABEL");
+			}
+		}
+
 		Story targetStory = (Story) clickedNode.getProperties().get("Story");
 		TaskStatus targetTaskStatus = (TaskStatus) clickedNode.getProperties().get("TaskStatus");
 
@@ -429,7 +458,7 @@ public class TaskController {
 		});
 
 		gridPane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-			System.out.println("Any button pressed hide context");
+			System.out.println("[controller.TaskController] Mouse Clicked to hide context menu");
 			contextMenu.hide();
 		}); 
 	}
@@ -439,18 +468,14 @@ public class TaskController {
 	}
 
 	private void confirmDeletingStoryWindow() {
-		System.out.println("[controller.TasklController] Print Story Error-Message");
+		System.out.println("[controller.TaskController] Print Story Error-Message");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Delete Story");
 		alert.setHeaderText("Deleting story: " + selectedStory.getStoryName() + " Are you sure?");
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() == ButtonType.OK) {
 			System.out.println("[controller.TaskController] Story deleted!");
-//			for(Task t : selectedStory.getTasks()) {
-//				storyModel.deleteTask(t);
-//			}
-//			storyModel.deleteStory(selectedStory);
-			storyList.remove(selectedStory);
+			storyModel.deleteStory(selectedStory);
 			navigationController.laodTaskView();    		
 		}
 		else if(result.get() == ButtonType.CANCEL) {
@@ -466,13 +491,7 @@ public class TaskController {
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() == ButtonType.OK) {
 			System.out.println("[controller.TaskController] Task deleted!");
-			
-//			if(!(u.getInvolvedProjects().contains(selectedProject))) {
-//				u.addProjectToUser(selectedProject);
-//				userModel.updateUser(u);
-//			}
-//			storyList.remove(arg0)
-//			selectedTask.getStory().removeTaskFromStory(selectedTask);
+
 			storyModel.deleteTask(selectedTask);
 			navigationController.laodTaskView();    		
 		}

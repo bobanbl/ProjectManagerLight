@@ -8,21 +8,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="940.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TaskController">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="940.0" styleClass="anchorbackgroundDARK" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TaskController">
    <children>
-      <GridPane fx:id="gridPane" gridLinesVisible="true" layoutX="14.0" layoutY="2.0" prefHeight="560.0" prefWidth="897.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="118.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="121.0" minWidth="0.0" prefWidth="18.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="256.0" minWidth="10.0" prefWidth="125.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.0" minWidth="10.0" prefWidth="196.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="185.0" minWidth="10.0" prefWidth="163.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="169.0" minWidth="10.0" prefWidth="133.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="139.0" minWidth="10.0" prefWidth="139.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints maxHeight="100.0" minHeight="0.0" prefHeight="85.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+      <GridPane fx:id="gridPaneHEADER" gridLinesVisible="true" layoutX="1.0" layoutY="1.0" prefHeight="100.0" prefWidth="937.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css">
          <children>
             <Label alignment="TOP_CENTER" pickOnBounds="false" text="Story" textAlignment="CENTER" textFill="#61892f">
                <font>
@@ -40,33 +28,63 @@
                   <Insets left="51.0" top="60.0" />
                </GridPane.margin>
             </ImageView>
-            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="32.0" prefWidth="124.0" text="New" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="2">
+            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="32.0" prefWidth="145.0" text="NEW" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="2">
                <font>
-                  <Font name="Arial Bold" size="28.0" />
+                  <Font name="Arial Bold" size="26.0" />
                </font>
             </Label>
-            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="32.0" prefWidth="196.0" text="In pogress" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="3">
+            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="64.0" prefWidth="155.0" text="IN &#10;PROGRESS" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="3">
                <font>
-                  <Font name="Arial Bold" size="28.0" />
+                  <Font name="Arial Bold" size="26.0" />
                </font>
             </Label>
-            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="32.0" prefWidth="160.0" text="On hold" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="4">
+            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="32.0" prefWidth="160.0" text="ON HOLD" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="4">
                <font>
-                  <Font name="Arial Bold" size="28.0" />
+                  <Font name="Arial Bold" size="26.0" />
                </font>
             </Label>
-            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="32.0" prefWidth="131.0" text="Rejected" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="5">
+            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="32.0" prefWidth="155.0" text="REJECTED" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="5">
                <font>
-                  <Font name="Arial Bold" size="28.0" />
+                  <Font name="Arial Bold" size="26.0" />
                </font>
             </Label>
-            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="32.0" prefWidth="141.0" text="Closed" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="6">
+            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="32.0" prefWidth="141.0" text="CLOSED" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="6">
                <font>
-                  <Font name="Arial Bold" size="28.0" />
+                  <Font name="Arial Bold" size="26.0" />
                </font>
             </Label>
          </children>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="118.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="0.0" prefWidth="25.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.0" minWidth="10.0" prefWidth="155.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="160.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.0" minWidth="10.0" prefWidth="155.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="155.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="160.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="100.0" minHeight="0.0" prefHeight="85.0" vgrow="SOMETIMES" />
+         </rowConstraints>
       </GridPane>
-      <ScrollBar layoutX="919.0" layoutY="87.0" orientation="VERTICAL" prefHeight="466.0" prefWidth="14.0" />
+      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="100.0" prefHeight="460.0" prefWidth="938.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="265.0" prefWidth="933.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css">
+               <children>
+                  <GridPane fx:id="gridPane" gridLinesVisible="true" prefHeight="5615.0" prefWidth="937.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="118.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="0.0" prefWidth="25.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.0" minWidth="10.0" prefWidth="155.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="160.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="157.0" minWidth="10.0" prefWidth="155.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="155.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="10.0" prefWidth="160.0" />
+                    </columnConstraints>
+                  </GridPane>
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

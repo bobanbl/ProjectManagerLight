@@ -54,9 +54,12 @@ public class ProjectController {
 	@FXML
 	private TableView<Project> projectTable;
 	@FXML
+	private TableColumn<Project, Integer> colProjectID;
+	@FXML
 	private TableColumn<Project, String> colProjectName;
 	@FXML
 	private TableColumn<Project, String> colProjectStatus;
+
 
 	@FXML
 	void initialize() {
@@ -117,7 +120,9 @@ public class ProjectController {
 		System.out.println("[controller.ProjectController]: " + projectModel.getProjectList());
 		if(!projectModel.getProjectList().isEmpty()) {
 			projectTable.setItems(projectModel.getProjectList());
+			colProjectID.setCellValueFactory(new PropertyValueFactory<Project, Integer>("projectID"));
 			colProjectName.setCellValueFactory(new PropertyValueFactory<Project, String>("projectName"));
+			colProjectName.setStyle("-fx-alignment:CENTER-LEFT;");
 			colProjectStatus.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProjectStatus().getName()));
 			
 			//Select first project in table at the first opening of the application
@@ -224,4 +229,6 @@ public class ProjectController {
 			alert.close();
 		}
 	}
+	
+
 }

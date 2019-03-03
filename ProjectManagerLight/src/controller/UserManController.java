@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 
 import org.apache.derby.iapi.sql.dictionary.UserDescriptor;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -51,7 +52,7 @@ public class UserManController {
 	@FXML
 	private URL location;
 	@FXML
-	private TableColumn<ProjectUser, List<Project>> colProjects;
+	private TableColumn<ProjectUser, String> colProjects;
 	@FXML
 	private TableColumn<ProjectUser, String> colLastName;
 	@FXML
@@ -64,8 +65,8 @@ public class UserManController {
 	private TableColumn<ProjectUser, String> colShortcut;
 	@FXML
 	private TableColumn<ProjectUser, String> colFirstName;
-	@FXML
-	private TableColumn<ProjectUser, String> colEmail;
+    @FXML
+    private TableColumn<ProjectUser, String> colEmail;
 
 	private Stage popUpWindow;
 
@@ -93,11 +94,9 @@ public class UserManController {
 		colShortcut.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("userShortcut"));
 		colFirstName.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("firstName"));
 		colLastName.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("lastName"));
-		colEmail.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("eMail"));
+		colEmail.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().geteMail()));
 		colRole.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("role"));
-		//@priebj is there a simple to show just the projectID from the projects
-		colProjects.setCellValueFactory(new PropertyValueFactory<ProjectUser, List<Project>>("involedProjects"));
-
+		colProjects.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().toString()));
 	}
 
 	//Close Pop-up window - Create User   
@@ -121,7 +120,6 @@ public class UserManController {
 
 	//opens User Detail Pop Up Window - User Details  
 	private void laodUserDetailPopUp(boolean addUser) {
-		if(popUpWindow == null) {
 			try {
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(getClass().getResource("../view/userDetailPopUp.fxml"));  	
@@ -149,12 +147,10 @@ public class UserManController {
 
 				popUpWindow.setTitle(title);
 				popUpWindow.setScene(scene);
-				popUpWindow.setAlwaysOnTop(true);
 				popUpWindow.showAndWait();	    	
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
 	} 
 
 	private void openContextMenu() {
@@ -166,12 +162,23 @@ public class UserManController {
 
 			@Override
 			public void handle(ActionEvent event) {
-				label.setText("Select Menu Item 1");
+				label.setText("[controller.UserManController] Select Menu Item 1");
 				confirmDeletingUserWindow();
 			}
 
-		});	
-		contextMenu.getItems().addAll(item1);
+		});		
+
+		MenuItem item2 = new MenuItem("Show involved projects from user");
+		item2.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				label.setText("[controller.UserManController] Select Menu Item 2");
+				openInvolvedProjectsPopUpWindow();
+			}
+
+		});		
+		contextMenu.getItems().addAll(item1, item2);
 		userTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
 			@Override
 			public void handle(ContextMenuEvent event) {
@@ -200,4 +207,25 @@ public class UserManController {
 		}
 	}   
 
+	private void openInvolvedProjectsPopUpWindow() {
+			try {
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(getClass().getResource("../view/involvedProjectsPopUp.fxml"));  	
+				Parent root = loader.load();
+
+				InvolvedProjectsController involvedProjectsController =  loader.getController();
+				involvedProjectsController.setUserManController(this);
+				involvedProjectsController.setInvolvedProjectsFromUser(selectedUserList.get(0).getInvolvedProjects());
+
+				Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));	
+				popUpWindow = new Stage();
+				String title = "Involved Project from User " + selectedUserList.get(0).getFirstName() + 
+						" " + selectedUserList.get(0).getLastName();
+				popUpWindow.setTitle(title);
+				popUpWindow.setScene(scene);
+				popUpWindow.showAndWait();	    	
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 }

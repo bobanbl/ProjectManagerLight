@@ -10,7 +10,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavigationController">
    <children>
-      <VBox fx:id="mainNavigationVBox" fillWidth="false" layoutY="185.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="210.0" prefWidth="60.0" styleClass="anchorbackgroundGREEN" stylesheets="@../application/application.css" AnchorPane.leftAnchor="0.0">
+      <VBox fx:id="mainNavigationVBox" fillWidth="false" layoutY="185.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="210.0" prefWidth="60.0" style="-fx-background-radius: 5;" styleClass="anchorbackgroundGREEN" stylesheets="@../application/application.css" AnchorPane.leftAnchor="0.0">
          <children>
             <ImageView fx:id="navigationButtonDashboardView" fitHeight="55.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                <image>

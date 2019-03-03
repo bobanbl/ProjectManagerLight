@@ -98,8 +98,9 @@ public class ProjectDetailTeamController {
     		Parent root = loader.load();
 
     		ProjectUserAddController projectUserAddController =  loader.getController();
-    		projectUserAddController.setUserModel(userModel);
+    		
     		projectUserAddController.setProjectDetailTeamController(this);
+    		projectUserAddController.setUserModel(userModel);
 
     		Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));	
     		popUpWindow = new Stage();
@@ -182,7 +183,6 @@ public class ProjectDetailTeamController {
     public void updateProjectMemberTable() {
     	System.out.println("[controller.ProjectUserAddController] initialize table view for project: " + selectedProject);
     	projectMemberTable.setItems(userList);
-    	projectMemberTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
     	colShortcut.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("userShortcut"));
     	colFirstName.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("firstName"));
     	colLastName.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("lastName"));
@@ -212,7 +212,7 @@ public class ProjectDetailTeamController {
 
     		@Override
     		public void handle(ActionEvent event) {
-    			label.setText("Select Menu Item 1");
+    			label.setText("[controller.ProjectDetailTeamController] Select Menu Item 1");
     			userList.remove(selectedUserList.get(0));	
     		}
     	});	

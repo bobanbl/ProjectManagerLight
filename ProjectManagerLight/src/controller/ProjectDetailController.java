@@ -347,6 +347,7 @@ public class ProjectDetailController {
 			
 			updateProject();
 			addProjectToUser();	
+			removeProjectFromUser();
 
 			projectController.closeDetailWindow();	
 		}
@@ -362,6 +363,15 @@ public class ProjectDetailController {
 			if(!(u.getInvolvedProjects().contains(selectedProject))) {
 				u.addProjectToUser(selectedProject);
 				userModel.updateUser(u);
+			}
+		}
+	}
+	
+	private void removeProjectFromUser() {
+		for(ProjectUser userOLD: projectMembersListOLD) {
+			if(!projectMembersListNEW.contains(userOLD)) {
+				userOLD.removeProjectFromUser(selectedProject);
+				userModel.updateUser(userOLD);
 			}
 		}
 	}

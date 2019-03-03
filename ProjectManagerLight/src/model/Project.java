@@ -149,6 +149,11 @@ public class Project implements Serializable{
 		this.story.add(story);
 		System.out.println("[model.Project] Story List: " + this.getStory());
 	}
+	
+	public void removeStoryFromProject(Story removeStory) {
+		System.out.println("[model.Project] Remove Story from Project: " + removeStory);
+		story.remove(removeStory);
+	}
 
 	@Override public boolean equals(Object o) {
 		if (this == o) return true;

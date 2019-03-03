@@ -98,7 +98,9 @@ public class DataModelStory {
      * @param deleteStory
      */
     public void deleteStory(Story deleteStory) {
-    	System.out.println("[model.DataModelStory] Deleting story");
+    	System.out.println("[model.DataModelStory] Deleting story: " + deleteStory);
+    	Project project = deleteStory.getProject();
+    	project.removeStoryFromProject(deleteStory);
     	storyList.remove(deleteStory);
     	printStoryData();
     }    
@@ -127,7 +129,7 @@ public class DataModelStory {
     		System.out.println("[model.DataModelStory] Print tasks: " + u.toString());
     	}
     }
-    
+        
     public void createTask(Task newTask) {
     	System.out.println("[model.DataModelStory] Adding new Task to List");
 		taskList.add(newTask);

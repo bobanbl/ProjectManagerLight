@@ -45,14 +45,8 @@ public class ProjectUser implements Serializable{
 	@OneToMany(mappedBy = "responsibility", orphanRemoval=true)
 	private List<Task> involvedTasks = new ArrayList<>();
 
-	//(mappedBy = "projectMembers", fetch=FetchType.EAGER, cascade = {CascadeType.ALL})
-	//(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@ManyToMany(mappedBy = "projectMembers", fetch=FetchType.EAGER)
 	private List<Project> involvedProjects = new ArrayList<>();
-//	@JoinTable(name = "user_project", 
-//	joinColumns = {@JoinColumn(name="fk_userID_project")},
-//	inverseJoinColumns = {@JoinColumn(name="fk_projectID")})
-
 
 	public ProjectUser() {
 		super();
@@ -114,32 +108,31 @@ public class ProjectUser implements Serializable{
 	//TEST__________________________________________________
 	public void removeProjectFromUser(Project project) {
 		System.out.println("[model.ProjectUser] 1---removeProjectFromUser: Project: " + project + " User: " + this);
-//		project.getProjectMember().remove(this);
-		for(Project p : this.getInvolvedProjects()) {
-			if(p.getProjectID() == project.getProjectID()) {
-				System.out.println("[model.ProjectUser] 2---removeProjectFromUser: Project: " + p + " User: " + this);
-				p.removeUserFromProject(this);
-				this.getInvolvedProjects().remove(p);
-			}
-		}
+		this.involvedProjects.remove(project);
+////		project.getProjectMember().remove(this);
+//		for(Project p : this.getInvolvedProjects()) {
+//			if(p.getProjectID() == project.getProjectID()) {
+//				System.out.println("[model.ProjectUser] 2---removeProjectFromUser: Project: " + p + " User: " + this);
+//				p.removeUserFromProject(this);
+//				this.getInvolvedProjects().remove(p);
+//			}
+//		}
 	}
 	
 	public void addProjectToUser(Project project) {	
 		if(!(this.getInvolvedProjects().contains(project))) {
 			System.out.println("[model.ProjectUser] addProjectToUser, Project: " + project);
-//			project.addProjectMembers(this);
-//			project.getProjectMember().add(this);
 			this.involvedProjects.add(project);
 		}
 	}
 	
-	public void addProject(Project project) {	
-		System.err.println("[model.ProjectUser] 1 addProjectToUser, Project: " + project);
-		if(!project.getProjectMember().contains(this)) {
-			System.out.println("[model.ProjectUser] addProjectToUser, Project: " + project);
-			this.involvedProjects.add(project);
-		}
-	}	
+//	public void addProject(Project project) {	
+//		System.err.println("[model.ProjectUser] 1 addProjectToUser, Project: " + project);
+//		if(!project.getProjectMember().contains(this)) {
+//			System.out.println("[model.ProjectUser] addProjectToUser, Project: " + project);
+//			this.involvedProjects.add(project);
+//		}
+//	}	
 	//TEST__________________________________________________
 //	public void deleteProjectFromUser(Project project) {
 //		for(Project p : involvedProjects) {
@@ -177,12 +170,24 @@ public class ProjectUser implements Serializable{
 		this.involvedTasks.add(newTask);
 	}
 
+//	@Override
+//	public String toString() {
+//		return "ProjectUser [userID=" + userID + ", userShortcut=" + userShortcut + ", firstName=" + firstName
+//				+ ", lastName=" + lastName + ", eMail=" + eMail + ", role=" + role + ", password=" + password
+//				+ ", involvedProjects=" + involvedProjects + ", involvedStories=" + involvedStories + ", involvedTasks="
+//				+ involvedTasks + "]";
+//	}
+	
+
+	@SuppressWarnings("unused")
 	@Override
 	public String toString() {
-		return "ProjectUser [userID=" + userID + ", userShortcut=" + userShortcut + ", firstName=" + firstName
-				+ ", lastName=" + lastName + ", eMail=" + eMail + ", role=" + role + ", password=" + password
-				+ ", involvedProjects=" + involvedProjects + ", involvedStories=" + involvedStories + ", involvedTasks="
-				+ involvedTasks + "]";
+		StringBuffer returnString = new StringBuffer();
+		for(Project p : this.getInvolvedProjects()) {
+			returnString.append("P-" + p.getProjectID() + " ");
+		}
+		String newString = returnString.toString();
+		return newString;
 	}
 	
 	@Override public boolean equals(Object o) {
@@ -196,6 +201,8 @@ public class ProjectUser implements Serializable{
 			return false;
 		}
 	}
+	
+
 
 
 }
