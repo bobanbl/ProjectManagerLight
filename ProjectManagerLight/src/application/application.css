@@ -62,11 +62,12 @@
 .storyAnyLabel{
 	-fx-text-fill: white; 
 	-fx-font-size: 15;
+	-fx-alignment: center;
 }
 
 .storyHBox{
 	-fx-alignment: center-left;
-	-fx-padding: 15, 0, 0, 5;
+	-fx-padding: 10, 0, 0, 4;
 	-fx-spacing: 20;
 }
 
