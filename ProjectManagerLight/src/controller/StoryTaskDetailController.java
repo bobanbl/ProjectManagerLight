@@ -118,7 +118,7 @@ public class StoryTaskDetailController {
 	void initialize() {
 		descriptionTextField.setWrapText(true);
 	}
-	
+		
 	public void setAddTaskTag(boolean addTask) {
 		this.addTask = addTask;
 	}
@@ -238,7 +238,11 @@ public class StoryTaskDetailController {
 
 	public void setUserListFromModel() {
 		System.out.println("[controller.StroyDetailController] Project: " + selectedProject);
-		ObservableList<ProjectUser> userProjectList = FXCollections.observableArrayList(selectedProject.getProjectMember());
+		
+		ObservableList<ProjectUser> userProjectList = FXCollections.observableArrayList();
+		if(selectedProject.getProjectMember() != null) {
+			userProjectList.addAll(selectedProject.getProjectMember());
+		}
 		userList = userProjectList;
 		System.out.println("[controller.StrorySetailController] userList: " + userList);   	
 		updateResponsibilityComboBox();

@@ -95,6 +95,7 @@ public class ProjectController {
 	public void closeDetailWindow() {
 		anchorPaneDetailView.getChildren().clear();
 		addProjectButton.setVisible(true);
+		projectDetailController = null;
 		initializeTable();
 	} 
 
@@ -136,20 +137,26 @@ public class ProjectController {
 
 	public void tablesChanges() { 	
 		projectTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+			
 			selectedProjectList = projectTable.getSelectionModel().getSelectedItems();
+			checkForChangesInProjectDetail();
 			System.out.println("[controller.ProjectController] Mouse Click on Project: " + selectedProjectList.get(0).getProjectName());
+			navigationController.setSelectedProject(selectedProjectList.get(0));
 			if (event.getClickCount() == 2) {
 				System.out.println("[controller.ProjectController] Double Mouse Click on Project: " + selectedProjectList.get(0).getProjectName());
+
+				
+				
 				this.newProject = false;
 				laodProjectDetailWindow();
 			} else if (event.getButton() == MouseButton.SECONDARY && selectedProjectList.get(0) != null) {
 				System.out.println("[controller.ProjectController] Right Mouse Button clicked");
 				closeDetailWindow();
+				
 				openContextMenu();
 			} else if (event.getClickCount() == 1) {
 				System.out.println("[controller.ProjectController] One Mouse Click on Project: " + selectedProjectList.get(0).getProjectName());
 				System.out.println("[controller.ProjectController] navigationController: " + navigationController);
-				navigationController.setSelectedProject(selectedProjectList.get(0));
 			}
 		});            
 	}
@@ -227,6 +234,13 @@ public class ProjectController {
 		}
 		else if(result.get() == ButtonType.CANCEL) {
 			alert.close();
+		}
+	}
+	
+	public void checkForChangesInProjectDetail() {
+		//if Detail-Windows already open: check if changes exist before closing
+		if(projectDetailController != null) {
+			projectDetailController.checkBeforeClosing();
 		}
 	}
 	

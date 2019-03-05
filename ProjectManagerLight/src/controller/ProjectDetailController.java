@@ -124,15 +124,20 @@ public class ProjectDetailController {
 		//clicking on the Close-Detail-Window-Button calls the method closeDetailWindow in ProjectController   	
 		closeDetailViewButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			System.out.println("[controller.ProjectDetailCOntroller] Close-Detail-Window-Button pressed");
-			if(checkIfValuesValid()) {
-				if(checkIfChangesExists()) {
-					confirmClosingProjectDetailWindowChanges();
-				} else {
-					projectController.closeDetailWindow();
-				}
-			}
+			checkBeforeClosing();
 		});
 	}
+	
+	public void checkBeforeClosing() {
+		if(checkIfValuesValid()) {
+			if(checkIfChangesExists()) {
+				confirmClosingProjectDetailWindowChanges();
+			} else {
+				projectController.closeDetailWindow();
+			}
+		}
+	}
+	
 	//loads the Detail-Main-Window in the AnchorPane of the Detail-Window
 	public void loadDetailMainWindow() {
 		saveValuesTemporaryTeamWindow();

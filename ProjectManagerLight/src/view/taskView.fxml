@@ -10,7 +10,7 @@
 
 <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="940.0" styleClass="anchorbackgroundDARK" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TaskController">
    <children>
-      <GridPane fx:id="gridPaneHEADER" gridLinesVisible="true" layoutX="1.0" layoutY="1.0" prefHeight="100.0" prefWidth="937.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css">
+      <GridPane fx:id="gridPaneHEADER" gridLinesVisible="true" layoutX="1.0" layoutY="1.0" prefHeight="100.0" prefWidth="931.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css">
          <children>
             <Label alignment="TOP_CENTER" pickOnBounds="false" text="Story" textAlignment="CENTER" textFill="#61892f">
                <font>
@@ -48,7 +48,7 @@
                   <Font name="Arial Bold" size="26.0" />
                </font>
             </Label>
-            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="32.0" prefWidth="141.0" text="CLOSED" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="6">
+            <Label alignment="TOP_CENTER" pickOnBounds="false" prefHeight="32.0" prefWidth="163.0" text="CLOSED" textAlignment="CENTER" textFill="#61892f" GridPane.columnIndex="6">
                <font>
                   <Font name="Arial Bold" size="26.0" />
                </font>
@@ -67,11 +67,11 @@
             <RowConstraints maxHeight="100.0" minHeight="0.0" prefHeight="85.0" vgrow="SOMETIMES" />
          </rowConstraints>
       </GridPane>
-      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="100.0" prefHeight="460.0" prefWidth="938.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css">
+      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="100.0" prefHeight="460.0" prefWidth="940.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="265.0" prefWidth="933.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="265.0" prefWidth="940.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css">
                <children>
-                  <GridPane fx:id="gridPane" gridLinesVisible="true" prefHeight="5615.0" prefWidth="937.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css">
+                  <GridPane fx:id="gridPane" gridLinesVisible="true" layoutY="1.0" prefHeight="5614.0" prefWidth="931.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="118.0" />
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="0.0" prefWidth="25.0" />

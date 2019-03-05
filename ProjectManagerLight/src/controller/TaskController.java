@@ -80,8 +80,6 @@ public class TaskController {
 	@FXML
 	void initialize() {
 
-
-
 		scrollPane.setContent(gridPane);
 
 		addStoryButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -101,41 +99,40 @@ public class TaskController {
 	}
 
 	private void loadDetailPopUp(boolean addTask) {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("../view/storyTaskDetailPopUp.fxml"));  	
-			Parent root = loader.load();	
+			try {
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(getClass().getResource("../view/storyTaskDetailPopUp.fxml"));  	
+				Parent root = loader.load();	
 
-			StoryTaskDetailController storyDetailController =  loader.getController();
-			storyDetailController.setDataModelStory(storyModel);
-			storyDetailController.setTaskController(this);
-			storyDetailController.setAddTaskTag(addTask);
-			storyDetailController.setSelectedTask(selectedTask);
-			storyDetailController.setSelectedStory(selectedStory);
-			storyDetailController.setSelectedProject(selectedProject);
+				StoryTaskDetailController storyDetailController =  loader.getController();
+				storyDetailController.setDataModelStory(storyModel);
+				storyDetailController.setTaskController(this);
+				storyDetailController.setAddTaskTag(addTask);
+				storyDetailController.setSelectedTask(selectedTask);
+				storyDetailController.setSelectedStory(selectedStory);
+				storyDetailController.setSelectedProject(selectedProject);
 
-			Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));    	
-			popUpWindow = new Stage();
+				Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));    	
+				popUpWindow = new Stage();
 
-			String title = null;
-			
-			if(addTask == true){
-				title = "Create Task";
-			} else if(selectedStory != null || selectedTask != null) {
-				title = "Details";
-			} else {
-				title = "Create Story";
-			}
+				String title = null;
 
-			popUpWindow.setTitle(title);
-			popUpWindow.setScene(scene);
+				if(addTask == true){
+					title = "Create Task";
+				} else if(selectedStory != null || selectedTask != null) {
+					title = "Details";
+				} else {
+					title = "Create Story";
+				}
 
-			popUpWindow.showAndWait();
+				popUpWindow.setTitle(title);
+				popUpWindow.setScene(scene);
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	
+				popUpWindow.showAndWait();
 
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
 	}
 
 	public void setDataModelStory(DataModelStory storyModel) {
@@ -144,9 +141,13 @@ public class TaskController {
 
 	public void closePopUpWindow() {
 		popUpWindow.close();
+		
 		navigationController.laodTaskView();
+		popUpWindow = null;
 	}
-
+	
+	
+	
 	//creates the VBoxes for the GridPane from storyList and taskList (DataModelStory.class)
 	private void createVBox() {
 		for(Story s : storyList) {
@@ -170,8 +171,10 @@ public class TaskController {
 			storyResponsibilityLabel.getStyleClass().add("storyAnyLabel");
 
 			HBox hbox = new HBox(storyDurationLabel, storyResponsibilityLabel);
-			hbox.getStyleClass().add("storyHBox");
-			
+			hbox.setAlignment(Pos.CENTER);
+			hbox.setSpacing(20);
+			hbox.setPadding(new Insets(10, 0, 0, 4));
+
 			VBox vbox = new VBox(storyNameLabel, hbox);
 			vbox.getStyleClass().add("vbox");
 			gridPane.add(vbox, 0, s.getPositionGridPane());
@@ -194,18 +197,21 @@ public class TaskController {
 			Image addImage = new Image(getClass().getResourceAsStream("../assets/AddProject.png"),20,20,false,true);
 			ImageView addTaskButton = new ImageView();
 			addTaskButton.setImage(addImage);
-			addTaskButton.setUserData(s);
-			addTaskButton.setId("AddTaskButton");
-			addTaskButton.setOnMouseClicked(event ->{
-				System.out.println("[controller.TaskController] AddTaskButton was pressed " + addTaskButton.getUserData());
-				selectedStory = (Story) addTaskButton.getUserData();
-				loadDetailPopUp(true);
-			});
+			VBox vBoxAddTask = new VBox(addTaskButton);
+			vBoxAddTask.setAlignment(Pos.CENTER);
 
-			gridPane.add(addTaskButton, 1, s.getPositionGridPane());
+			vBoxAddTask.setUserData(s);
+			vBoxAddTask.setId("AddTaskButton");
+			vBoxAddTask.setOnMouseClicked(event ->{
+				System.out.println("[controller.TaskController] AddTaskButton was pressed " + addTaskButton.getUserData());
+				selectedStory = (Story) vBoxAddTask.getUserData();
+				selectedTask = null;
+				loadDetailPopUp(true);
+			});		
+
+			gridPane.add(vBoxAddTask, 1, s.getPositionGridPane());
 
 			List<Task> taskListStory = s.getTasks();
-
 
 			//Creating VBoxes for every Status and every Story
 			VBox vboxNEW = new VBox();
@@ -382,20 +388,20 @@ public class TaskController {
 		/*proving if the task is dragged on an other task
 		 * if YES: the parent of the TaskBox is set on the given clickedNode
 		 */
-		
+
 		if(clickedNode.getId() != null) {
 			if(clickedNode.getId().equals("TaskBox")) {
 				clickedNode = clickedNode.getParent();
 			} 
 		}
-		
+
 		if(clickedNode.getParent().getId() != null) {
 			if(clickedNode.getParent().getId().equals("TaskBox")) {
 				clickedNode =  clickedNode.getParent().getParent();
 				System.err.println("Dragged on Box in TaskBox");
 			}
 		}
-		
+
 		if(clickedNode.getParent().getParent().getId() != null) {
 			if(clickedNode.getParent().getParent().getId().equals("TaskBox")) {
 				clickedNode =  clickedNode.getParent().getParent().getParent();

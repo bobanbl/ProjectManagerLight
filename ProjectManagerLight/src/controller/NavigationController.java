@@ -68,11 +68,17 @@ public class NavigationController {
 		//click on Navigation Button Dashboard View calls method loadProjectView()    	
 		navigationButtonDashboardView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			System.out.println("Project Dashboard Navigation Button pressed");
+			if(projectController != null) {
+				projectController.checkForChangesInProjectDetail();
+			}
 			laodProjectView();
 		});
 		//click on Navigation Button Task View calls method loadTaskView()        	
 		navigationButtonTaskView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			System.out.println("Task Navigation Button pressed");
+			if(projectController != null) {
+				projectController.checkForChangesInProjectDetail();
+			}
 			if(selectedProject != null) {
 				laodTaskView();	
 			} else {
@@ -82,6 +88,9 @@ public class NavigationController {
 		//click on Navigation Button User Management calls method loadUserManView()        	
 		navigationButtonUserManView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			System.out.println("User Man. Navigation Button pressed");
+			if(projectController != null) {
+				projectController.checkForChangesInProjectDetail();
+			}
 			laodUserManView();
 		});   	
 	}
