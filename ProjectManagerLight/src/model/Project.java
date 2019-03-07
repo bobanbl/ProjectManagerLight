@@ -121,7 +121,11 @@ public class Project implements Serializable{
 	}
 
 	public List<ProjectUser> getProjectMember() {
-		return projectMembers;
+		if(projectMembers != null) {
+			return projectMembers;
+		}
+		return null;
+		
 	}
 
 	public void setProjectMembers(List<ProjectUser> projectMember) {

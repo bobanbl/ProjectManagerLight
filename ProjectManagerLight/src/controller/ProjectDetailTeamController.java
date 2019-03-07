@@ -130,7 +130,11 @@ public class ProjectDetailTeamController {
     }
     
     public String getProjectSponsor() {
-    	return textFieldProjectSponsor.getText().trim();
+    	String projectSponsor = "";
+    	if (textFieldProjectSponsor.getText() != null) {
+    		projectSponsor = textFieldProjectSponsor.getText().trim();
+    	}
+    	return projectSponsor;
     }
     
     public ProjectUser getProjectManager() {
@@ -141,6 +145,7 @@ public class ProjectDetailTeamController {
     	this.userModel = userModel;
     	ObservableList<ProjectUser> userList = FXCollections.observableArrayList();
     	userList = userModel.getUserList();
+    	
     	projectManagerComboBox.setItems(userList);
     	projectManagerComboBox.setConverter( new StringConverter<ProjectUser>() {
 
@@ -167,6 +172,8 @@ public class ProjectDetailTeamController {
     public void setUserListFromModel() {
     	ObservableList<ProjectUser> userProjectList = FXCollections.observableArrayList(selectedProject.getProjectMember());
     	userList = userProjectList;
+    	
+		
     	System.out.println("[controller.ProjectDetailTeamCotnroller] userList: " + userList);
     	updateProjectMemberTable();
     }
@@ -177,6 +184,7 @@ public class ProjectDetailTeamController {
     }
     
     public ObservableList<ProjectUser> getProjectMembers(){
+    	System.err.println("userList: " +  userList);
     	return userList;
     }
     
@@ -229,8 +237,6 @@ public class ProjectDetailTeamController {
     		contextMenu.hide();
     	}); 
     }
-    
-    
 }
 
 

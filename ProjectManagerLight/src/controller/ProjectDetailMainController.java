@@ -137,7 +137,7 @@ public class ProjectDetailMainController {
 		}
 		return null;
 	}
-
+	
 	public void setSelectedProject(Project selectedProject) {
 		this.selectedProject = selectedProject; 	
 		projectNameTextField.setText(selectedProject.getProjectName());
@@ -159,32 +159,5 @@ public class ProjectDetailMainController {
 		} catch(NullPointerException e) {
 
 		}
-	}
-
-	public void setValuesFromTemp(Project selectedProject, String projectNameTemp, String descriptionTemp, 
-			ProjectStatus projectStatusTemp, Date projectStartDateTEMP, Date projectFinishDateTEMP) {
-		this.selectedProject = selectedProject; 	
-		projectNameTextField.setText(projectNameTemp);
-		projectDescriptionTextField.setText(descriptionTemp);
-		projectStatusComboBox.setValue(projectStatusTemp);
-		if (selectedProject != null){
-			projectID.setText(String.valueOf(selectedProject.getProjectID()));
-		}
-
-		try {
-			//convert from datatype "Date" to "LocalDate" for DataPicker
-			Date startDate = projectStartDateTEMP;
-			Instant instantStart = startDate.toInstant();
-			LocalDate localStartDate = instantStart.atZone(ZoneId.systemDefault()).toLocalDate();
-			projectStartDate.setValue(localStartDate);
-
-			Date finishDate = projectFinishDateTEMP;
-			Instant instantFinish = finishDate.toInstant();
-			LocalDate localFinishDate = instantFinish.atZone(ZoneId.systemDefault()).toLocalDate();
-			projectFinishDate.setValue(localFinishDate);
-		} catch(NullPointerException e) {
-
-		}
-
 	}
 }
