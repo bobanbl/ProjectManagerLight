@@ -8,13 +8,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
-
+/**loads the data from the Entity ProjectUser into a ObservableList from the Database
+ * over the DatabaseController
+ * Methods: CRUD
+ * @author blazebo
+ *
+ */
 public class DataModelUser {
 
 	private final DatabaseController database = DatabaseController.getInstance();
 	
     private ObservableList<ProjectUser> userList;
-//    private ObservableList<Object> projectList;
 	
     public DataModelUser() {
 		loadUserData();
@@ -40,7 +44,7 @@ public class DataModelUser {
                 		database.deleteUser(u);
                 	}
                 } else {
-                    for (ProjectUser u : c.getAddedSubList()) {
+                    for (ProjectUser u : c.getAddedSubList()) {	
                         database.createUser(u);
                     }
                 }
@@ -48,7 +52,7 @@ public class DataModelUser {
 		});
 
     }
-//------------------ProjectUser--------------------------------------    
+  
     public void loadUserData() {
     	List<ProjectUser> list = database.readAllUser();
 		userList = FXCollections.observableArrayList(list);	
@@ -90,7 +94,7 @@ public class DataModelUser {
     	return 3;
     }
 
-    //creating new user
+    //creates new user and calls the method printUserData
     public void createUser(ProjectUser newUser) {
     	System.out.println("[model.DataModel] Adding new User to List");
     	userList.add(newUser);

@@ -49,8 +49,8 @@ public class Project implements Serializable{
 //	@JoinColumn(name = "FKUSERID", JoinColumns = { @JoinColumns"USERID")
 	
 	
-	@OneToMany(mappedBy = "project", orphanRemoval=true, cascade = CascadeType.ALL)
-	private List<Story> story = new ArrayList<>();
+	@OneToMany(mappedBy = "project", orphanRemoval=true)
+	private List<Story> stories = new ArrayList<>();
 	
 	public Project() {
 		super();
@@ -142,21 +142,21 @@ public class Project implements Serializable{
 	}
 
 	public List<Story> getStory() {
-		return story;
+		return stories;
 	}
 
 	public void setStory(List<Story> story) {
-		this.story = story;
+		this.stories = story;
 	}
 	
 	public void addStorytoProject(Story story) {
-		this.story.add(story);
+		this.stories.add(story);
 		System.out.println("[model.Project] Story List: " + this.getStory());
 	}
 	
 	public void removeStoryFromProject(Story removeStory) {
 		System.out.println("[model.Project] Remove Story from Project: " + removeStory);
-		story.remove(removeStory);
+		stories.remove(removeStory);
 	}
 
 	@Override public boolean equals(Object o) {

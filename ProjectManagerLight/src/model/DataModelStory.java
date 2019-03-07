@@ -1,15 +1,17 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import database.DatabaseController;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import model.Task.TaskStatus;
-import javafx.collections.ListChangeListener.Change;
 
+/**loads the data from the Entity Story and Task into two ObservableLists from the Database
+ * over the DatabaseController
+ * Methods: CRUD
+ * @author blazebo
+ *
+ */
 public class DataModelStory {
 
 	private final DatabaseController database = DatabaseController.getInstance();
@@ -19,7 +21,7 @@ public class DataModelStory {
 	public DataModelStory(){
 		loadStoryData();
 		printStoryData();
-				
+
 		storyList.addListener(new ListChangeListener<Story>() {
 
 			@Override
@@ -27,133 +29,134 @@ public class DataModelStory {
 				c.next();
 
 				if (c.wasPermutated()) {
-                    for (int i = c.getFrom(); i < c.getTo(); ++i) {
-                         System.err.println("Permutation not implemented");
-                    }
-                } else if (c.wasReplaced()) {
-                	for (int i = c.getFrom(); i < c.getTo(); ++i) {
-                		database.updateStory(storyList.get(i));
-                   }
-                } else if (c.wasRemoved()){
-                	for (Story u : c.getRemoved()) {
-                		database.deleteStory(u);
-                	}
-                } else {
-                    for (Story u : c.getAddedSubList()) {
-                        database.createStory(u);
-                    }
-                }
+					for (int i = c.getFrom(); i < c.getTo(); ++i) {
+						System.err.println("Permutation not implemented");
+					}
+				} else if (c.wasReplaced()) {
+					for (int i = c.getFrom(); i < c.getTo(); ++i) {
+						database.updateStory(storyList.get(i));
+					}
+				} else if (c.wasRemoved()){
+					for (Story u : c.getRemoved()) {
+						database.deleteStory(u);
+					}
+				} else {
+					for (Story u : c.getAddedSubList()) {
+						database.createStory(u);
+					}
+				}
 			}
 		});
-		
-		taskList.addListener(new ListChangeListener<Task>() {
-			
+
+		taskList.addListener(new ListChangeListener<Task>() {		
 			@Override
 			public void onChanged(Change<? extends Task> c) {
 				c.next();
 
 				if (c.wasPermutated()) {
-                    for (int i = c.getFrom(); i < c.getTo(); ++i) {
-                         System.err.println("Permutation not implemented");
-                    }
-                } else if (c.wasReplaced()) {
-                	for (int i = c.getFrom(); i < c.getTo(); ++i) {
-                		database.updateTask(taskList.get(i));
-                   }
-                } else if (c.wasRemoved()){
-                	for (Task u : c.getRemoved()) {
-                		database.deleteTask(u);
-                	}
-                } else {
-                    for (Task u : c.getAddedSubList()) {
-                        database.createTask(u);
-                    }
-                }				
+					for (int i = c.getFrom(); i < c.getTo(); ++i) {
+						System.err.println("Permutation not implemented");
+					}
+				} else if (c.wasReplaced()) {
+					for (int i = c.getFrom(); i < c.getTo(); ++i) {
+						database.updateTask(taskList.get(i));
+					}
+				} else if (c.wasRemoved()){
+					for (Task u : c.getRemoved()) {
+						database.deleteTask(u);
+					}
+				} else {
+					for (Task u : c.getAddedSubList()) {
+						database.createTask(u);
+					}
+				}				
 			}
 		});
 	}
-//----------------------------STORY------------------------------------------
-    public void loadStoryData() {
-    	List<Story> list = database.readAllStories();
+	//----------------------------STORY------------------------------------------
+	/*load Stories from Database into a list and adds this list to an ObservableList storyList
+	 * and calls the method: loadTaskData
+	 */
+	public void loadStoryData() {
+		List<Story> list = database.readAllStories();
 		storyList = FXCollections.observableArrayList(list);
-		printStoryData();
 		loadTaskData();
-    }
-    
-    public void printStoryData() {
-    	for(Story u : storyList) {
-    		System.out.println("[model.DataModelStory] Print stories: " + u.toString());
-    		System.out.println("[model.DataModelStory] Print story tasks: " +  u.getTasks());
-    	}
-    }
-        
-    public void createStory(Story newStory) {
-    	System.out.println("[model.DataModelStory] Adding new Story to List");
+	}
+
+	//print printStoryData in Console
+	public void printStoryData() {
+		for(Story u : storyList) {
+			System.out.println("[model.DataModelStory] Print stories: " + u.toString());
+		}
+	}
+
+	//create a new Story in storyList and call method printStoryData
+	public void createStory(Story newStory) {
+		System.out.println("[model.DataModelStory] Adding new Story to List");
 		storyList.add(newStory);
 		printStoryData();    	
-    }
+	}
 
-    /** Deleting existing Story in storyList
-     * 
-     * @param deleteStory
-     */
-    public void deleteStory(Story deleteStory) {
-    	System.out.println("[model.DataModelStory] Deleting story: " + deleteStory);
-    	Project project = deleteStory.getProject();
-    	project.removeStoryFromProject(deleteStory);
-    	storyList.remove(deleteStory);
-    	printStoryData();
-    }    
+	/** Deleting existing Story in storyList
+	 * 
+	 * @param deleteStory
+	 */
+	public void deleteStory(Story deleteStory) {
+		System.out.println("[model.DataModelStory] Deleting story: " + deleteStory);
+		Project project = deleteStory.getProject();
+		project.removeStoryFromProject(deleteStory);
+		storyList.remove(deleteStory);
+		printStoryData();
+	}    
 
-    public void updateStory(Story updateStory) {
-    	System.out.println("[model.DataModelStory] UpdateStory: " + updateStory.getStoryName());
-    	int storyIndex = storyList.indexOf(updateStory);
-    	storyList.set(storyIndex, updateStory);
-    	printStoryData();
-    }
-  //----------------------------Task------------------------------------------
-    public void loadTaskData() {
-//    	List<Task> list = new ArrayList<Task>();
-//    	for(Story s : storyList) {
-//    		for(Task t : s.getTasks()) {
-//    			list.add(t);
-//    		}
-//    	}
-    	List<Task> list = database.readAllTasks();
+	//updateStory in storyList and call method printStoryData
+	public void updateStory(Story updateStory) {
+		System.out.println("[model.DataModelStory] UpdateStory: " + updateStory.getStoryName());
+		int storyIndex = storyList.indexOf(updateStory);
+		storyList.set(storyIndex, updateStory);
+		printStoryData();
+	}
+	//----------------------------Task------------------------------------------
+	/*load Taks from Database into a list and adds this list to an ObservableList taskList
+	 * and calls the method: loadTaskData
+	 */
+	public void loadTaskData() {
+		List<Task> list = database.readAllTasks();
 		taskList = FXCollections.observableArrayList(list);	
 		printTaskData();
-    }
-        
-    public void printTaskData() {
-    	for(Task u : taskList) {
-    		System.out.println("[model.DataModelStory] Print tasks: " + u.toString());
-    	}
-    }
-        
-    public void createTask(Task newTask) {
-    	System.out.println("[model.DataModelStory] Adding new Task to List");
+	}
+
+	//print printStoryData in Console
+	public void printTaskData() {
+		for(Task u : taskList) {
+			System.out.println("[model.DataModelStory] Print tasks: " + u.toString());
+		}
+	}
+
+	//create a new Task in storyList and print Tasks and call method printTaskData
+	public void createTask(Task newTask) {
+		System.out.println("[model.DataModelStory] Adding new Task to List");
 		taskList.add(newTask);
 		printTaskData();    	
-    }
-        
-    //deleting existing Task in TaskList
-    public void deleteTask(Task deleteTask) {
-    	System.out.println("[model.DataModelStory] 1 Deleting Task: " + deleteTask);
-    	Story story = deleteTask.getStory();
-    	story.removeTaskFromStory(deleteTask);
-    	taskList.remove(deleteTask);
+	}
 
-       	printTaskData();
-    }    
-    
-  //updating existing Task in TaskList
-    public void updateTask(Task updateTask) {
-    	System.out.println("[model.DataModelStory] UpdateTask: " + updateTask);
-    	int taskIndex = taskList.indexOf(updateTask);
-    	taskList.set(taskIndex, updateTask);
-    	printTaskData();
-    } 
-    
+	//deleting existing Task in TaskList and call method printTaskData
+	public void deleteTask(Task deleteTask) {
+		System.out.println("[model.DataModelStory] 1 Deleting Task: " + deleteTask);
+		Story story = deleteTask.getStory();
+		story.removeTaskFromStory(deleteTask);
+		taskList.remove(deleteTask);
+		printTaskData();
+	}    
+
+	//updating existing Task in TaskList call method printTaskData
+	public void updateTask(Task updateTask) {
+		System.out.println("[model.DataModelStory] UpdateTask: " + updateTask);
+		int taskIndex = taskList.indexOf(updateTask);
+		taskList.set(taskIndex, updateTask);
+		printTaskData();
+	} 
+
 }
 
 

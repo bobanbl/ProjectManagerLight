@@ -38,7 +38,7 @@ public class ProjectDetailController {
 	private ProjectDetailTeamController projectDetailTeamController;
 	private DataModelProject projectModel;
 	private DataModelUser userModel;
-	private boolean newProject;
+	private boolean isNewProject;
 	private Project selectedProject;
 
 	private String projectNameOLD;
@@ -200,10 +200,10 @@ public class ProjectDetailController {
 	//sets the ProjectController projectController    
 	public void setProjectController(ProjectController controller) {
 		this.projectController = controller;
-		newProject = projectController.getIfNewProject();
-		System.out.println("[controller.ProjectDetailController] New Project: " + newProject);
+		isNewProject = projectController.getIfNewProject();
+		System.out.println("[controller.ProjectDetailController] New Project: " + isNewProject);
 
-		if(newProject) {
+		if(isNewProject) {
 			cancelButton.setVisible(true);
 			createProjectButton.setVisible(true);
 			closeDetailViewButton.setVisible(false);
