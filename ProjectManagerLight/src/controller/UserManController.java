@@ -45,6 +45,7 @@ import model.ProjectUser;
 public class UserManController {
 
 	private DataModelUser model;
+	private ProjectUser selectedUser;
 	ObservableList<ProjectUser> selectedUserList;
 
 	@FXML
@@ -89,7 +90,6 @@ public class UserManController {
 
 	private void initializeTable() {
 		System.out.println("[controller.UserManController] initialize table view");
-
 		userTable.setItems(model.getUserList());
 		colShortcut.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("userShortcut"));
 		colFirstName.setCellValueFactory(new PropertyValueFactory<ProjectUser, String>("firstName"));
@@ -107,11 +107,12 @@ public class UserManController {
 	public void tablesChanges() {
 		userTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			selectedUserList = userTable.getSelectionModel().getSelectedItems();
-			System.out.println(selectedUserList.get(0).getLastName());
+			selectedUser = selectedUserList.get(0);
+			System.out.println("[controller.UserManController] slectedUser: " + selectedUser.getLastName());
 			if (event.getClickCount() == 2) {
 				laodUserDetailPopUp(false);
 			}
-			if (event.getButton() == MouseButton.SECONDARY && selectedUserList.get(0) != null) {
+			if (event.getButton() == MouseButton.SECONDARY && selectedUser != null) {
 				System.out.println("Right Mouse Button clicked");
 				openContextMenu();
 			}
@@ -128,9 +129,8 @@ public class UserManController {
 				UserDetailController userDetailController =  loader.getController();
 				userDetailController.setDataModel(model);
 				userDetailController.setUserManController(this);
-				ProjectUser selectedUser = null;
-				if(addUser == false) {
-					selectedUser = selectedUserList.get(0);
+				if(addUser == true) {
+					selectedUser = null;
 				}
 
 				userDetailController.setSelectedUser(selectedUser);
@@ -157,7 +157,7 @@ public class UserManController {
 		Label label = new Label();
 		ContextMenu contextMenu = new ContextMenu();
 
-		MenuItem item1 = new MenuItem("Delete User: " + selectedUserList.get(0).getUserShortcut());
+		MenuItem item1 = new MenuItem("Delete User: " + selectedUser.getUserShortcut());
 		item1.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -196,11 +196,11 @@ public class UserManController {
 		System.out.println("Print User Error-Message");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Delete User");
-		alert.setHeaderText("Deleting user: " + selectedUserList.get(0).getUserShortcut() + " Are you sure?");
+		alert.setHeaderText("Deleting user: " + selectedUser.getUserShortcut() + " Are you sure?");
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() == ButtonType.OK) {
 			System.out.println("[controller.UserManController] User deleted!");
-			model.deleteUser(selectedUserList.get(0));	
+			model.deleteUser(selectedUser);	
 		}
 		else if(result.get() == ButtonType.CANCEL) {
 			alert.close();
@@ -215,12 +215,12 @@ public class UserManController {
 
 				InvolvedProjectsController involvedProjectsController =  loader.getController();
 				involvedProjectsController.setUserManController(this);
-				involvedProjectsController.setInvolvedProjectsFromUser(selectedUserList.get(0).getInvolvedProjects());
+				involvedProjectsController.setInvolvedProjectsFromUser(selectedUser.getInvolvedProjects());
 
 				Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));	
 				popUpWindow = new Stage();
-				String title = "Involved Project from User " + selectedUserList.get(0).getFirstName() + 
-						" " + selectedUserList.get(0).getLastName();
+				String title = "Involved Project from User " + selectedUser.getFirstName() + 
+						" " + selectedUser.getLastName();
 				popUpWindow.setTitle(title);
 				popUpWindow.setScene(scene);
 				popUpWindow.showAndWait();	    	

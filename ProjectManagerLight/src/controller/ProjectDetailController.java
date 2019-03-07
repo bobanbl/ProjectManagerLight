@@ -145,7 +145,7 @@ public class ProjectDetailController {
 			projectDetailMainController = loader.getController();
 			projectDetailMainController.setProjectDetailController(this);
 			projectDetailMainController.setSelectedProject(selectedProject);
-			
+
 			anchorPaneDetailViews.getChildren().setAll(root);  	
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -154,7 +154,7 @@ public class ProjectDetailController {
 
 	//loads the Detail-Team-Window in the AnchorPane of the Detail-Window    
 	public void loadDetailTeamWindow() {
-		
+
 		saveValuesTemporaryMainWindow();
 		try {
 			anchorPaneDetailViews.getChildren().clear();
@@ -167,7 +167,7 @@ public class ProjectDetailController {
 			projectDetailTeamController.setProjectDetailController(this);
 			projectDetailTeamController.setDataModelUser(userModel);
 
-				projectDetailTeamController.setUserListFromModel();
+			projectDetailTeamController.setUserListFromModel();
 
 			anchorPaneDetailViews.getChildren().setAll(root);
 		} catch (IOException e) {
@@ -221,6 +221,7 @@ public class ProjectDetailController {
 			newProject.setPlanedFinishDate(date);
 			newProject.setProjectSponsor("");
 			newProject.setProjectManager(null);
+			//			newProject.setProjectMembers();
 
 			selectedProject = projectModel.createProject(newProject);
 			projectDetailMainController.setSelectedProject(selectedProject);
@@ -373,10 +374,12 @@ public class ProjectDetailController {
 	}
 
 	private void removeProjectFromUser() {
-		for(ProjectUser userOLD: projectMembersListOLD) {
-			if(!projectMembersListNEW.contains(userOLD)) {
-				userOLD.removeProjectFromUser(selectedProject);
-				userModel.updateUser(userOLD);
+		if(projectMembersListOLD != null) {
+			for(ProjectUser userOLD: projectMembersListOLD) {
+				if(!projectMembersListNEW.contains(userOLD)) {
+					userOLD.removeProjectFromUser(selectedProject);
+					userModel.updateUser(userOLD);
+				}
 			}
 		}
 	}

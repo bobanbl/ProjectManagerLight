@@ -148,8 +148,14 @@ public class UserDetailController {
 	//return true is shortcut does NOT exist!! because this the 'everything is fine' case  
 	private boolean evaluateuserDetailShortcutField(String shortcut) {
 		for(ProjectUser u : model.getUserList()) {
-			if(u.getUserShortcut().toLowerCase().contains(shortcut.toLowerCase()) &&
-					!shortcut.equals(selectedUser.getUserShortcut())){
+			//existingUserShortcutCheck is TRUE if the shortcut equals the shortcut of the selected user
+			boolean existingUserShortcutCheck = true;
+			if(selectedUser != null) {
+				if(u.getUserShortcut().equals(selectedUser.getUserShortcut())){
+					existingUserShortcutCheck = false;
+				}
+			}
+			if(u.getUserShortcut().toLowerCase().contains(shortcut.toLowerCase()) && existingUserShortcutCheck && !userDetailShortcutField.getText().equals("")){
 				System.out.println("User-Shortcut already exists");
 				userDetailShortcutField.setStyle("-fx-control-inner-background: #FF0000");
 				return true;    

@@ -42,6 +42,7 @@ public class ProjectController {
 	private DataModelUser userModel;
 	private boolean newProject;
 	private DataModelProject projectModel;
+	private Project selectedProject;
 	ObservableList<Project> selectedProjectList;
 	@FXML
 	private ResourceBundle resources;
@@ -125,37 +126,39 @@ public class ProjectController {
 			colProjectName.setCellValueFactory(new PropertyValueFactory<Project, String>("projectName"));
 			colProjectName.setStyle("-fx-alignment:CENTER-LEFT;");
 			colProjectStatus.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProjectStatus().getName()));
-			
+
 			//Select first project in table at the first opening of the application
 			if(navigationController.getSelectedProject() == null) {
-					navigationController.setSelectedProject(projectTable.getItems().get(0));
-				}
+				navigationController.setSelectedProject(projectTable.getItems().get(0));
+			}
 		}
-		
+
 		projectTable.getSelectionModel().select(navigationController.getSelectedProject());
 	}
 
+
 	public void tablesChanges() { 	
 		projectTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-			
-			selectedProjectList = projectTable.getSelectionModel().getSelectedItems();
-			checkForChangesInProjectDetail();
-			System.out.println("[controller.ProjectController] Mouse Click on Project: " + selectedProjectList.get(0).getProjectName());
-			navigationController.setSelectedProject(selectedProjectList.get(0));
-			if (event.getClickCount() == 2) {
-				System.out.println("[controller.ProjectController] Double Mouse Click on Project: " + selectedProjectList.get(0).getProjectName());
 
-				
-				
+			selectedProjectList = projectTable.getSelectionModel().getSelectedItems();
+			selectedProject = selectedProjectList.get(0);
+			checkForChangesInProjectDetail();
+			System.out.println("[controller.ProjectController] Mouse Click on Project: " + selectedProject.getProjectName());
+			navigationController.setSelectedProject(selectedProject);
+			if (event.getClickCount() == 2) {
+				System.out.println("[controller.ProjectController] Double Mouse Click on Project: " + selectedProject.getProjectName());
+
+
+
 				this.newProject = false;
 				laodProjectDetailWindow();
-			} else if (event.getButton() == MouseButton.SECONDARY && selectedProjectList.get(0) != null) {
+			} else if (event.getButton() == MouseButton.SECONDARY && selectedProject != null) {
 				System.out.println("[controller.ProjectController] Right Mouse Button clicked");
 				closeDetailWindow();
-				
+
 				openContextMenu();
 			} else if (event.getClickCount() == 1) {
-				System.out.println("[controller.ProjectController] One Mouse Click on Project: " + selectedProjectList.get(0).getProjectName());
+				System.out.println("[controller.ProjectController] One Mouse Click on Project: " + selectedProject.getProjectName());
 				System.out.println("[controller.ProjectController] navigationController: " + navigationController);
 			}
 		});            
@@ -170,7 +173,7 @@ public class ProjectController {
 			projectDetailController = loader.getController();
 			projectDetailController.setProjectController(this);
 			projectDetailController.setDataModelProject(projectModel);
-			projectDetailController.setSelectedProject(selectedProjectList.get(0));
+			projectDetailController.setSelectedProject(selectedProject);
 			projectDetailController.setDataModelUser(userModel);
 
 			anchorPaneDetailView.getChildren().setAll(root);	
@@ -183,7 +186,7 @@ public class ProjectController {
 		Label label = new Label();
 		ContextMenu contextMenu = new ContextMenu();
 
-		MenuItem item1 = new MenuItem("Delete Project: " + selectedProjectList.get(0).getProjectName());
+		MenuItem item1 = new MenuItem("Delete Project: " + selectedProject.getProjectName());
 		item1.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -211,14 +214,14 @@ public class ProjectController {
 		System.out.println("[controller.ProjectController] Print Project Error-Message");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Delete User");
-		alert.setHeaderText("Deleting Project: " + selectedProjectList.get(0).getProjectName() + " Are you sure?");
+		alert.setHeaderText("Deleting Project: " + selectedProject.getProjectName() + " Are you sure?");
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() == ButtonType.OK) {
 			System.out.println("[UserManController] Project deleted!");
 			//select another Project when deleting the selected Project
-			if(navigationController.getSelectedProject() == selectedProjectList.get(0)) {
+			if(navigationController.getSelectedProject() == selectedProject) {
 				System.out.println("[controller.ProjectController] selectedProject = deletedProject");
-				if(projectTable.getItems().get(0) != selectedProjectList.get(0)) {
+				if(projectTable.getItems().get(0) != selectedProject) {
 					System.out.println("[controller.ProjectController] selectedProject = POSITION NOT 0");
 					navigationController.setSelectedProject(projectTable.getItems().get(0));
 				} else if(selectedProjectList.size() == 1){
@@ -229,20 +232,31 @@ public class ProjectController {
 					navigationController.setSelectedProject(projectTable.getItems().get(1));
 				}
 			}
-			projectModel.deleteProject(selectedProjectList.get(0));	
+			removeSelectedProjectFromAllUser();
+			projectModel.deleteProject(selectedProject);	
 
 		}
 		else if(result.get() == ButtonType.CANCEL) {
 			alert.close();
 		}
 	}
-	
+
+	private void removeSelectedProjectFromAllUser() {
+		if(selectedProject.getProjectMember() != null) {
+			for(ProjectUser user: selectedProject.getProjectMember()) {
+				user.removeProjectFromUser(selectedProject);
+				userModel.updateUser(user);
+			}
+		}
+	}
+
+
 	public void checkForChangesInProjectDetail() {
 		//if Detail-Windows already open: check if changes exist before closing
 		if(projectDetailController != null) {
 			projectDetailController.checkBeforeClosing();
 		}
 	}
-	
+
 
 }

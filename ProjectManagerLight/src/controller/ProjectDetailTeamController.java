@@ -170,10 +170,12 @@ public class ProjectDetailTeamController {
     }
     
     public void setUserListFromModel() {
-    	ObservableList<ProjectUser> userProjectList = FXCollections.observableArrayList(selectedProject.getProjectMember());
+    	ObservableList<ProjectUser> userProjectList = FXCollections.observableArrayList();
+    	if(selectedProject.getProjectMember() != null) {
+    		userProjectList.addAll(selectedProject.getProjectMember());
+    	}
     	userList = userProjectList;
     	
-		
     	System.out.println("[controller.ProjectDetailTeamCotnroller] userList: " + userList);
     	updateProjectMemberTable();
     }
@@ -184,7 +186,7 @@ public class ProjectDetailTeamController {
     }
     
     public ObservableList<ProjectUser> getProjectMembers(){
-    	System.err.println("userList: " +  userList);
+    	
     	return userList;
     }
     
