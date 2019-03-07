@@ -91,7 +91,7 @@ public class TaskController {
 		addStoryButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			System.out.println("[controller.TaskController] Add-Story-Button pressed");
 			selectedStory = null;
-			loadDetailPopUp(false);	
+			loadStoryDetailPopUp();	
 		});	
 	}
 
@@ -104,17 +104,15 @@ public class TaskController {
 		createVBox();	
 	}
 
-	private void loadDetailPopUp(boolean addTask) {
+	private void loadStoryDetailPopUp() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("../view/storyTaskDetailPopUp.fxml"));  	
+			loader.setLocation(getClass().getResource("../view/storyDetailPopUp.fxml"));  	
 			Parent root = loader.load();	
 
-			StoryTaskDetailController storyDetailController =  loader.getController();
+			StoryDetailController storyDetailController =  loader.getController();
 			storyDetailController.setDataModelStory(storyModel);
 			storyDetailController.setTaskController(this);
-			storyDetailController.setAddTaskTag(addTask);
-			storyDetailController.setSelectedTask(selectedTask);
 			storyDetailController.setSelectedStory(selectedStory);
 			storyDetailController.setSelectedProject(selectedProject);
 
@@ -123,17 +121,47 @@ public class TaskController {
 
 			String title = null;
 
-			if(addTask == true){
-				title = "Create Task";
-			} else if(selectedStory != null || selectedTask != null) {
-				title = "Details";
+			if(selectedStory != null) {
+				title = "Story Details";
 			} else {
 				title = "Create Story";
 			}
 
 			popUpWindow.setTitle(title);
 			popUpWindow.setScene(scene);
+			popUpWindow.showAndWait();
 
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	private void loadTaskDetailPopUp() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("../view/taskDetailPopUp.fxml"));  	
+			Parent root = loader.load();	
+
+			TaskDetailController taskDetailController =  loader.getController();
+			taskDetailController.setDataModelStory(storyModel);
+			taskDetailController.setTaskController(this);
+			taskDetailController.setSelectedTask(selectedTask);
+			taskDetailController.setSelectedStory(selectedStory);
+			taskDetailController.setSelectedProject(selectedProject);
+
+			Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));    	
+			popUpWindow = new Stage();
+
+			String title = null;
+
+			if(selectedStory != null) {
+				title = "Story Details";
+			} else {
+				title = "Create Story";
+			}
+
+			popUpWindow.setTitle(title);
+			popUpWindow.setScene(scene);
 			popUpWindow.showAndWait();
 
 		} catch (IOException e) {
@@ -192,7 +220,7 @@ public class TaskController {
 				selectedStory = s;
 				selectedTask = null;
 				if (event.getClickCount() == 2) {
-					loadDetailPopUp(false);
+					loadStoryDetailPopUp();
 				} else if (event.getButton() == MouseButton.SECONDARY) {
 					System.out.println("[controller.TaskController] Right Mouse Button clicked");
 					openContextMenu();
@@ -212,7 +240,7 @@ public class TaskController {
 				System.out.println("[controller.TaskController] AddTaskButton was pressed " + addTaskButton.getUserData());
 				selectedStory = (Story) vBoxAddTask.getUserData();
 				selectedTask = null;
-				loadDetailPopUp(true);
+				loadTaskDetailPopUp();
 			});		
 
 			gridPane.add(vBoxAddTask, 1, s.getPositionGridPane());
@@ -301,7 +329,7 @@ public class TaskController {
 					selectedStory = null;
 					selectedTask = (Task) vbox1.getUserData();
 					if (event.getClickCount() == 2) {
-						loadDetailPopUp(false);
+						loadTaskDetailPopUp();
 					} else if (event.getButton() == MouseButton.SECONDARY) {
 						System.out.println("[controller.TaskController] Right Mouse Button clicked");
 						openContextMenu();

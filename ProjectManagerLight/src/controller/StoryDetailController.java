@@ -26,14 +26,14 @@ import model.Story;
 import model.Task;
 import model.Task.TaskStatus;
 
-public class StoryTaskDetailController {
+public class StoryDetailController {
 
 	private DataModelStory storyModel;
 	private TaskController taskController;
 	private Project selectedProject;
 	private Story selectedStory;
-	private Task selectedTask;
-	private boolean addTask;
+
+
 
 	private String nameOLD;
 	private String descriptionOLD;
@@ -74,11 +74,8 @@ public class StoryTaskDetailController {
 			errorWindow("Description missing!");
 		} else if(!checkCorrectData()) {
 			errorWindow("Duration has to be a Number");
-		} else if (selectedTask == null && selectedStory == null) {
+		} else if (selectedStory == null) {
 			createStory();
-			updateAndClose();
-		} else if (addTask == true) {
-			createTask();
 			updateAndClose();
 		} else if(checkIfChangesExists()) {
 			confirmClosingStoryDetailWindowChanges();
@@ -87,11 +84,13 @@ public class StoryTaskDetailController {
 		}
 	}
 	
+	//updates the tasks in the taskController and closes the Pop-Up Window
 	private void updateAndClose() {
 		taskController.updateTasks();
 		taskController.closePopUpWindow();
 	}
-
+	
+	//creates a new Object Story with the new values
 	private void createStory() {
 		Story newStory = new Story();
 		newStory.setDescription(descriptionNEW);
@@ -103,52 +102,35 @@ public class StoryTaskDetailController {
 		storyModel.createStory(newStory);		 
 	}
 	
-	private void createTask() {
-		Task newTask = new Task();
-    	newTask.setDescription(descriptionNEW);
-		newTask.setDuration(Integer.parseInt(durationNEW));
-		newTask.setTaskName(nameNEW);
-		newTask.setStory(selectedStory);
-		newTask.setStatus(TaskStatus.NEW);
-		newTask.setResponsibility(responsibleUserNEW);
-		storyModel.createTask(newTask);
-	}
 
 	@FXML
 	void initialize() {
 		descriptionTextField.setWrapText(true);
 	}
 		
-	public void setAddTaskTag(boolean addTask) {
-		this.addTask = addTask;
-	}
-
+	//sets the storyModel attribute from another object 
 	public void setDataModelStory(DataModelStory storyModel) {
 		this.storyModel = storyModel;
 	}
-
+	
+	//sets the taskController attribute from another object 
 	public void setTaskController(TaskController taskController) {
 		this.taskController = taskController;
 	}
-
+	
+	//sets the selectedProject attribute from another object 
 	public void setSelectedProject(Project selectedProject) {
 		this.selectedProject = selectedProject;
 		setUserListFromModel();
 	}
-
-	public void setSelectedTask(Task selectedTask) {
-		this.selectedTask = selectedTask;
-		if(selectedTask != null) {	
-			nameOLD = selectedTask.getTaskName();
-			descriptionOLD = selectedTask.getDescription();
-			durationOLD = String.valueOf(selectedTask.getDuration());
-			fillSelectedValuesInFields();
-		}
-	}
-
+	
+	/*sets the selectedStory attribute and if not null 
+	 * --> the values from the selectedStory are set into the ..OLD attributes
+	 * and the fillSelectedValuesInFields method is called
+	 */
 	public void setSelectedStory(Story selectedStory) {
 		this.selectedStory = selectedStory;
-    	if(selectedStory != null && addTask == false) {
+    	if(selectedStory != null) {
     		nameOLD = selectedStory.getStoryName();
     		descriptionOLD = selectedStory.getDescription();
     		durationOLD = String.valueOf(selectedStory.getDuration());
@@ -156,12 +138,16 @@ public class StoryTaskDetailController {
     	}
     }
 	
+	//the text fields are set from the ..OLD attributes
 	private void fillSelectedValuesInFields() {
 		nameTextField.setText(nameOLD);
 		descriptionTextField.setText(descriptionOLD);
 		durationTextField.setText(durationOLD);
 	}
 	
+	/* checks if the ..OLD and ..NEW values are equal
+	 * if NOT, so if changes exist --> returns TRUE
+	 */
 	private boolean checkIfChangesExists() {
 		System.out.println("[controller.StoryDetailController] checkIfChangesExists");
 
@@ -177,7 +163,10 @@ public class StoryTaskDetailController {
 			return true;
 		}
 	}
-
+	
+	/*if the value in the durationTextField is not a number, the durationTextField turns red
+	 * and the method returns FALSE
+	 */
 	private boolean checkCorrectData() {
 		durationNEW = durationTextField.getText().trim();
 		if(!isNumeric(durationNEW)) {		 		
@@ -186,7 +175,8 @@ public class StoryTaskDetailController {
 		}
 		return true;
 	}
-
+	
+	//returns TRUE if the given String str is a number
 	public boolean isNumeric(String str) {  
 		try {  
 			int i = Integer.parseInt(str);  
@@ -195,20 +185,17 @@ public class StoryTaskDetailController {
 		}  
 		return true;  
 	}
-
+	
+	//opens a alert Pop-Up-Window, which ask if the changes should be saved 
 	private void confirmClosingStoryDetailWindowChanges() {
 		System.out.println("[controller.StoryDetailController] Open Confirm Update Story Window");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle("Update");
+		alert.setTitle("Update Story");
 		alert.setHeaderText("Update: Save changes?");
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() == ButtonType.OK) {
 			System.out.println("[controller.StoryDetailController] Update Story Confirm!");
-			if(selectedTask == null) {
-				updateStory();
-			} else {
-				updateTask();
-			}
+			updateStory();
 
 			taskController.updateTasks();
 			taskController.closePopUpWindow();	
@@ -218,6 +205,7 @@ public class StoryTaskDetailController {
 		}
 	}
 	
+	//sets the ...NEW attributes in the selectedStory-Object and updates this Object in the storyModel
 	private void updateStory() {
 		System.err.println("updateStory");
 		selectedStory.setStoryName(nameNEW);
@@ -227,18 +215,12 @@ public class StoryTaskDetailController {
 		storyModel.updateStory(selectedStory);
 	}
 	
-	private void updateTask() {
-		System.err.println("updateTask");
-		selectedTask.setTaskName(nameNEW);
-		selectedTask.setDescription(descriptionNEW);
-		selectedTask.setDuration(Integer.parseInt(durationNEW));
-		selectedTask.setResponsibility(responsibleUserNEW);
-		storyModel.updateTask(selectedTask);
-	}
-
+	/*adds the ProjectMember form the selectedProject into the ObservableList<ProjectUser> userProjectList.
+	 * Makes then a reference to the global ObservableList userlist
+	 * and calls the method updateResponsibilityComboBox
+	 */
 	public void setUserListFromModel() {
-		System.out.println("[controller.StroyDetailController] Project: " + selectedProject);
-		
+		System.out.println("[controller.StroyDetailController] Project: " + selectedProject);	
 		ObservableList<ProjectUser> userProjectList = FXCollections.observableArrayList();
 		if(selectedProject.getProjectMember() != null) {
 			userProjectList.addAll(selectedProject.getProjectMember());
@@ -247,10 +229,13 @@ public class StoryTaskDetailController {
 		System.out.println("[controller.StrorySetailController] userList: " + userList);   	
 		updateResponsibilityComboBox();
 	}
-
+	
+	/*sets the values from the userList in the responsibilityComboBox 
+	 * and selects the user from the selctedStory if not null
+	 */
 	private void updateResponsibilityComboBox() {
 		responsibilityComboBox.setItems(userList);
-		if(selectedStory != null && addTask == false) {
+		if(selectedStory != null) {
 			responsibleUserOLD = selectedStory.getResponsibility();
 			responsibilityComboBox.setValue(responsibleUserOLD);
 			System.out.println("[controller.StrorySetailController] responsibleUserOLD: " + responsibleUserOLD);  
@@ -269,7 +254,8 @@ public class StoryTaskDetailController {
 			}	
 		}); 	
 	}
-
+	
+	//opens a alert window with the title "ERROR"
 	private void errorWindow(String message) {
 		System.out.println("Print User Error-Message");
 		Alert alert = new Alert(AlertType.ERROR);
