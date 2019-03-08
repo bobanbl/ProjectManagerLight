@@ -3,14 +3,11 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
@@ -21,9 +18,6 @@ import javax.persistence.OneToMany;
 @Entity
 public class ProjectUser implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -34,14 +28,14 @@ public class ProjectUser implements Serializable{
 	private String eMail;
 	private String role;
 	private String password;
-	
+
 
 	@OneToMany(mappedBy = "projectManager", orphanRemoval=true)
 	private List<Project> projectManger = new ArrayList<Project>();
-	
+
 	@OneToMany(mappedBy = "responsibility", orphanRemoval=true)
 	private List<Story> involvedStories = new ArrayList<>();
-	
+
 	@OneToMany(mappedBy = "responsibility", orphanRemoval=true)
 	private List<Task> involvedTasks = new ArrayList<>();
 
@@ -50,16 +44,6 @@ public class ProjectUser implements Serializable{
 
 	public ProjectUser() {
 		super();
-	}
-	
-	public ProjectUser(String userShortcut, String firstName, String lastName, String eMail, String role, String password) {
-		super();
-		this.setUserShortcut(userShortcut);
-		this.setFirstName(firstName);
-		this.setLastName(lastName);
-		this.seteMail(eMail);
-		this.setRole(role);
-		this.setPassword(password);
 	}
 
 	public long getUserID() {
@@ -104,45 +88,20 @@ public class ProjectUser implements Serializable{
 	public void setInvolvedProjects(List<Project> involvedProjects) {
 		this.involvedProjects = involvedProjects;
 	}
-	
-	//TEST__________________________________________________
+
+	//removes the given Project from the involvedProject-List
 	public void removeProjectFromUser(Project project) {
-		System.out.println("[model.ProjectUser] 1---removeProjectFromUser: Project: " + project + " User: " + this);
 		this.involvedProjects.remove(project);
-////		project.getProjectMember().remove(this);
-//		for(Project p : this.getInvolvedProjects()) {
-//			if(p.getProjectID() == project.getProjectID()) {
-//				System.out.println("[model.ProjectUser] 2---removeProjectFromUser: Project: " + p + " User: " + this);
-//				p.removeUserFromProject(this);
-//				this.getInvolvedProjects().remove(p);
-//			}
-//		}
 	}
-	
+
+	//adds the given Project to the involvedProject-List, if it has not already been added
 	public void addProjectToUser(Project project) {	
 		if(!(this.getInvolvedProjects().contains(project))) {
 			System.out.println("[model.ProjectUser] addProjectToUser, Project: " + project);
 			this.involvedProjects.add(project);
 		}
 	}
-	
-//	public void addProject(Project project) {	
-//		System.err.println("[model.ProjectUser] 1 addProjectToUser, Project: " + project);
-//		if(!project.getProjectMember().contains(this)) {
-//			System.out.println("[model.ProjectUser] addProjectToUser, Project: " + project);
-//			this.involvedProjects.add(project);
-//		}
-//	}	
-	//TEST__________________________________________________
-//	public void deleteProjectFromUser(Project project) {
-//		for(Project p : involvedProjects) {
-//			if(p.getProjectID() == project.getProjectID()) {
-//				involvedProjects.remove(p);
-//				p.deleteMemberFromProject(this);
-//			}
-//		}
-//	}
-		
+
 	public String getPassword() {
 		return password;
 	}
@@ -161,24 +120,22 @@ public class ProjectUser implements Serializable{
 	public void setInvolvedTasks(List<Task> involvedTasks) {
 		this.involvedTasks = involvedTasks;
 	}
-	
+
 	public void addInvolvedStory(Story newStory) {
 		this.involvedStories.add(newStory);
 	}
-	
+
 	public void addInvolvedTask(Task newTask) {
 		this.involvedTasks.add(newTask);
 	}
 
-//	@Override
-//	public String toString() {
-//		return "ProjectUser [userID=" + userID + ", userShortcut=" + userShortcut + ", firstName=" + firstName
-//				+ ", lastName=" + lastName + ", eMail=" + eMail + ", role=" + role + ", password=" + password
-//				+ ", involvedProjects=" + involvedProjects + ", involvedStories=" + involvedStories + ", involvedTasks="
-//				+ involvedTasks + "]";
-//	}
-	
 
+	/* returns all ProjectIDs from involvedProject list as String with the 
+	 * letter "P"
+	 * Is used for the UserTable in the UserManagement
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@SuppressWarnings("unused")
 	@Override
 	public String toString() {
@@ -190,6 +147,12 @@ public class ProjectUser implements Serializable{
 		return newString;
 	}
 	
+	/*compares the given Object to this Object 
+	 * returns TRUE if References equal
+	 * if References not equal and given Object instanceof ProjectUser --> assigned by userID
+	 * (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override public boolean equals(Object o) {
 
 		if (this == o) return true;
@@ -201,8 +164,4 @@ public class ProjectUser implements Serializable{
 			return false;
 		}
 	}
-	
-
-
-
 }

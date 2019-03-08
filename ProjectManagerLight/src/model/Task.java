@@ -1,18 +1,14 @@
 package model;
 
 import java.io.Serializable;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 /**
  * Entity implementation class for Entity: Task
@@ -20,14 +16,12 @@ import javax.persistence.OneToOne;
  */
 @Entity
 public class Task implements Serializable{
-	
+
+	//TaskStatus as ENUM
 	public enum TaskStatus{
 		NEW, IN_PROGRESS, ON_HOLD, CLOSED, REJECTED;
 	}
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -43,11 +37,11 @@ public class Task implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "FKStoryID", referencedColumnName = "STORYID")
 	private Story story;
-		
+
 	public final Task getTask() {
 		return this;
 	}
-	
+
 	public int getTaskID() {
 		return taskID;
 	}
@@ -89,20 +83,26 @@ public class Task implements Serializable{
 		return story;
 	}
 
+	/*adds the given Story to the attribute "story" 
+	 * and adds this Task to the TaskList: tasks in the object Story
+	 */
 	public void setStory(Story story) {
-		System.out.println("[model.Task] !story.getTasks().contains(this) " + this.story);
 		this.story = story;
-		System.out.println("[model.Task] Story: " + story.getStoryName());
 		if(!story.getTasks().contains(this)) {
 			System.out.println("[model.Task] !story.getTasks().contains(this) " + story);
 			story.addTasktoStory(this);
 		}
 	}
-	
-	@Override public boolean equals(Object o) {
 
+	/*compares the given Object to this Object 
+	 * returns TRUE if References equal
+	 * if References not equal and given Object instanceof Task --> assigned by taskID
+	 * (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override 
+	public boolean equals(Object o) {
 		if (this == o) return true;
-
 		if ((o instanceof Task) == true) {
 			Task u = (Task)o;
 			return this.taskID == u.taskID;
@@ -110,5 +110,4 @@ public class Task implements Serializable{
 			return false;
 		}
 	}
-	
 }

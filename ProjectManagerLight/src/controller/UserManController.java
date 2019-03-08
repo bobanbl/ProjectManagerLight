@@ -2,15 +2,9 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
-import org.apache.derby.iapi.sql.dictionary.UserDescriptor;
-
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,26 +13,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import model.DataModelUser;
-import model.Project;
 import model.ProjectUser;
 
 //The Controller for userManView.fxml
@@ -47,6 +34,7 @@ public class UserManController {
 	private DataModelUser model;
 	private ProjectUser selectedUser;
 	ObservableList<ProjectUser> selectedUserList;
+	private boolean isPopUpOpen = false;
 
 	@FXML
 	private ResourceBundle resources;
@@ -66,13 +54,14 @@ public class UserManController {
 	private TableColumn<ProjectUser, String> colShortcut;
 	@FXML
 	private TableColumn<ProjectUser, String> colFirstName;
-    @FXML
-    private TableColumn<ProjectUser, String> colEmail;
+	@FXML
+	private TableColumn<ProjectUser, String> colEmail;
 
 	private Stage popUpWindow;
 
 
 
+	//opens at the initializing the method "tablesChanges"
 	@FXML
 	void initialize() {
 		//Method loadUserDetailPopUp() is called, when addUserButton is pressed
@@ -83,11 +72,13 @@ public class UserManController {
 		tablesChanges();
 	}
 
+	//sets the attribute "model" and calls the method "initializeTable"
 	public void setDataModel(DataModelUser model) {
 		this.model = model;
 		initializeTable();
 	}
 
+	//sets the items from the userList in the userModel into the columns from the userTable
 	private void initializeTable() {
 		System.out.println("[controller.UserManController] initialize table view");
 		userTable.setItems(model.getUserList());
@@ -99,11 +90,15 @@ public class UserManController {
 		colProjects.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().toString()));
 	}
 
-	//Close Pop-up window - Create User   
+	//closes the Pop-up-Window    
 	public void closePopUpWindow() {
 		popUpWindow.close();
 	}
 
+	/*recognizes mouse-clicks on the userTable and sets the Clicked-User on the attribute selectedUser
+	 * at Double-Mouse-Click on ProjectUser in table --> calling method: laodUserDetailPopUp
+	 * at Right-Mouse-Click on ProjectUser in table --> calling method: openContextMenu
+	 */
 	public void tablesChanges() {
 		userTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			selectedUserList = userTable.getSelectionModel().getSelectedItems();
@@ -119,9 +114,14 @@ public class UserManController {
 		}); 
 	}
 
-	//opens User Detail Pop Up Window - User Details  
+	/*opens User Detail Pop-Up-Window  
+	 * if given attribute "addUser" TRUE --> Create User 
+	 * if given attribute "addUser" FALSE --> Detail User 
+	 */
 	private void laodUserDetailPopUp(boolean addUser) {
+		if(!isPopUpOpen) {
 			try {
+				isPopUpOpen = true;
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(getClass().getResource("../view/userDetailPopUp.fxml"));  	
 				Parent root = loader.load();
@@ -147,12 +147,15 @@ public class UserManController {
 
 				popUpWindow.setTitle(title);
 				popUpWindow.setScene(scene);
-				popUpWindow.showAndWait();	    	
+				popUpWindow.showAndWait();	  
+				isPopUpOpen = false;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
 	} 
 
+	// opens context menu with the items: "DELETE USER" and "SHOW INVOLVED PROJECTS"
 	private void openContextMenu() {
 		Label label = new Label();
 		ContextMenu contextMenu = new ContextMenu();
@@ -192,6 +195,7 @@ public class UserManController {
 		}); 
 	}
 
+	//opens Alert-Pop-Up-Window with confirmation "Delete User"
 	private void confirmDeletingUserWindow() {
 		System.out.println("Print User Error-Message");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -207,25 +211,28 @@ public class UserManController {
 		}
 	}   
 
+	/*opens Involved-Project-Pop-Up-Window 
+	 * the title of the Window involves the first and last name from the selected ProjectUser
+	 */
 	private void openInvolvedProjectsPopUpWindow() {
-			try {
-				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("../view/involvedProjectsPopUp.fxml"));  	
-				Parent root = loader.load();
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(getClass().getResource("../view/involvedProjectsPopUp.fxml"));  	
+			Parent root = loader.load();
 
-				InvolvedProjectsController involvedProjectsController =  loader.getController();
-				involvedProjectsController.setUserManController(this);
-				involvedProjectsController.setInvolvedProjectsFromUser(selectedUser.getInvolvedProjects());
+			InvolvedProjectsController involvedProjectsController =  loader.getController();
+			involvedProjectsController.setUserManController(this);
+			involvedProjectsController.setInvolvedProjectsFromUser(selectedUser.getInvolvedProjects());
 
-				Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));	
-				popUpWindow = new Stage();
-				String title = "Involved Project from User " + selectedUser.getFirstName() + 
-						" " + selectedUser.getLastName();
-				popUpWindow.setTitle(title);
-				popUpWindow.setScene(scene);
-				popUpWindow.showAndWait();	    	
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));	
+			popUpWindow = new Stage();
+			String title = "Involved Project from User " + selectedUser.getFirstName() + 
+					" " + selectedUser.getLastName();
+			popUpWindow.setTitle(title);
+			popUpWindow.setScene(scene);
+			popUpWindow.showAndWait();	    	
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+	}
 }

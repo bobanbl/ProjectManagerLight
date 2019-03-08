@@ -3,7 +3,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.*;
 
 
@@ -14,20 +13,21 @@ import javax.persistence.*;
 @Entity
 public class Project implements Serializable{
 
+	//ProjectStatus as Enum with String for ComboBox in ProjetDetailView
 	public enum ProjectStatus {
 		IN_DEVELOPMENT("In development"), CLOSED("Closed"), NOT_STARTED("Not started");
-		
+
 		String name;
-		
+
 		private ProjectStatus(String name) {
 			this.name = name;
 		}
-		
+
 		public String getName() {			
 			return this.name;
 		}
 	}
-	
+
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -46,16 +46,16 @@ public class Project implements Serializable{
 	//
 	@ManyToMany(fetch=FetchType.EAGER)
 	private List<ProjectUser> projectMembers = new ArrayList<>();
-//	@JoinColumn(name = "FKUSERID", JoinColumns = { @JoinColumns"USERID")
-	
-	
+	//	@JoinColumn(name = "FKUSERID", JoinColumns = { @JoinColumns"USERID")
+
+
 	@OneToMany(mappedBy = "project", orphanRemoval=true)
 	private List<Story> stories = new ArrayList<>();
-	
+
 	public Project() {
 		super();
 	}
-	
+
 	public int getProjectID() {
 		return projectID;
 	}
@@ -120,25 +120,16 @@ public class Project implements Serializable{
 		this.projectManager = projectManager;
 	}
 
+	//returns the  List "projectMember" if not null otherwise null
 	public List<ProjectUser> getProjectMember() {
 		if(projectMembers != null) {
 			return projectMembers;
 		}
-		return null;
-		
+		return null;	
 	}
 
 	public void setProjectMembers(List<ProjectUser> projectMember) {
 		this.projectMembers = projectMember;
-	}
-	
-	public void removeUserFromProject(ProjectUser user) {
-		for(ProjectUser u : projectMembers) {
-			if(u.getUserID() == user.getUserID()) {
-				System.out.println("[model.Project] removeUserFromProject: " + u);
-				projectMembers.remove(u);
-			}
-		}
 	}
 
 	public List<Story> getStory() {
@@ -148,18 +139,25 @@ public class Project implements Serializable{
 	public void setStory(List<Story> story) {
 		this.stories = story;
 	}
-	
+
+	//adds the given Story to the list "stories"
 	public void addStorytoProject(Story story) {
 		this.stories.add(story);
-		System.out.println("[model.Project] Story List: " + this.getStory());
 	}
-	
+
+	//removes the given Story from the list "stories"
 	public void removeStoryFromProject(Story removeStory) {
-		System.out.println("[model.Project] Remove Story from Project: " + removeStory);
 		stories.remove(removeStory);
 	}
 
-	@Override public boolean equals(Object o) {
+	/*compares the given Object to this Object 
+	 * returns TRUE if References equal
+	 * if References not equal and given Object instanceof Project --> assigned by projectID
+	 * (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override 
+	public boolean equals(Object o) {
 		if (this == o) return true;
 		if ((o instanceof Project) == true) {
 			Project u = (Project)o;
@@ -168,6 +166,4 @@ public class Project implements Serializable{
 			return false;
 		}
 	}
-
-
 }

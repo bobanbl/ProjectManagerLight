@@ -1,13 +1,10 @@
 package model;
 
 import java.util.List;
-import java.util.Optional;
-
 import database.DatabaseController;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.ListChangeListener.Change;
 /**loads the data from the Entity ProjectUser into a ObservableList from the Database
  * over the DatabaseController
  * Methods: CRUD

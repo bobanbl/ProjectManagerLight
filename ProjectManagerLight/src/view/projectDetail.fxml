@@ -13,7 +13,7 @@
    <children>
       <ImageView fx:id="closeDetailViewButton" fitHeight="87.0" fitWidth="42.0" layoutX="-1.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../bin/assets/closeDetails.png" />
+            <Image url="@../assets/closeDetails.png" />
          </image>
       </ImageView>
       <Button fx:id="cancelButton" cancelButton="true" layoutX="239.0" layoutY="6.0" mnemonicParsing="false" onAction="#cancelButtonPressed" prefHeight="31.0" prefWidth="115.0" style="-fx-background-color: red;" text="Cancel" visible="false">

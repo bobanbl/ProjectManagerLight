@@ -3,9 +3,6 @@ package controller;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
-import org.apache.derby.impl.store.replication.net.SlaveAddress;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,7 +15,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.util.StringConverter;
-import model.DataModelUser;
 import model.DataModelStory;
 import model.Project;
 import model.ProjectUser;
@@ -34,13 +30,16 @@ public class TaskDetailController {
 	private Story selectedStory;
 	private Task selectedTask;
 
+	//OLD values
 	private String nameOLD;
 	private String descriptionOLD;
 	private String durationOLD;
+	private ProjectUser responsibleUserOLD;
+
+	//NEW values
 	private String nameNEW;
 	private String descriptionNEW;
 	private String durationNEW;
-	private ProjectUser responsibleUserOLD;
 	private ProjectUser responsibleUserNEW;
 
 	ObservableList<ProjectUser> userList = null;
@@ -59,6 +58,11 @@ public class TaskDetailController {
 	@FXML
 	private ComboBox<ProjectUser> responsibilityComboBox;
 
+	/* pressing Assume-Button sets the values from the text fields in the NEW-Attributes
+	 *  Checks if attributes are not empty and valid and
+	 *  if newTask --> method createTask then updateAndClose
+	 *  if existing task --> method checkIfChangesExists --> if changes available --> confirmClosingTaskDetailWindowChanges
+	 */
 	@FXML
 	void assumeButtonPressed(ActionEvent event) {
 		System.out.println("[controller.StoryDetailController] assumeButtonPressed");
@@ -82,13 +86,13 @@ public class TaskDetailController {
 			updateAndClose();
 		}
 	}
-	
+
 	//updates the tasks in the taskController and closes the Pop-Up Window
 	private void updateAndClose() {
 		taskController.updateTasks();
 		taskController.closePopUpWindow();
 	}
-	
+
 	//creates a new Object Task with the new values
 	private void createTask() {
 		Task newTask = new Task();
@@ -105,30 +109,30 @@ public class TaskDetailController {
 	void initialize() {
 		descriptionTextField.setWrapText(true);
 	}
-	
+
 	//sets the storyModel attribute from another object 
 	public void setDataModelStory(DataModelStory storyModel) {
 		this.storyModel = storyModel;
 	}
-	
+
 	//sets the taskController attribute from another object 
 	public void setTaskController(TaskController taskController) {
 		this.taskController = taskController;
 	}
-	
+
 	//sets the selectedProject attribute from another object 
 	public void setSelectedProject(Project selectedProject) {
 		this.selectedProject = selectedProject;
 		setUserListFromModel();
 	}
-	
+
 	//sets the selectedStory attribute from another object 
 	public void setSelectedStory(Story selectedStory) {
 		if(selectedStory != null) {
 			this.selectedStory = selectedStory;
 		}
 	}
-	
+
 	/*sets the selectedTask attribute and if not null 
 	 * --> the values from the selectedTask are set into the selectedStory and the ..OLD attributes
 	 * and the fillSelectedValuesInFields method is called
@@ -151,7 +155,7 @@ public class TaskDetailController {
 		descriptionTextField.setText(descriptionOLD);
 		durationTextField.setText(durationOLD);
 	}
-	
+
 	/* checks if the ..OLD and ..NEW values are equal
 	 * if NOT, so if changes exist --> returns TRUE
 	 */
@@ -170,7 +174,7 @@ public class TaskDetailController {
 			return true;
 		}
 	}
-	
+
 	/*if the value in the durationTextField is not a number, the durationTextField turns red
 	 * and the method returns FALSE
 	 */
@@ -182,18 +186,18 @@ public class TaskDetailController {
 		}
 		return true;
 	}
-	
+
 	//returns TRUE if the given String str is a number
 	public boolean isNumeric(String str) {  
 		try {  
-			int i = Integer.parseInt(str);  
+			Integer.parseInt(str);			
 		} catch(NumberFormatException e) {  
 			return false;  
 		}  
 		return true;  
 	}
-	
-	
+
+	//Confirmation-Pop-Up-Window for confirming "SAVE CHANGES"
 	private void confirmClosingTaskDetailWindowChanges() {
 		System.out.println("[controller.TaskDetailController] Open Confirm Update Story Window");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

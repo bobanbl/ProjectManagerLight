@@ -8,23 +8,19 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Alert.AlertType;
+//import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import model.DataModelUser;
 import model.DataModelProject;
 import model.Project;
@@ -41,6 +37,7 @@ public class ProjectDetailController {
 	private boolean isNewProject;
 	private Project selectedProject;
 
+	//OLD values
 	private String projectNameOLD;
 	private String descriptionOLD;
 	private ProjectStatus projectStatusOLD;
@@ -50,6 +47,7 @@ public class ProjectDetailController {
 	private ProjectUser projectManagerOLD = null;
 	private ObservableList<ProjectUser> projectMembersListOLD = null;
 
+	//NEW values
 	private Date projectStartDateNEW = null;
 	private Date projectFinishDateNEW  = null;
 	private String projectNameNEW;
@@ -79,11 +77,12 @@ public class ProjectDetailController {
 		confirmClosingCreateProjectWindow();
 	}
 
+	/*pressing Create-Button --> set ...NEW attributes from fields,
+	 * check if Project-Detail-Team-View was already open, when not these ..NEW attributes are set to "EMPTY"
+	 * and calling methods: updateProject and closeDetailWindow in projectController
+	 */
 	@FXML
 	void createProjectButtonPressed(ActionEvent event) {
-		Date projectStartDate = null;
-		Date projectFinishDate = null;
-
 		//values from Project Detail Main Windows
 		System.out.println("[controller.ProjectDetailController] createProjectButtonPressed");
 		projectNameNEW = projectDetailMainController.getProjectNameTextField();
@@ -122,6 +121,10 @@ public class ProjectDetailController {
 		});
 	}
 
+	/*check before closing Detail-View if changes exists
+	 *  if YES --> method confirmClosingProjectDetailWindowChanges is called
+	 *  if NO --> method closeDetailWindow in projectController is called
+	 */
 	public void checkBeforeClosing() {
 		if(checkIfValuesValid()) {
 			if(checkIfChangesExists()) {
@@ -175,6 +178,7 @@ public class ProjectDetailController {
 		}
 	}  
 
+	//sets the values from the Detail-Main-View in the object selectedProject
 	private void saveValuesTemporaryMainWindow() {
 		projectNameNEW = projectDetailMainController.getProjectNameTextField();
 		descriptionNEW= projectDetailMainController.getProjectDescriptionTextField();
@@ -188,6 +192,7 @@ public class ProjectDetailController {
 		selectedProject.setPlanedFinishDate(projectFinishDateNEW);
 	}
 
+	//sets the values from the Detail-Team-View in the object selectedProject
 	private void saveValuesTemporaryTeamWindow() {
 		projectSponsorNEW = projectDetailTeamController.getProjectSponsor();
 		projectManagerNEW = projectDetailTeamController.getProjectManager();
@@ -221,29 +226,23 @@ public class ProjectDetailController {
 			newProject.setPlanedFinishDate(date);
 			newProject.setProjectSponsor("");
 			newProject.setProjectManager(null);
-			//			newProject.setProjectMembers();
 
 			selectedProject = projectModel.createProject(newProject);
 			projectDetailMainController.setSelectedProject(selectedProject);
 		} 
 	}
 
+	//sets the attribute projectModel
 	public void setDataModelProject(DataModelProject projectModel) {
 		this.projectModel = projectModel;
 	}
 
+	//sets the attribute userModel
 	public void setDataModelUser(DataModelUser userModel) {
 		this.userModel = userModel;
 	}
-
-	private void errorWindow(String message) {
-		System.out.println("[controller.PojectDetailController] Print User Error-Message");
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("Cancel Creating Project?");
-		alert.setHeaderText(message);
-		alert.showAndWait();
-	}
-
+	
+	//opens Confirm-Window to confirm or cancel changes
 	private void confirmClosingCreateProjectWindow() {
 		System.out.println("[controller.PojectDetailController] Open Confirm Canceling Creating User Window");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -260,6 +259,7 @@ public class ProjectDetailController {
 		}
 	}
 
+	//sets the attribute selectedProject and the ...OLD values from the selected project
 	public void setSelectedProject(Project selectedProject) {
 		this.selectedProject = selectedProject;
 		projectDetailMainController.setSelectedProject(selectedProject);
@@ -279,6 +279,7 @@ public class ProjectDetailController {
 		projectManagerOLD = selectedProject.getProjectManager();
 	}
 
+	//returns TRUE when values from fields are valid
 	private boolean checkIfValuesValid() {
 		//if value null, field gets red in ProjectDetailMainController
 		if(projectDetailMainController.getprojectStartDate() != null && projectDetailMainController.getprojectFinishDate() != null
@@ -292,6 +293,7 @@ public class ProjectDetailController {
 		}
 	}
 
+	//returns TRUE when changes exist
 	public boolean checkIfChangesExists() {
 		System.out.println("[controller.ProjectDetailController] checkIfChangesExists");
 
@@ -328,6 +330,7 @@ public class ProjectDetailController {
 		}
 	}
 
+	//updates the selected project with the ...NEW values and calls the update method in the projectModel
 	private void updateProject() {
 		//set new parameters in selected project
 		selectedProject.setDescription(descriptionNEW);
@@ -342,6 +345,7 @@ public class ProjectDetailController {
 		projectModel.updateProject(selectedProject);
 	}
 
+	//opens the Confirm-Window for confirming if changes should be saved 
 	private void confirmClosingProjectDetailWindowChanges() {
 		System.out.println("[controller.PojectDetailController] Open Confirm Update Project Window");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -352,8 +356,8 @@ public class ProjectDetailController {
 			System.out.println("[controller.PojectDetailController] Update Project Confirm!");
 
 			updateProject();
-			addProjectToUser();	
-			removeProjectFromUser();
+			addProjectToUsers();	
+			removeProjectFromUsers();
 
 			projectController.closeDetailWindow();	
 		}
@@ -363,7 +367,8 @@ public class ProjectDetailController {
 		}
 	}
 
-	private void addProjectToUser() {
+	//adding OrijectUser to ProjectMemberList
+	private void addProjectToUsers() {
 		for(ProjectUser u : projectMembersListNEW) {
 			System.out.println("[controller.PojectDetailController] Update User: " + u.getFirstName() + ", adding Project: " + selectedProject);
 			if(!(u.getInvolvedProjects().contains(selectedProject))) {
@@ -373,7 +378,8 @@ public class ProjectDetailController {
 		}
 	}
 
-	private void removeProjectFromUser() {
+	//remove project from ProjectUser
+	private void removeProjectFromUsers() {
 		if(projectMembersListOLD != null) {
 			for(ProjectUser userOLD: projectMembersListOLD) {
 				if(!projectMembersListNEW.contains(userOLD)) {

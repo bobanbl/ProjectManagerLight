@@ -1,19 +1,11 @@
 package controller;
 
-import java.io.IOException;
-import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.ResourceBundle;
-
-import com.sun.prism.paint.Color;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -23,14 +15,11 @@ import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
 import model.Project;
 import model.Project.ProjectStatus;
-import model.Task.TaskStatus;
 
 //Controller for projectDetailMain.fxml
 public class ProjectDetailMainController {
 
 	private ProjectDetailController projectDetailController;
-	private Project selectedProject;
-	private boolean newProject;
 	@FXML
 	private TextArea projectDescriptionTextField;
 	@FXML
@@ -45,6 +34,7 @@ public class ProjectDetailMainController {
 	private TextField projectNameTextField;
 	@FXML
 	private Label projectID;
+	
 	//click in projecktTeamButton calls method loadDetailTeamWindow in ProjectDetailController
 	@FXML
 	void projectTeamButton(ActionEvent event) {
@@ -54,6 +44,7 @@ public class ProjectDetailMainController {
 		}
 	}
 
+	//filling projectStatusComboBox with ProjectStatus with String-Values from ProjectStatus-enum
 	@FXML
 	void initialize() {
 		projectDescriptionTextField.setWrapText(true);
@@ -80,7 +71,6 @@ public class ProjectDetailMainController {
 
 	//sets the ProjectDetailController projectDetailController  
 	public void setIfNewProject(boolean newProject) {
-		this.newProject = newProject;
 		if(newProject) {
 			projectStatusComboBox.setValue(ProjectStatus.NOT_STARTED);
 			projectStartDate.setValue(LocalDate.now(ZoneId.systemDefault()));
@@ -88,10 +78,14 @@ public class ProjectDetailMainController {
 		}
 	}
 
+	//sets the attribute projectDetailController
 	public void setProjectDetailController(ProjectDetailController controller) {
 		this.projectDetailController = controller;
 	}
 
+	/*returns the String from the projectNameTextField
+	 * if this field is empty --> field-background turns red
+	 */
 	public String getProjectNameTextField() {
 		if(projectNameTextField.getText().equals("")) {
 			projectNameTextField.setStyle("-fx-control-inner-background: #FF0000");
@@ -101,14 +95,17 @@ public class ProjectDetailMainController {
 		return null;
 	}
 
+	//returns String from projectDescriptionTextField
 	public String getProjectDescriptionTextField() {
 		return projectDescriptionTextField.getText().trim();
 	}
 
+	//return selected ProjectStatus from projectStatusComboBox
 	public ProjectStatus getProjectStatus() {
 		return projectStatusComboBox.getValue();
 	}
 
+	//returns startDate
 	public Date getprojectStartDate() {
 		//converting from datatype "LocalDate" to "Date"
 		//projectStartDate must have a value, if not --> field background turns red
@@ -124,6 +121,7 @@ public class ProjectDetailMainController {
 		
 	}
 
+	//returns finishDate
 	public Date getprojectFinishDate() {
 		//converting from datatype "LocalDate" to "Date"
 		//projectFinishDate must have a value, if not --> field background turns red
@@ -138,8 +136,8 @@ public class ProjectDetailMainController {
 		return null;
 	}
 	
+	//sets the values from the selected project into the fields 
 	public void setSelectedProject(Project selectedProject) {
-		this.selectedProject = selectedProject; 	
 		projectNameTextField.setText(selectedProject.getProjectName());
 		projectDescriptionTextField.setText(selectedProject.getDescription());
 		projectStatusComboBox.setValue(selectedProject.getProjectStatus());

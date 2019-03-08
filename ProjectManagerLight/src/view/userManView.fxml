@@ -10,7 +10,7 @@
    <children>
       <ImageView fx:id="addUserButton" fitHeight="89.0" fitWidth="82.0" layoutX="801.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../bin/assets/AddUser.png" />
+            <Image url="@../assets/AddUser.png" />
          </image>
       </ImageView>
       <TableView fx:id="userTable" layoutX="4.0" layoutY="117.0" prefHeight="429.0" prefWidth="925.0" styleClass="table-view4">

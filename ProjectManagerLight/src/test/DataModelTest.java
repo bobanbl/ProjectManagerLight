@@ -2,21 +2,21 @@ package test;
 
 import java.util.List;
 
-import database.DatabaseController;
+//import database.DatabaseController;
 import model.DataModelUser;
 import model.DataModelProject;
-import model.DataModelStory;
+//import model.DataModelStory;
 import model.Project;
 import model.ProjectUser;
-import model.Task;
+//import model.Task;
 
 public class DataModelTest {
 
 	public static void main(String[] args) {
 		DataModelUser model = new DataModelUser();
-		DataModelStory modelStory = new DataModelStory();
+//		DataModelStory modelStory = new DataModelStory();
 		DataModelProject modelProject = new DataModelProject();
-		DatabaseController database = new DatabaseController();
+//		DatabaseController database = new DatabaseController();
 		
 		List<ProjectUser> list = model.getUserList();
 		for(ProjectUser u : list) {

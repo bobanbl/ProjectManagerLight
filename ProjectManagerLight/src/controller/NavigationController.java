@@ -3,23 +3,16 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import model.DataModelUser;
 import model.DataModelProject;
 import model.DataModelStory;
@@ -95,6 +88,10 @@ public class NavigationController {
 		});   	
 	}
 
+	/*sets attributes for models and calling the 
+	 * calling the methods setDataModelProject and setDataModelUser for the projectController, 
+	 * bc of implemented projectController
+	 */
 	public void setModels(DataModelUser userModel, DataModelStory storyModel, DataModelProject projectModel) {
 		this.userModel = userModel;
 		this.storyModel = storyModel;
@@ -103,6 +100,9 @@ public class NavigationController {
 		projectController.setDataModelUser(userModel);
 	}
 
+	/*sets the selected project in the attribute and in the text-field: mainSelectedProject
+	 * if selected project is null --> "---NO PROJECT SELECTED--" in text field
+	 */
 	public void setSelectedProject(Project selectedProject) {
 		this.selectedProject = selectedProject;
 		if(selectedProject == null) {
@@ -112,10 +112,12 @@ public class NavigationController {
 		}
 	}
 
+	//returns the selectedProject
 	public Project getSelectedProject() {
 		return selectedProject;
 	}
 
+	//return the attribute projectModel
 	public DataModelProject getDataModelProject() {
 		return this.projectModel;
 	}
@@ -179,10 +181,12 @@ public class NavigationController {
 		}
 	}   
 
+	//sets the label "labelLoggedUser" with "Logged User: " and the given String
 	public void setLabelLoggedUser(String loggedUser) {
 		labelLoggedUser.setText("Logged User: " + loggedUser);
 	}
 
+	//Alert-Pop-Up-Window with the given String as message
 	private void errorWindow(String message) {
 		System.out.println("Print User Error-Message");
 		Alert alert = new Alert(AlertType.ERROR);

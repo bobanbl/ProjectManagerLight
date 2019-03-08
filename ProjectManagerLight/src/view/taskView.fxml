@@ -22,7 +22,7 @@
             </Label>
             <ImageView fx:id="addStoryButton" fitHeight="30.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../bin/assets/AddProject.png" />
+                  <Image url="@../assets/AddProject.png" />
                </image>
                <GridPane.margin>
                   <Insets left="51.0" top="60.0" />

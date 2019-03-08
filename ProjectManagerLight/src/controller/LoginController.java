@@ -1,10 +1,7 @@
 package controller;
 
 import java.net.URL;
-import application.Main;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,14 +14,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import model.DataModelUser;
 import model.DataModelProject;
 import model.DataModelStory;
-import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 //LoginController for login.fxml
 public class LoginController {
@@ -47,13 +40,14 @@ public class LoginController {
 	@FXML
 	private Label loginLabel;
 
-	// When the "Assume"-Button is pressed a method from the DatabaseController will be called
+	//pressing "Assume"-Button --> method from the DatabaseController will be called
 	@FXML
 	void buttonPressed(ActionEvent event) {
 		System.out.println("Button was pressed!");
 		loginUser();
 	}
 
+	
 	@FXML
 	void initialize() {
 		//if in text field loginUsername Enter is pressed -> cursor jumps in password field    	
@@ -63,7 +57,7 @@ public class LoginController {
 				loginPassword.requestFocus();
 			}
 		});
-
+		//if ENTER is pressed while in loginPassword-Field 
 		loginPassword.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
 			if(event.getCode() == KeyCode.ENTER) {
 				loginUser();
@@ -71,6 +65,7 @@ public class LoginController {
 		});    		
 	}
 
+	//attributes for models are set
 	public void setModels(DataModelUser userModel, DataModelStory storyModel, DataModelProject projectModel) {
 		this.userModel = userModel;
 		this.storyModel = storyModel;
@@ -92,6 +87,7 @@ public class LoginController {
 		break;
 		} 
 	}
+	
 	//closing Login Window and opening the Main Window 
 	private void openMainWindow(){
 		try {

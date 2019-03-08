@@ -5,10 +5,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
-import org.w3c.dom.events.EventException;
-
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -23,9 +19,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -39,14 +33,8 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import model.DataModelUser;
 import model.DataModelStory;
 import model.Project;
 import model.Story;
@@ -62,6 +50,7 @@ public class TaskController {
 	private NavigationController navigationController;
 	private List<Story> storyList;
 
+	private boolean isPopUpOpen = false;
 	//for Drag&Drop
 	Story srcStory;
 	TaskStatus srcTask;
@@ -84,8 +73,11 @@ public class TaskController {
 	@FXML
 	private ImageView addStoryButton;
 	@FXML
+	
+	/*initializing: setting gridPane into the ScrollPane
+	 * MouseEvent on addStoryButton
+	 */
 	void initialize() {
-
 		scrollPane.setContent(gridPane);
 
 		addStoryButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -95,6 +87,9 @@ public class TaskController {
 		});	
 	}
 
+	/*puts the Stories from the selected Project into the storyList, prints the Stories on the Console 
+	 * and calls the method: createVBox
+	 */
 	public void updateTasks() {
 		System.out.println("[controller.TaskController] Selected Project: " + selectedProject.getProjectName());
 		this.storyList = selectedProject.getStory();
@@ -104,85 +99,103 @@ public class TaskController {
 		createVBox();	
 	}
 
+	/*opens the Story-Detail-Pop-Up-Window
+	 * when the attribute selectedStory is null --> Create new Story otherwise details from existing Story
+	 */
 	private void loadStoryDetailPopUp() {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("../view/storyDetailPopUp.fxml"));  	
-			Parent root = loader.load();	
+		if(!isPopUpOpen) {
+			try {
 
-			StoryDetailController storyDetailController =  loader.getController();
-			storyDetailController.setDataModelStory(storyModel);
-			storyDetailController.setTaskController(this);
-			storyDetailController.setSelectedStory(selectedStory);
-			storyDetailController.setSelectedProject(selectedProject);
+				isPopUpOpen = true;
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(getClass().getResource("../view/storyDetailPopUp.fxml"));  	
+				Parent root = loader.load();	
 
-			Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));    	
-			popUpWindow = new Stage();
+				StoryDetailController storyDetailController =  loader.getController();
+				storyDetailController.setDataModelStory(storyModel);
+				storyDetailController.setTaskController(this);
+				storyDetailController.setSelectedStory(selectedStory);
+				storyDetailController.setSelectedProject(selectedProject);
 
-			String title = null;
+				Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));    	
+				popUpWindow = new Stage();
 
-			if(selectedStory != null) {
-				title = "Story Details";
-			} else {
-				title = "Create Story";
+				String title = null;
+
+				if(selectedStory != null) {
+					title = "Story Details";
+				} else {
+					title = "Create Story";
+				}
+
+				popUpWindow.setTitle(title);
+				popUpWindow.setScene(scene);
+				popUpWindow.showAndWait();
+				isPopUpOpen = false;
+
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-
-			popUpWindow.setTitle(title);
-			popUpWindow.setScene(scene);
-			popUpWindow.showAndWait();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	
+		}
 	}
-	
+
+	/*opens the Task-Detail-Pop-Up-Window
+	 * when the attribute selectedTask is null --> Create new Task otherwise details from existing Task
+	 */
 	private void loadTaskDetailPopUp() {
-		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("../view/taskDetailPopUp.fxml"));  	
-			Parent root = loader.load();	
+		if(!isPopUpOpen) {
+			try {
+				isPopUpOpen = true;
 
-			TaskDetailController taskDetailController =  loader.getController();
-			taskDetailController.setDataModelStory(storyModel);
-			taskDetailController.setTaskController(this);
-			taskDetailController.setSelectedTask(selectedTask);
-			taskDetailController.setSelectedStory(selectedStory);
-			taskDetailController.setSelectedProject(selectedProject);
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(getClass().getResource("../view/taskDetailPopUp.fxml"));  	
+				Parent root = loader.load();	
 
-			Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));    	
-			popUpWindow = new Stage();
+				TaskDetailController taskDetailController =  loader.getController();
+				taskDetailController.setDataModelStory(storyModel);
+				taskDetailController.setTaskController(this);
+				taskDetailController.setSelectedTask(selectedTask);
+				taskDetailController.setSelectedStory(selectedStory);
+				taskDetailController.setSelectedProject(selectedProject);
 
-			String title = null;
+				Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));    	
+				popUpWindow = new Stage();
 
-			if(selectedStory != null) {
-				title = "Story Details";
-			} else {
-				title = "Create Story";
-			}
+				String title = null;
 
-			popUpWindow.setTitle(title);
-			popUpWindow.setScene(scene);
-			popUpWindow.showAndWait();
+				if(selectedStory != null) {
+					title = "Story Details";
+				} else {
+					title = "Create Story";
+				}
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	
+				popUpWindow.setTitle(title);
+				popUpWindow.setScene(scene);
+				popUpWindow.showAndWait();
+				isPopUpOpen = false;
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
+		}
 	}
 
-	public void setDataModelStory(DataModelStory storyModel) {
-		this.storyModel = storyModel;
-	}
-
+	//closes Pop-Up-Window
 	public void closePopUpWindow() {
 		popUpWindow.close();
-
 		navigationController.laodTaskView();
 		popUpWindow = null;
 	}
 
+	//sets attribute storyModel
+	public void setDataModelStory(DataModelStory storyModel) {
+		this.storyModel = storyModel;
+	}
 
-
-	//creates the VBoxes for the GridPane from storyList and taskList (DataModelStory.class)
+	/*creates the VBoxes for the GridPane from storyList and taskList (DataModelStory.class)
+	 *  puts the Labels Duration and Responsibility in a Hbox and together with the Label Name in a VBox
+	 *  the VBox gets the Story/ Task Object as UserData
+	 */
 	private void createVBox() {
 		for(Story s : storyList) {
 			Label storyNameLabel = new Label();
@@ -206,8 +219,6 @@ public class TaskController {
 
 			HBox hbox = new HBox(storyDurationLabel, storyResponsibilityLabel);
 			hbox.setAlignment(Pos.CENTER);
-			hbox.setSpacing(20);
-			hbox.setPadding(new Insets(10, 0, 0, 4));
 
 			VBox vbox = new VBox(storyNameLabel, hbox);
 			vbox.getStyleClass().add("vbox");
@@ -279,7 +290,7 @@ public class TaskController {
 			vboxONHOLD.setOnDragDropped(this::onDragDropped);
 			vboxREJECTED.setOnDragDropped(this::onDragDropped);
 			vboxCLOSED.setOnDragDropped(this::onDragDropped);
-			
+
 			vboxNEW.setOnDragExited(this:: onDragExited);
 			vboxINPROGRESS.setOnDragExited(this:: onDragExited);
 			vboxONHOLD.setOnDragExited(this:: onDragExited);
@@ -298,7 +309,7 @@ public class TaskController {
 
 				Label taskDurationLabel = new Label();
 				taskDurationLabel.setText(String.valueOf(t.getDuration()));
-				taskDurationLabel.getStyleClass().add("storyAnyLabel");	
+				taskDurationLabel.getStyleClass().add("taskAnyLabel");	
 				taskDurationLabel.setId("TaskBoxChildren");
 
 				Label taskResponsibilityLabel = new Label();
@@ -310,13 +321,11 @@ public class TaskController {
 					taskResponsibleUserShortcut = "";
 				}
 				taskResponsibilityLabel.setText(taskResponsibleUserShortcut);
-				taskResponsibilityLabel.getStyleClass().add("storyAnyLabel");	
+				taskResponsibilityLabel.getStyleClass().add("taskAnyLabel");	
 
 				HBox hbox1 = new HBox(taskDurationLabel, taskResponsibilityLabel);
 				hbox1.setId("TaskBoxChildren");
 				hbox1.setAlignment(Pos.CENTER);
-				hbox1.setSpacing(40);
-				hbox1.setPadding(new Insets(10, 0, 0, 4));
 
 				VBox vbox1 = new VBox(taskNameLabel, hbox1);
 				vbox1.setAlignment(Pos.TOP_CENTER);
@@ -335,8 +344,6 @@ public class TaskController {
 						openContextMenu();
 					}	
 				});
-				
-				
 
 				//Drag & Drop function from the tasks
 				vbox1.setOnDragDetected((MouseEvent event) -> {
@@ -348,7 +355,7 @@ public class TaskController {
 					db.setContent(content);   		
 					event.consume();
 				});
-				
+
 
 				gridPane.setOnDragDone((DragEvent event) -> {
 					System.out.println("[controller.TaskController] 5--setOnDragDone");
@@ -371,7 +378,7 @@ public class TaskController {
 				}
 			}    
 
-			//adds the Vboxes in the GridPane for the tasks, that's nessecary 
+			//adds the Vboxes in the GridPane for the tasks, that's necessary 
 			gridPane.add(vboxNEW, 2, s.getPositionGridPane());
 			gridPane.add(vboxINPROGRESS, 3, s.getPositionGridPane());
 			gridPane.add(vboxONHOLD, 4, s.getPositionGridPane());
@@ -381,7 +388,8 @@ public class TaskController {
 
 		}
 	}
-	
+
+	//onDragEntered as method to use lambda expression for every VBox of every status  
 	private void onDragEntered(DragEvent event) {
 		event.acceptTransferModes(TransferMode.ANY);
 		System.out.println("[controller.TaskController] 2--setOnDragEntered");
@@ -392,16 +400,17 @@ public class TaskController {
 		event.consume();
 	}
 
+	//onDragExited as method to use lambda expression for every VBox of every status
 	private void onDragExited(DragEvent event) {
 		event.acceptTransferModes(TransferMode.ANY);
 		System.out.println("[controller.TaskController] 3--setOnDragExited");
 		target.setStyle("");
 		event.consume();
 	}
-	
+
+	//onDragDropped as method to use lambda expression for every VBox of every status 
 	private void onDragDropped(DragEvent event) {
 		System.out.println("[controller.TaskController] 4--setOnDragDropped"); 
-		Dragboard db = event.getDragboard();
 		boolean success = false;
 		Node clickedNode = event.getPickResult().getIntersectedNode();
 		success = executeDragDrop(getClickedNode(clickedNode));
@@ -424,6 +433,7 @@ public class TaskController {
 		return numRows;
 	}
 
+	//sets the attribute selectedProject and calls the method updateTasks
 	public void setSelectedProject(Project selectedProject) {
 		this.selectedProject = selectedProject;
 		updateTasks();
@@ -433,7 +443,7 @@ public class TaskController {
 	 * if YES: the parent of the TaskBox is set on the given clickedNode
 	 */
 	private Node getClickedNode(Node clickedNode) {		
-	
+
 		if(clickedNode.getId() != null) {
 			if(clickedNode.getId().equals("TaskBox")) {
 				clickedNode = clickedNode.getParent();
@@ -479,22 +489,7 @@ public class TaskController {
 		return false;
 	}
 
-	//back from target to src
-	private void removeDragDropAction() {
-		Story targetStory = selectedTask.getStory();
-		TaskStatus targetTaskStatus  = selectedTask.getStatus();
-
-		if(srcStory != null && srcTask != null) {
-			if(srcStory != targetStory) {
-				selectedTask.setStory(srcStory);
-				targetStory.getTasks().remove(selectedTask);
-			}
-			selectedTask.setStatus(srcTask);
-		}
-		storyModel.updateTask(selectedTask);
-		navigationController.laodTaskView();		
-	}
-
+	//opens context-menu with item "DELETE STORY" or "DELETE TASK"
 	private void openContextMenu() {
 		Label label = new Label();
 		ContextMenu contextMenu = new ContextMenu();
@@ -535,10 +530,12 @@ public class TaskController {
 		}); 
 	}
 
+	//sets the attribute navigationController
 	public void setNavigationController(NavigationController navigationController) {
 		this.navigationController = navigationController;
 	}
 
+	//opens Alert-Pop-Up-Window with "DELETE STORY"-Confirmation
 	private void confirmDeletingStoryWindow() {
 		System.out.println("[controller.TaskController] Print Story Error-Message");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -555,6 +552,7 @@ public class TaskController {
 		}
 	}
 
+	//opens Alert-Pop-Up-Window with "DELETE TASK"-Confirmation
 	private void confirmDeletingTaskWindow() {
 		System.out.println("[controller.TasklController] Print Task Error-Message");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

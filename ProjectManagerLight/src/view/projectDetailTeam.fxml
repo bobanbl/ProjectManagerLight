@@ -88,7 +88,7 @@
                   </Button>
                   <ImageView fx:id="addProjectTeamMemberButton" fitHeight="101.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../bin/assets/AddUser.png" />
+                        <Image url="@../assets/AddUser.png" />
                      </image>
                      <HBox.margin>
                         <Insets left="180.0" />

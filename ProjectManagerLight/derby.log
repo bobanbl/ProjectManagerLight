@@ -1,8 +1,8 @@
 ----------------------------------------------------------------
-Sun Mar 03 21:15:32 CET 2019:
-Booten von Derby-Version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): Instanz a816c00e-0169-4532-844b-000004c2da58
-für Datenbankverzeichnis C:\Users\blazebo\Desktop\Java\Project_Repository\ProjectManagerLight\DB mit Class Loader sun.misc.Launcher$AppClassLoader@2a139a55
-Geladen aus file:/C:/Program%20Files/Java/jdk1.8.0_191/db/lib/derby.jar
+Fri Mar 08 16:14:35 CET 2019:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0169-5dde-c8e4-00000494f6c8 
+on database directory C:\Users\blazebo\Desktop\Java\Project_Repository\ProjectManagerLight\DB with class loader sun.misc.Launcher$AppClassLoader@2a139a55 
+Loaded from file:/C:/Users/blazebo/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_191-b12
 user.dir=C:\Users\blazebo\Desktop\Java\Project_Repository\ProjectManagerLight
@@ -10,4 +10,4 @@ os.name=Windows 7
 os.arch=amd64
 os.version=6.1
 derby.system.home=null
-Datenbank-Class Loader wurde gestartet - derby.database.classpath=''
+Database Class Loader started - derby.database.classpath=''

@@ -19,7 +19,7 @@
       <AnchorPane fx:id="anchorPaneDetailView" layoutX="539.0" prefHeight="560.0" prefWidth="218.0" />
       <ImageView fx:id="addProjectButton" fitHeight="150.0" fitWidth="164.0" layoutX="781.0" layoutY="406.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../bin/assets/AddProject.png" />
+            <Image url="@../assets/AddProject.png" />
          </image>
       </ImageView>
    </children>

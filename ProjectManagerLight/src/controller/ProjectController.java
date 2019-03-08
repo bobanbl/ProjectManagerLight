@@ -4,16 +4,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
-import com.sun.javafx.property.PropertyReference;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -28,7 +24,6 @@ import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import model.DataModelUser;
 import model.DataModelProject;
 import model.Project;
@@ -40,7 +35,7 @@ public class ProjectController {
 	private ProjectDetailController projectDetailController;
 	private NavigationController navigationController;
 	private DataModelUser userModel;
-	private boolean newProject;
+	private boolean isNewProject;
 	private DataModelProject projectModel;
 	private Project selectedProject;
 	ObservableList<Project> selectedProjectList;
@@ -68,7 +63,7 @@ public class ProjectController {
 		addProjectButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			System.out.println("[controller.ProjectController] Project-Add-Button pressed");
 			addProjectButton.setVisible(false);
-			this.newProject = true;
+			this.isNewProject = true;
 			laodDetailMainView();
 		});  	
 		tablesChanges();
@@ -100,26 +95,32 @@ public class ProjectController {
 		initializeTable();
 	} 
 
+	//returns the boolean "isNewProject"
 	public boolean getIfNewProject() {
-		return this.newProject;
+		return this.isNewProject;
 	}
 
+	//sets the attribute projectModel and calls the method initializeTable
 	public void setDataModelProject(DataModelProject projectModel) {
 		this.projectModel = projectModel;
 		initializeTable();
 	}
 
+	//sets the attribute navigationController
 	public void setNavigationController(NavigationController navigationController) {
 		this.navigationController = navigationController;
 	}
 
+	//sets the attribute userModel
 	public void setDataModelUser(DataModelUser userModel) {
 		this.userModel = userModel;
 	}
 
+	/*if the ProjectList from the projectModel is not empty --> the items from the project table are set from this list
+	 * and the selected project from the navigationController is selected in the table
+	 */
 	public void initializeTable() {
 		System.out.println("[controller.ProjectController] Initializing table view"); 
-		System.out.println("[controller.ProjectController]: " + projectModel.getProjectList());
 		if(!projectModel.getProjectList().isEmpty()) {
 			projectTable.setItems(projectModel.getProjectList());
 			colProjectID.setCellValueFactory(new PropertyValueFactory<Project, Integer>("projectID"));
@@ -132,14 +133,15 @@ public class ProjectController {
 				navigationController.setSelectedProject(projectTable.getItems().get(0));
 			}
 		}
-
 		projectTable.getSelectionModel().select(navigationController.getSelectedProject());
 	}
 
-
+	/*Mouse-Click on item in projectTable --> Project gets selected
+	 * Double-Mouse-Click on item in projectTable --> calling method laodProjectDetailWindow
+	 * Right-Mouse-Click on item in projectTable --> calling methods closeDetailWindow and openContextMenu
+	 */
 	public void tablesChanges() { 	
 		projectTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-
 			selectedProjectList = projectTable.getSelectionModel().getSelectedItems();
 			selectedProject = selectedProjectList.get(0);
 			checkForChangesInProjectDetail();
@@ -147,10 +149,7 @@ public class ProjectController {
 			navigationController.setSelectedProject(selectedProject);
 			if (event.getClickCount() == 2) {
 				System.out.println("[controller.ProjectController] Double Mouse Click on Project: " + selectedProject.getProjectName());
-
-
-
-				this.newProject = false;
+				this.isNewProject = false;
 				laodProjectDetailWindow();
 			} else if (event.getButton() == MouseButton.SECONDARY && selectedProject != null) {
 				System.out.println("[controller.ProjectController] Right Mouse Button clicked");
@@ -164,6 +163,7 @@ public class ProjectController {
 		});            
 	}
 
+	//opens Project-Detail-Window
 	private void laodProjectDetailWindow() {
 		try {
 			addProjectButton.setVisible(false);
@@ -182,6 +182,7 @@ public class ProjectController {
 		}	
 	}
 
+	//opens context menu with item "DELETE PROJECT"
 	private void openContextMenu() {
 		Label label = new Label();
 		ContextMenu contextMenu = new ContextMenu();
@@ -210,6 +211,7 @@ public class ProjectController {
 		}); 
 	}
 
+	//opens Confirmation-Window for confirming "DELETE PROJECT"
 	private void confirmDeletingProjectWindow() {
 		System.out.println("[controller.ProjectController] Print Project Error-Message");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -234,13 +236,13 @@ public class ProjectController {
 			}
 			removeSelectedProjectFromAllUser();
 			projectModel.deleteProject(selectedProject);	
-
 		}
 		else if(result.get() == ButtonType.CANCEL) {
 			alert.close();
 		}
 	}
 
+	//removes all ProjectUser which are in the selected project as Project-Member
 	private void removeSelectedProjectFromAllUser() {
 		if(selectedProject.getProjectMember() != null) {
 			for(ProjectUser user: selectedProject.getProjectMember()) {
@@ -250,9 +252,8 @@ public class ProjectController {
 		}
 	}
 
-
-	public void checkForChangesInProjectDetail() {
-		//if Detail-Windows already open: check if changes exist before closing
+	//if Detail-Windows already open: check if changes exist before closing
+	public void checkForChangesInProjectDetail() {	
 		if(projectDetailController != null) {
 			projectDetailController.checkBeforeClosing();
 		}

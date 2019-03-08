@@ -3,9 +3,6 @@ package controller;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
-import org.apache.derby.impl.store.replication.net.SlaveAddress;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,13 +15,10 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.util.StringConverter;
-import model.DataModelUser;
 import model.DataModelStory;
 import model.Project;
 import model.ProjectUser;
 import model.Story;
-import model.Task;
-import model.Task.TaskStatus;
 
 public class StoryDetailController {
 
@@ -33,15 +27,16 @@ public class StoryDetailController {
 	private Project selectedProject;
 	private Story selectedStory;
 
-
-
+	//OLD Values
 	private String nameOLD;
 	private String descriptionOLD;
 	private String durationOLD;
+	private ProjectUser responsibleUserOLD;
+
+	//NEW Values
 	private String nameNEW;
 	private String descriptionNEW;
 	private String durationNEW;
-	private ProjectUser responsibleUserOLD;
 	private ProjectUser responsibleUserNEW;
 
 	ObservableList<ProjectUser> userList = null;
@@ -60,14 +55,19 @@ public class StoryDetailController {
 	@FXML
 	private ComboBox<ProjectUser> responsibilityComboBox;
 
+	/* pressing Assume-Button sets the values from the text fields in the NEW-Attributes
+	 *  Checks if attributes are not empty and valid and
+	 *  if new Story --> method createTask then updateAndClose
+	 *  if existing Story --> method checkIfChangesExists --> if changes available --> confirmClosingStoryDetailWindowChanges
+	 */
 	@FXML
 	void assumeButtonPressed(ActionEvent event) {
 		System.out.println("[controller.StoryDetailController] assumeButtonPressed");
-		
+
 		nameNEW = nameTextField.getText().trim();
 		descriptionNEW = descriptionTextField.getText().trim();
 		responsibleUserNEW = responsibilityComboBox.getSelectionModel().getSelectedItem();
-		
+
 		if(nameNEW.equals("")) { 
 			errorWindow("Name field empty!");
 		} else if(descriptionNEW.equals("")) {
@@ -83,13 +83,13 @@ public class StoryDetailController {
 			updateAndClose();
 		}
 	}
-	
+
 	//updates the tasks in the taskController and closes the Pop-Up Window
 	private void updateAndClose() {
 		taskController.updateTasks();
 		taskController.closePopUpWindow();
 	}
-	
+
 	//creates a new Object Story with the new values
 	private void createStory() {
 		Story newStory = new Story();
@@ -101,50 +101,50 @@ public class StoryDetailController {
 		newStory.setResponsibility(responsibleUserNEW);
 		storyModel.createStory(newStory);		 
 	}
-	
+
 
 	@FXML
 	void initialize() {
 		descriptionTextField.setWrapText(true);
 	}
-		
+
 	//sets the storyModel attribute from another object 
 	public void setDataModelStory(DataModelStory storyModel) {
 		this.storyModel = storyModel;
 	}
-	
+
 	//sets the taskController attribute from another object 
 	public void setTaskController(TaskController taskController) {
 		this.taskController = taskController;
 	}
-	
+
 	//sets the selectedProject attribute from another object 
 	public void setSelectedProject(Project selectedProject) {
 		this.selectedProject = selectedProject;
 		setUserListFromModel();
 	}
-	
+
 	/*sets the selectedStory attribute and if not null 
 	 * --> the values from the selectedStory are set into the ..OLD attributes
 	 * and the fillSelectedValuesInFields method is called
 	 */
 	public void setSelectedStory(Story selectedStory) {
 		this.selectedStory = selectedStory;
-    	if(selectedStory != null) {
-    		nameOLD = selectedStory.getStoryName();
-    		descriptionOLD = selectedStory.getDescription();
-    		durationOLD = String.valueOf(selectedStory.getDuration());
-    		fillSelectedValuesInFields();
-    	}
-    }
-	
+		if(selectedStory != null) {
+			nameOLD = selectedStory.getStoryName();
+			descriptionOLD = selectedStory.getDescription();
+			durationOLD = String.valueOf(selectedStory.getDuration());
+			fillSelectedValuesInFields();
+		}
+	}
+
 	//the text fields are set from the ..OLD attributes
 	private void fillSelectedValuesInFields() {
 		nameTextField.setText(nameOLD);
 		descriptionTextField.setText(descriptionOLD);
 		durationTextField.setText(durationOLD);
 	}
-	
+
 	/* checks if the ..OLD and ..NEW values are equal
 	 * if NOT, so if changes exist --> returns TRUE
 	 */
@@ -163,7 +163,7 @@ public class StoryDetailController {
 			return true;
 		}
 	}
-	
+
 	/*if the value in the durationTextField is not a number, the durationTextField turns red
 	 * and the method returns FALSE
 	 */
@@ -175,17 +175,17 @@ public class StoryDetailController {
 		}
 		return true;
 	}
-	
+
 	//returns TRUE if the given String str is a number
 	public boolean isNumeric(String str) {  
 		try {  
-			int i = Integer.parseInt(str);  
+			Integer.parseInt(str);  
 		} catch(NumberFormatException e) {  
 			return false;  
 		}  
 		return true;  
 	}
-	
+
 	//opens a alert Pop-Up-Window, which ask if the changes should be saved 
 	private void confirmClosingStoryDetailWindowChanges() {
 		System.out.println("[controller.StoryDetailController] Open Confirm Update Story Window");
@@ -204,7 +204,7 @@ public class StoryDetailController {
 			alert.close();
 		}
 	}
-	
+
 	//sets the ...NEW attributes in the selectedStory-Object and updates this Object in the storyModel
 	private void updateStory() {
 		System.err.println("updateStory");
@@ -214,7 +214,7 @@ public class StoryDetailController {
 		selectedStory.setResponsibility(responsibleUserNEW);
 		storyModel.updateStory(selectedStory);
 	}
-	
+
 	/*adds the ProjectMember form the selectedProject into the ObservableList<ProjectUser> userProjectList.
 	 * Makes then a reference to the global ObservableList userlist
 	 * and calls the method updateResponsibilityComboBox
@@ -229,7 +229,7 @@ public class StoryDetailController {
 		System.out.println("[controller.StrorySetailController] userList: " + userList);   	
 		updateResponsibilityComboBox();
 	}
-	
+
 	/*sets the values from the userList in the responsibilityComboBox 
 	 * and selects the user from the selctedStory if not null
 	 */
@@ -254,7 +254,7 @@ public class StoryDetailController {
 			}	
 		}); 	
 	}
-	
+
 	//opens a alert window with the title "ERROR"
 	private void errorWindow(String message) {
 		System.out.println("Print User Error-Message");

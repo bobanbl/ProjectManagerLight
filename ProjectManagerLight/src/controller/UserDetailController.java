@@ -1,22 +1,18 @@
 package controller;
 
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import model.DataModelUser;
 import model.ProjectUser;
 
@@ -27,6 +23,7 @@ public class UserDetailController {
 	private UserManController userManController;
 	private ProjectUser selectedUser;
 
+	//attributes for text-fields
 	private String shortcut;
 	private String eMail;
 	private String firstName;
@@ -79,6 +76,9 @@ public class UserDetailController {
 		userManController.closePopUpWindow();
 	}
 
+	/*update selected ProjectUser with values from attributes (text-fields)
+	 * and updating the selected ProjectUser in the userModel
+	 */
 	private void updateSelectedUser() {
 		selectedUser.setFirstName(firstName);
 		selectedUser.setLastName(lastName);
@@ -89,6 +89,7 @@ public class UserDetailController {
 		model.updateUser(selectedUser);
 	}
 
+	//create new ProjectUser with attributes and call createUser-method in userModel
 	private void createNewUser() {
 		ProjectUser newUser = new ProjectUser();
 		newUser.setFirstName(firstName);
@@ -102,37 +103,46 @@ public class UserDetailController {
 
 	@FXML
 	void initialize() {
+		//pressing Enter-Button in the userDetailShortcutField calls method evaluateuserDetailShortcutField
 		userDetailShortcutField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
 			if(event.getCode() == KeyCode.ENTER) {
 				evaluateuserDetailShortcutField(userDetailShortcutField.getText().trim());
 			}
 		}); 
 
+		//when Mouse exits userDetailShortcutField --> calling method evaluateuserDetailShortcutField
 		userDetailShortcutField.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
 			evaluateuserDetailShortcutField(userDetailShortcutField.getText().trim());
 		}); 
 
+		//pressing Enter-Button in the userDetailEmailField calls method validEMail
 		userDetailEmailField.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
 			if(event.getCode() == KeyCode.ENTER) {
 				validEMail(userDetailEmailField.getText().trim());
 			}
 		}); 
 
+		//when Mouse exits userDetailEmailField --> calling method validEMail
 		userDetailEmailField.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
 			if(userDetailEmailField.getText().trim().indexOf("") != 0) {
 				validEMail(userDetailEmailField.getText().trim());
 			}
-		});    		
+		});    		   		
 	}
 
+	//setting userModel method
 	public void setDataModel(DataModelUser model) {
 		this.model = model;
 	}
 
+	//setting userManController method
 	public void setUserManController(UserManController controller) {
 		this.userManController = controller;
 	}
 
+	/*setting selectedUser method
+	 * if selectedUser not null, means that details from selected ProjectUser are set in the text-fields
+	 */
 	public void setSelectedUser(ProjectUser selectedUser) {
 		this.selectedUser = selectedUser;
 		if(selectedUser != null) {
@@ -168,7 +178,11 @@ public class UserDetailController {
 
 
 	}
-	//returns true if eMail has right syntax, otherwise false
+
+	/*returns true if eMail has right syntax, otherwise false
+	 * background of userDetailEmailField turns RED if false if false syntax
+	 * otherwise white
+	 */
 	private boolean validEMail(String eMail) {
 		String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+ 
 				"[a-zA-Z0-9_+&*-]+)*@" + 
@@ -188,6 +202,7 @@ public class UserDetailController {
 		}
 	}
 
+	//Error-Pop-Up Window 
 	private void errorWindow(String message) {
 		System.out.println("Print User Error-Message");
 		Alert alert = new Alert(AlertType.ERROR);
