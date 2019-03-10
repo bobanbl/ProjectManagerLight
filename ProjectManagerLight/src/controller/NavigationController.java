@@ -17,6 +17,7 @@ import model.DataModelUser;
 import model.DataModelProject;
 import model.DataModelStory;
 import model.Project;
+import model.ProjectUser;
 
 //Controller for main.fxml
 public class NavigationController {
@@ -154,6 +155,7 @@ public class NavigationController {
 
 			UserManController userManController =  loader.getController();
 			userManController.setDataModel(userModel);
+			userManController.setProjectModel(projectModel);
 
 			anchorPaneViews.getChildren().setAll(root);			
 			labelSelectedView.setText("User Management");			
@@ -183,7 +185,11 @@ public class NavigationController {
 
 	//sets the label "labelLoggedUser" with "Logged User: " and the given String
 	public void setLabelLoggedUser(String loggedUser) {
-		labelLoggedUser.setText("Logged User: " + loggedUser);
+		for(ProjectUser u : userModel.getUserList()) {
+			u.getUserShortcut().equals(loggedUser);
+			labelLoggedUser.setText("Logged User: " + u.getFirstName() + " " + u.getLastName());
+		}
+		
 	}
 
 	//Alert-Pop-Up-Window with the given String as message

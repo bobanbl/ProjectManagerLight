@@ -9,7 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -163,10 +162,10 @@ public class TaskController {
 
 				String title = null;
 
-				if(selectedStory != null) {
-					title = "Story Details";
+				if(selectedTask != null) {
+					title = "Task Details";
 				} else {
-					title = "Create Story";
+					title = "Create Task";
 				}
 
 				popUpWindow.setTitle(title);
@@ -193,7 +192,7 @@ public class TaskController {
 	}
 
 	/*creates the VBoxes for the GridPane from storyList and taskList (DataModelStory.class)
-	 *  puts the Labels Duration and Responsibility in a Hbox and together with the Label Name in a VBox
+	 *  puts the Labels Duration and Responsibility in a HBox and together with the Label Name in a VBox
 	 *  the VBox gets the Story/ Task Object as UserData
 	 */
 	private void createVBox() {
@@ -265,7 +264,7 @@ public class TaskController {
 			VBox vboxREJECTED = new VBox();
 			VBox vboxCLOSED = new VBox();
 
-			//adding porperties to Vboxes
+			//adding properties to VBoxes
 			vboxNEW.getProperties().put("TaskStatus", TaskStatus.NEW);
 			vboxNEW.getProperties().put("Story", s);
 			vboxINPROGRESS.getProperties().put("TaskStatus", TaskStatus.IN_PROGRESS);
@@ -297,7 +296,7 @@ public class TaskController {
 			vboxREJECTED.setOnDragExited(this:: onDragExited);
 			vboxCLOSED.setOnDragExited(this:: onDragExited);
 
-			//creates the Vboxes for the Tasks
+			//creates the VBoxes for the Tasks
 			for(Task t : taskListStory) {
 
 				System.out.println("[controller.TaskController] Tasks for VBox from Stories: " + t);

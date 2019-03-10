@@ -29,7 +29,7 @@ public class DataModelUser {
 
 				if (c.wasPermutated()) {
                     for (int i = c.getFrom(); i < c.getTo(); ++i) {
-                         System.err.println("Permutation not implemented");
+                         System.err.println("[model.DataModelUser] Permutation not implemented");
                     }
                 } else if (c.wasReplaced()) {
                 	for (int i = c.getFrom(); i < c.getTo(); ++i) {
@@ -57,7 +57,7 @@ public class DataModelUser {
     
     public void printUserData() {
     	for(ProjectUser u : userList) {
-    		System.out.println("[model.DataModel]" + u.toString());
+    		System.out.println("[model.DataModelUser] printUserData: " + u.toString());
     	}
     }
     
@@ -75,25 +75,25 @@ public class DataModelUser {
      * returns 3 if user does not exist in database
      */    
     public int getLoginData(String loginShortcut, String password) {
-    	System.out.println("Start Query Shortcut and Password in DataModel");
+    	System.out.println("[model.DataModelUser] Start Query Shortcut and Password in DataModel");
     	for(ProjectUser u : userList) {
     		if(u.getUserShortcut().equals(loginShortcut)) {
     			if(u.getPassword().equals(password)) {
-    				System.out.println("[DataModel] Password ok");
+    				System.out.println("[model.DataModelUser] Password ok");
     				return 1;
     			} else {
-    				System.out.println("[DataModel] Password not ok");
+    				System.out.println("[model.DataModelUser] Password not ok");
     				return 2;       				
     			}
     		}
     	}
-    	System.out.println("[model.DataModel] User: " + loginShortcut + " does not exist");
+    	System.out.println("[model.DataModelUser] User: " + loginShortcut + " does not exist");
     	return 3;
     }
 
     //creates new user and calls the method printUserData
     public void createUser(ProjectUser newUser) {
-    	System.out.println("[model.DataModel] Adding new User to List");
+    	System.out.println("[model.DataModelUser] Adding new User to List");
     	userList.add(newUser);
     	printUserData();    	
     }
@@ -103,14 +103,14 @@ public class DataModelUser {
      * @param deleteUser 
      */
     public void deleteUser(ProjectUser deleteUser) {
-    	System.out.println("[DataModel] Deleting user");
+    	System.out.println("[model.DataModelUser] Deleting user");
     	userList.remove(deleteUser);
     	printUserData();
     }
 
     //Update existing projectUser in userList
     public void updateUser(ProjectUser updateUser) {
-    	System.out.println("[model.DataModel] Update user: " + updateUser.getUserShortcut() + " " + updateUser);
+    	System.out.println("[model.DataModelUser] Update user: " + updateUser.getUserShortcut() + " " + updateUser);
     	int userIndex = userList.indexOf(updateUser);
 		userList.set(userIndex, updateUser);
     	printUserData();

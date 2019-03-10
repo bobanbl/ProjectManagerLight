@@ -24,6 +24,7 @@ public class LoginController {
 
 	private NavigationController navigationController;
 	private String loggedUser;
+	private String loggedPassword;
 	private DataModelUser userModel;
 	private DataModelStory storyModel;
 	private DataModelProject projectModel;
@@ -46,14 +47,13 @@ public class LoginController {
 		System.out.println("Button was pressed!");
 		loginUser();
 	}
-
 	
 	@FXML
 	void initialize() {
 		//if in text field loginUsername Enter is pressed -> cursor jumps in password field    	
 		loginUsername.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
 			if(event.getCode() == KeyCode.ENTER) {
-				System.out.println("LoginUsename Enter pressed");
+				System.out.println("[controller.LoginController] LoginUsename Enter pressed");
 				loginPassword.requestFocus();
 			}
 		});
@@ -75,7 +75,8 @@ public class LoginController {
 	//closes the Login-Window and opens the Main-Window (main.fxml)        
 	private void loginUser() {
 		loggedUser = loginUsername.getText().trim();
-		int loginResult = userModel.getLoginData(loggedUser, loginPassword.getText().trim());
+		loggedPassword = loginPassword.getText().trim();
+		int loginResult = userModel.getLoginData(loggedUser, loggedPassword);
 		switch(loginResult) {
 		case 1:		openMainWindow();
 		break;
@@ -97,8 +98,8 @@ public class LoginController {
 			Parent root = loader.load();
 
 			this.navigationController =  loader.getController();
-			this.navigationController.setLabelLoggedUser(loggedUser.toUpperCase());
 			this.navigationController.setModels(userModel, storyModel, projectModel);
+			this.navigationController.setLabelLoggedUser(loggedUser.toUpperCase());
 
 			Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));
 			Stage mainStage = new Stage();

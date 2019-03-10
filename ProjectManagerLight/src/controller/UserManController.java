@@ -25,13 +25,16 @@ import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import model.DataModelProject;
 import model.DataModelUser;
+import model.Project;
 import model.ProjectUser;
 
 //The Controller for userManView.fxml
 public class UserManController {
 
 	private DataModelUser model;
+	DataModelProject projectModel;
 	private ProjectUser selectedUser;
 	ObservableList<ProjectUser> selectedUserList;
 	private boolean isPopUpOpen = false;
@@ -59,8 +62,6 @@ public class UserManController {
 
 	private Stage popUpWindow;
 
-
-
 	//opens at the initializing the method "tablesChanges"
 	@FXML
 	void initialize() {
@@ -73,9 +74,14 @@ public class UserManController {
 	}
 
 	//sets the attribute "model" and calls the method "initializeTable"
-	public void setDataModel(DataModelUser model) {
-		this.model = model;
+	public void setDataModel(DataModelUser userModel) {
+		this.model = userModel;
 		initializeTable();
+	}
+	
+	//sets the attribute projectModel
+	public void setProjectModel(DataModelProject projectModel) {
+		this.projectModel = projectModel;
 	}
 
 	//sets the items from the userList in the userModel into the columns from the userTable
@@ -103,12 +109,12 @@ public class UserManController {
 		userTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			selectedUserList = userTable.getSelectionModel().getSelectedItems();
 			selectedUser = selectedUserList.get(0);
-			System.out.println("[controller.UserManController] slectedUser: " + selectedUser.getLastName());
+			System.out.println("[controller.UserManController] selectedUser: " + selectedUser.getLastName());
 			if (event.getClickCount() == 2) {
 				laodUserDetailPopUp(false);
 			}
 			if (event.getButton() == MouseButton.SECONDARY && selectedUser != null) {
-				System.out.println("Right Mouse Button clicked");
+				System.out.println("[controller.UserManController] Right Mouse Button clicked");
 				openContextMenu();
 			}
 		}); 
@@ -190,20 +196,27 @@ public class UserManController {
 		});
 
 		userTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-			System.out.println("Any button pressed hide context");
+			System.out.println("[controller.UserManController] Any button pressed hide context");
 			contextMenu.hide();
 		}); 
 	}
 
 	//opens Alert-Pop-Up-Window with confirmation "Delete User"
 	private void confirmDeletingUserWindow() {
-		System.out.println("Print User Error-Message");
+		System.out.println("[controller.UserManController] Print User Error-Message");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Delete User");
 		alert.setHeaderText("Deleting user: " + selectedUser.getUserShortcut() + " Are you sure?");
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() == ButtonType.OK) {
 			System.out.println("[controller.UserManController] User deleted!");
+			if(selectedUser.getInvolvedProjects() != null) {
+				for(Project p : selectedUser.getInvolvedProjects()) {
+					p.removeMemberFromProject(selectedUser);
+					projectModel.updateProject(p);
+				}
+			}
+
 			model.deleteUser(selectedUser);	
 		}
 		else if(result.get() == ButtonType.CANCEL) {

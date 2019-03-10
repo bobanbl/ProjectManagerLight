@@ -85,12 +85,14 @@ public class ProjectUser implements Serializable{
 	public List<Project> getInvolvedProjects() {
 		return involvedProjects;
 	}
+	
 	public void setInvolvedProjects(List<Project> involvedProjects) {
 		this.involvedProjects = involvedProjects;
 	}
 
 	//removes the given Project from the involvedProject-List
 	public void removeProjectFromUser(Project project) {
+		System.out.println("[model.ProjectUser] removeProjectFromUser: " + project);
 		this.involvedProjects.remove(project);
 	}
 

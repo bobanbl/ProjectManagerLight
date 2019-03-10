@@ -149,6 +149,11 @@ public class Project implements Serializable{
 	public void removeStoryFromProject(Story removeStory) {
 		stories.remove(removeStory);
 	}
+	
+	//removes the given ProjectUser from the list "projectMembers"
+	public void removeMemberFromProject(ProjectUser removeUser) {
+		projectMembers.remove(removeUser);
+	}
 
 	/*compares the given Object to this Object 
 	 * returns TRUE if References equal

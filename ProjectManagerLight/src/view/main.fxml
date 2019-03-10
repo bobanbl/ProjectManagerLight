@@ -47,12 +47,12 @@
             </Label>
             <Label fx:id="labelSelectedView" layoutX="12.0" prefHeight="40.0" prefWidth="257.0" text="Slected View">
                <font>
-                  <Font size="20.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="labelLoggedUser" layoutX="806.0" prefHeight="40.0" prefWidth="193.0" text="Logged User">
+            <Label fx:id="labelLoggedUser" alignment="CENTER_RIGHT" layoutX="725.0" prefHeight="40.0" prefWidth="274.0" text="Logged User" textAlignment="RIGHT">
                <font>
-                  <Font size="20.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
          </children>
