@@ -20,6 +20,14 @@
 	-fx-text-fill:  #86C232;
 } 
 
+.scroll-pane > .viewport{
+	-fx-background-color:  #222629;
+}
+
+.scroll-pane{
+	-fx-background-color:  #222629;
+}
+
 .vbox{
 	-fx-alignment: center;
 	-fx-background-color:  #86C232;

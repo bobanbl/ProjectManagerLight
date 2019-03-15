@@ -68,7 +68,7 @@ public class UserManController {
 		//Method loadUserDetailPopUp() is called, when addUserButton is pressed
 		addUserButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			System.out.println("[controller.UserManController] Add-User-Button pressed");
-			laodUserDetailPopUp(true);
+			loadUserDetailPopUp(true);
 		});
 		tablesChanges();
 	}
@@ -102,20 +102,24 @@ public class UserManController {
 	}
 
 	/*recognizes mouse-clicks on the userTable and sets the Clicked-User on the attribute selectedUser
-	 * at Double-Mouse-Click on ProjectUser in table --> calling method: laodUserDetailPopUp
+	 * at Double-Mouse-Click on ProjectUser in table --> calling method: loadUserDetailPopUp
 	 * at Right-Mouse-Click on ProjectUser in table --> calling method: openContextMenu
 	 */
 	public void tablesChanges() {
+		
+		userTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+			@Override
+			public void handle(ContextMenuEvent event) {
+				getContextMenu().show(userTable, event.getScreenX(), event.getScreenY());
+			}
+		});
+		
 		userTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			selectedUserList = userTable.getSelectionModel().getSelectedItems();
 			selectedUser = selectedUserList.get(0);
 			System.out.println("[controller.UserManController] selectedUser: " + selectedUser.getLastName());
 			if (event.getClickCount() == 2) {
-				laodUserDetailPopUp(false);
-			}
-			if (event.getButton() == MouseButton.SECONDARY && selectedUser != null) {
-				System.out.println("[controller.UserManController] Right Mouse Button clicked");
-				openContextMenu();
+				loadUserDetailPopUp(false);
 			}
 		}); 
 	}
@@ -124,7 +128,7 @@ public class UserManController {
 	 * if given attribute "addUser" TRUE --> Create User 
 	 * if given attribute "addUser" FALSE --> Detail User 
 	 */
-	private void laodUserDetailPopUp(boolean addUser) {
+	private void loadUserDetailPopUp(boolean addUser) {
 		if(!isPopUpOpen) {
 			try {
 				isPopUpOpen = true;
@@ -153,6 +157,7 @@ public class UserManController {
 
 				popUpWindow.setTitle(title);
 				popUpWindow.setScene(scene);
+				popUpWindow.setResizable(false);
 				popUpWindow.showAndWait();	  
 				isPopUpOpen = false;
 			} catch (IOException e) {
@@ -162,7 +167,7 @@ public class UserManController {
 	} 
 
 	// opens context menu with the items: "DELETE USER" and "SHOW INVOLVED PROJECTS"
-	private void openContextMenu() {
+	private ContextMenu getContextMenu() {
 		Label label = new Label();
 		ContextMenu contextMenu = new ContextMenu();
 
@@ -188,17 +193,13 @@ public class UserManController {
 
 		});		
 		contextMenu.getItems().addAll(item1, item2);
-		userTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-			@Override
-			public void handle(ContextMenuEvent event) {
-				contextMenu.show(userTable, event.getScreenX(), event.getScreenY());
-			}
-		});
 
 		userTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			System.out.println("[controller.UserManController] Any button pressed hide context");
 			contextMenu.hide();
 		}); 
+		
+		return contextMenu;
 	}
 
 	//opens Alert-Pop-Up-Window with confirmation "Delete User"
@@ -206,7 +207,7 @@ public class UserManController {
 		System.out.println("[controller.UserManController] Print User Error-Message");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Delete User");
-		alert.setHeaderText("Deleting user: " + selectedUser.getUserShortcut() + " Are you sure?");
+		alert.setHeaderText("Deleting user: " + selectedUser.getUserShortcut() + ". Are you sure?");
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() == ButtonType.OK) {
 			System.out.println("[controller.UserManController] User deleted!");

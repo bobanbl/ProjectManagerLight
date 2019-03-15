@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="560.0" maxWidth="940.0" prefHeight="560.0" prefWidth="940.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProjectController">
+<AnchorPane prefHeight="560.0" prefWidth="960.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProjectController">
    <children>
-      <TableView fx:id="projectTable" prefHeight="560.0" prefWidth="769.0" styleClass="table-column" stylesheets="@../application/application.css">
+      <TableView fx:id="projectTable" styleClass="table-column" stylesheets="@../application/application.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="0.0">
         <columns>
             <TableColumn fx:id="colProjectID" prefWidth="132.0" text="Project ID" />
           <TableColumn fx:id="colProjectName" prefWidth="404.0" text="Project Name" />
@@ -17,7 +17,7 @@
         </columns>
       </TableView>
       <AnchorPane fx:id="anchorPaneDetailView" layoutX="539.0" prefHeight="560.0" prefWidth="218.0" />
-      <ImageView fx:id="addProjectButton" fitHeight="150.0" fitWidth="164.0" layoutX="781.0" layoutY="406.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="addProjectButton" fitHeight="150.0" fitWidth="164.0" layoutX="781.0" layoutY="406.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="15.0">
          <image>
             <Image url="@../assets/AddProject.png" />
          </image>

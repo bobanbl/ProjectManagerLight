@@ -74,7 +74,7 @@ public class DataModelUser {
      * returns 2 if password does not match to user
      * returns 3 if user does not exist in database
      */    
-    public int getLoginData(String loginShortcut, String password) {
+    public int verifyLoginData(String loginShortcut, String password) {
     	System.out.println("[model.DataModelUser] Start Query Shortcut and Password in DataModel");
     	for(ProjectUser u : userList) {
     		if(u.getUserShortcut().equals(loginShortcut)) {

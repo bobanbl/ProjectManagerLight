@@ -76,7 +76,7 @@ public class LoginController {
 	private void loginUser() {
 		loggedUser = loginUsername.getText().trim();
 		loggedPassword = loginPassword.getText().trim();
-		int loginResult = userModel.getLoginData(loggedUser, loggedPassword);
+		int loginResult = userModel.verifyLoginData(loggedUser, loggedPassword);
 		switch(loginResult) {
 		case 1:		openMainWindow();
 		break;
@@ -106,6 +106,7 @@ public class LoginController {
 
 			mainStage.setTitle("ProjectManagerLight");
 			mainStage.setScene(scene);
+			mainStage.setResizable(false);
 			mainStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

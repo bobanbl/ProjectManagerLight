@@ -59,18 +59,18 @@ public class ProjectController {
 
 	@FXML
 	void initialize() {
-		//When the Project-Add-Button, the Button gets invisible and the method laodDetailMainView is called
+		//When the Project-Add-Button, the Button gets invisible and the method loadDetailMainView is called
 		addProjectButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			System.out.println("[controller.ProjectController] Project-Add-Button pressed");
 			addProjectButton.setVisible(false);
 			this.isNewProject = true;
-			laodDetailMainView();
+			loadDetailMainView();
 		});  	
 		tablesChanges();
 	}
 
 	//load in AnchorPane Project Detail View
-	private void laodDetailMainView() {
+	private void loadDetailMainView() {
 		try {
 			addProjectButton.setVisible(false);
 			FXMLLoader loader = new FXMLLoader();
@@ -136,11 +136,20 @@ public class ProjectController {
 		projectTable.getSelectionModel().select(navigationController.getSelectedProject());
 	}
 
+	
 	/*Mouse-Click on item in projectTable --> Project gets selected
-	 * Double-Mouse-Click on item in projectTable --> calling method laodProjectDetailWindow
+	 * Double-Mouse-Click on item in projectTable --> calling method loadProjectDetailWindow
 	 * Right-Mouse-Click on item in projectTable --> calling methods closeDetailWindow and openContextMenu
 	 */
-	public void tablesChanges() { 	
+	public void tablesChanges() {
+		
+		projectTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+			@Override
+			public void handle(ContextMenuEvent event) {
+				getContextMenu().show(projectTable, event.getScreenX(), event.getScreenY());
+			}
+		});
+
 		projectTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			selectedProjectList = projectTable.getSelectionModel().getSelectedItems();
 			selectedProject = selectedProjectList.get(0);
@@ -150,21 +159,22 @@ public class ProjectController {
 			if (event.getClickCount() == 2) {
 				System.out.println("[controller.ProjectController] Double Mouse Click on Project: " + selectedProject.getProjectName());
 				this.isNewProject = false;
-				laodProjectDetailWindow();
+				loadProjectDetailWindow();
 			} else if (event.getButton() == MouseButton.SECONDARY && selectedProject != null) {
 				System.out.println("[controller.ProjectController] Right Mouse Button clicked");
 				closeDetailWindow();
-
-				openContextMenu();
 			} else if (event.getClickCount() == 1) {
 				System.out.println("[controller.ProjectController] One Mouse Click on Project: " + selectedProject.getProjectName());
 				System.out.println("[controller.ProjectController] navigationController: " + navigationController);
 			}
-		});            
+		});  
+		
+		
+		
 	}
 
 	//opens Project-Detail-Window
-	private void laodProjectDetailWindow() {
+	private void loadProjectDetailWindow() {
 		try {
 			addProjectButton.setVisible(false);
 			FXMLLoader loader = new FXMLLoader();
@@ -183,7 +193,7 @@ public class ProjectController {
 	}
 
 	//opens context menu with item "DELETE PROJECT"
-	private void openContextMenu() {
+	private ContextMenu getContextMenu() {
 		Label label = new Label();
 		ContextMenu contextMenu = new ContextMenu();
 
@@ -197,18 +207,15 @@ public class ProjectController {
 			}
 
 		});	
-		contextMenu.getItems().addAll(item1);
-		projectTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-			@Override
-			public void handle(ContextMenuEvent event) {
-				contextMenu.show(projectTable, event.getScreenX(), event.getScreenY());
-			}
-		});
-
-		projectTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+		
+		projectTable.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
 			System.out.println("Any button pressed hide context");
 			contextMenu.hide();
 		}); 
+		
+		contextMenu.getItems().addAll(item1);
+		return contextMenu;
+
 	}
 
 	//opens Confirmation-Window for confirming "DELETE PROJECT"
@@ -216,7 +223,7 @@ public class ProjectController {
 		System.out.println("[controller.ProjectController] Print Project Error-Message");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Delete User");
-		alert.setHeaderText("Deleting Project: " + selectedProject.getProjectName() + " Are you sure?");
+		alert.setHeaderText("Deleting Project: " + selectedProject.getProjectName() + ". Are you sure?");
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() == ButtonType.OK) {
 			System.out.println("[UserManController] Project deleted!");

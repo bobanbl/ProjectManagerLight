@@ -65,7 +65,7 @@ public class NavigationController {
 			if(projectController != null) {
 				projectController.checkForChangesInProjectDetail();
 			}
-			laodProjectView();
+			loadProjectView();
 		});
 		//click on Navigation Button Task View calls method loadTaskView()        	
 		navigationButtonTaskView.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -74,7 +74,7 @@ public class NavigationController {
 				projectController.checkForChangesInProjectDetail();
 			}
 			if(selectedProject != null) {
-				laodTaskView();	
+				loadTaskView();	
 			} else {
 				errorWindow("No Project selected!");
 			}
@@ -85,7 +85,7 @@ public class NavigationController {
 			if(projectController != null) {
 				projectController.checkForChangesInProjectDetail();
 			}
-			laodUserManView();
+			loadUserManView();
 		});   	
 	}
 
@@ -126,7 +126,7 @@ public class NavigationController {
 	/* Load in AnchorPane Task View
 	Set label(selected View) on "Tasks"
 	 */
-	public void laodTaskView() {
+	public void loadTaskView() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource("../view/taskView.fxml"));  	
@@ -146,7 +146,7 @@ public class NavigationController {
 	}
 
 	//load in AnchorPane User Management View
-	private void laodUserManView() {
+	private void loadUserManView() {
 		try {
 			FXMLLoader loader = new FXMLLoader();    	
 			loader.setLocation(getClass().getResource("../view/userManView.fxml"));  
@@ -165,7 +165,7 @@ public class NavigationController {
 	}    
 
 	//load in AnchorPane Project View    
-	public void laodProjectView() {
+	public void loadProjectView() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource("../view/projectView.fxml"));  	

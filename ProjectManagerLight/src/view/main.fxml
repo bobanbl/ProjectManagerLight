@@ -10,54 +10,62 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" styleClass="anchorbackgroundDARK" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavigationController">
    <children>
-      <VBox fx:id="mainNavigationVBox" fillWidth="false" layoutY="185.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="210.0" prefWidth="60.0" style="-fx-background-radius: 5;" styleClass="anchorbackgroundGREEN" stylesheets="@../application/application.css" AnchorPane.leftAnchor="0.0">
+      <VBox alignment="CENTER_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="navigationButtonDashboardView" fitHeight="55.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../assets/DashboardView.png" />
-               </image>
-               <VBox.margin>
-                  <Insets left="2.0" top="5.0" />
-               </VBox.margin>
-            </ImageView>
-            <ImageView fx:id="navigationButtonTaskView" fitHeight="55.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../assets/TaskView.png" />
-               </image>
-               <VBox.margin>
-                  <Insets left="2.0" top="10.0" />
-               </VBox.margin>
-            </ImageView>
-            <ImageView fx:id="navigationButtonUserManView" fitHeight="55.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../assets/UserManagementView.png" />
-               </image>
-               <VBox.margin>
-                  <Insets left="3.0" top="10.0" />
-               </VBox.margin>
-            </ImageView>
+            <VBox fx:id="mainNavigationVBox" fillWidth="false" maxHeight="210.0" maxWidth="60.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="210.0" prefWidth="60.0" style="-fx-background-radius: 5;" styleClass="anchorbackgroundGREEN" stylesheets="@../application/application.css">
+               <children>
+                  <ImageView fx:id="navigationButtonDashboardView" fitHeight="55.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/DashboardView.png" />
+                     </image>
+                     <VBox.margin>
+                        <Insets left="2.0" top="5.0" />
+                     </VBox.margin>
+                  </ImageView>
+                  <ImageView fx:id="navigationButtonTaskView" fitHeight="55.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/TaskView.png" />
+                     </image>
+                     <VBox.margin>
+                        <Insets left="2.0" top="10.0" />
+                     </VBox.margin>
+                  </ImageView>
+                  <ImageView fx:id="navigationButtonUserManView" fitHeight="55.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../assets/UserManagementView.png" />
+                     </image>
+                     <VBox.margin>
+                        <Insets left="3.0" top="10.0" />
+                     </VBox.margin>
+                  </ImageView>
+               </children>
+            </VBox>
          </children>
       </VBox>
-      <AnchorPane prefHeight="40.0" prefWidth="1000.0" styleClass="anchorbackgroundGREEN" stylesheets="@../application/application.css">
+      <AnchorPane layoutX="215.0" prefHeight="39.0" styleClass="anchorbackgroundGREEN" stylesheets="@../application/application.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="mainSelectedProject" alignment="CENTER" contentDisplay="CENTER" layoutX="153.0" layoutY="7.0" prefHeight="27.0" prefWidth="640.0" text="Label" textAlignment="CENTER">
-               <font>
-                  <Font name="System Bold" size="21.0" />
-               </font>
-            </Label>
-            <Label fx:id="labelSelectedView" layoutX="12.0" prefHeight="40.0" prefWidth="257.0" text="Slected View">
+            <Label fx:id="labelSelectedView" prefHeight="41.0" prefWidth="211.0" text="Selected View" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="labelLoggedUser" alignment="CENTER_RIGHT" layoutX="725.0" prefHeight="40.0" prefWidth="274.0" text="Logged User" textAlignment="RIGHT">
+            <HBox alignment="TOP_CENTER" prefHeight="39.0" prefWidth="1000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label fx:id="mainSelectedProject" alignment="CENTER" contentDisplay="CENTER" prefHeight="41.0" prefWidth="570.0" text="Label" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="21.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <Label fx:id="labelLoggedUser" alignment="CENTER_RIGHT" prefHeight="41.0" prefWidth="297.0" text="Logged User" textAlignment="RIGHT" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorPaneViews" layoutX="61.0" layoutY="40.0" prefHeight="560.0" prefWidth="940.0">
+      <AnchorPane fx:id="anchorPaneViews" prefHeight="560.0" prefWidth="940.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
          <children>
             <fx:include fx:id="project" source="projectView.fxml" />
          </children></AnchorPane>

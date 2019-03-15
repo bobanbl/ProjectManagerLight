@@ -107,9 +107,9 @@ public class DatabaseController {
 		System.out.println("[DatabaseController] Read all User");
 		transaction.begin();	
 
-		@SuppressWarnings("unchecked")
-		List<ProjectUser> user = (List<ProjectUser>)em.createQuery("select u from ProjectUser u").getResultList();
 
+		List<ProjectUser> user = (List<ProjectUser>)em.createQuery("select u from ProjectUser u", ProjectUser.class).getResultList();
+		
 		transaction.commit();
 		em.close();
 		return user;		
@@ -197,9 +197,9 @@ public class DatabaseController {
 		System.out.println("[database.DatabaseController] Read all Stories");
 		transaction.begin();	
 
-		@SuppressWarnings("unchecked")
-		List<Story> story = (List<Story>)em.createQuery("select u from Story u").getResultList();
+		List<Story> story = (List<Story>)em.createQuery("select u from Story u", Story.class).getResultList();
 
+		
 		transaction.commit();
 		em.close();
 
@@ -276,8 +276,7 @@ public class DatabaseController {
 		System.out.println("[database.DatabaseController] Read all Tasks");
 		transaction.begin();	
 
-		@SuppressWarnings("unchecked")
-		List<Task> task = (List<Task>)em.createQuery("select u from Task u").getResultList();
+		List<Task> task = (List<Task>)em.createQuery("select u from Task u", Task.class).getResultList();
 
 		transaction.commit();
 		em.close();
@@ -400,8 +399,7 @@ public class DatabaseController {
 		System.out.println("[database.DatabaseController] Read all Projects");
 		transaction.begin();	
 
-		@SuppressWarnings("unchecked")
-		List<Project> project = (List<Project>)em.createQuery("select u from Project u").getResultList();
+		List<Project> project = (List<Project>)em.createQuery("select u from Project u", Project.class).getResultList();
 
 		System.out.println("[database.DatabaseController] Read all Projects " + project);
 

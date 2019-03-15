@@ -77,13 +77,13 @@ public class ProjectDetailTeamController {
 		//Method loadUserDetailPopUp() is called, when addUserButton is pressed
 		addProjectTeamMemberButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			System.out.println("[controller.ProjectDetailTeamController] Add-Team-Member-Button pressed");
-			laodUserSelectPopUp();
+			loadUserSelectPopUp();
 		});
 		clickOnTable();
 	}
 
 	//opens User Select Pop Up Window - Create User    
-	private void laodUserSelectPopUp() {
+	private void loadUserSelectPopUp() {
 		if(!isPopUpOpen) {
 			try {
 				isPopUpOpen = true;

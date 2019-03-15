@@ -11,7 +11,7 @@ import model.DataModelProject;
 import model.DataModelStory;
 /** This is the main Class from the tool "ProjectManagerLight" which opens the Login Window
 @author Boblaz
-@version 0.5 <I>Java Project 2019</I>
+@version 0.6 <I>Java Project 2019</I>
  */
 
 public class Main extends Application {
@@ -35,6 +35,7 @@ public class Main extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setTitle("Login");
 			primaryStage.setScene(scene);
+			primaryStage.setResizable(false);
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

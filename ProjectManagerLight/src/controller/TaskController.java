@@ -129,6 +129,7 @@ public class TaskController {
 
 				popUpWindow.setTitle(title);
 				popUpWindow.setScene(scene);
+				popUpWindow.setResizable(false);
 				popUpWindow.showAndWait();
 				isPopUpOpen = false;
 
@@ -170,6 +171,7 @@ public class TaskController {
 
 				popUpWindow.setTitle(title);
 				popUpWindow.setScene(scene);
+				popUpWindow.setResizable(false);
 				popUpWindow.showAndWait();
 				isPopUpOpen = false;
 
@@ -182,7 +184,7 @@ public class TaskController {
 	//closes Pop-Up-Window
 	public void closePopUpWindow() {
 		popUpWindow.close();
-		navigationController.laodTaskView();
+		navigationController.loadTaskView();
 		popUpWindow = null;
 	}
 
@@ -229,13 +231,17 @@ public class TaskController {
 				System.out.println("[controller.TaskController] StoryName: " + vbox.getId());
 				selectedStory = s;
 				selectedTask = null;
+				
+				vbox.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+					@Override
+					public void handle(ContextMenuEvent event) {
+						getContextMenu().show(gridPane, event.getScreenX(), event.getScreenY());
+					}
+				});
+					
 				if (event.getClickCount() == 2) {
 					loadStoryDetailPopUp();
-				} else if (event.getButton() == MouseButton.SECONDARY) {
-					System.out.println("[controller.TaskController] Right Mouse Button clicked");
-					openContextMenu();
-
-				}	
+				} 
 			});
 
 			Image addImage = new Image(getClass().getResourceAsStream("../assets/AddProject.png"),20,20,false,true);
@@ -336,12 +342,17 @@ public class TaskController {
 					System.out.println("[controller.TaskController] StoryName: " + vbox.getId());
 					selectedStory = null;
 					selectedTask = (Task) vbox1.getUserData();
+					
+					vbox1.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+						@Override
+						public void handle(ContextMenuEvent event) {
+							getContextMenu().show(gridPane, event.getScreenX(), event.getScreenY());
+						}
+					});
+					
 					if (event.getClickCount() == 2) {
 						loadTaskDetailPopUp();
-					} else if (event.getButton() == MouseButton.SECONDARY) {
-						System.out.println("[controller.TaskController] Right Mouse Button clicked");
-						openContextMenu();
-					}	
+					} 
 				});
 
 				//Drag & Drop function from the tasks
@@ -482,14 +493,14 @@ public class TaskController {
 			selectedTask.setStatus(targetTaskStatus);
 
 			storyModel.updateTask(selectedTask);
-			navigationController.laodTaskView();
+			navigationController.loadTaskView();
 			return true;
 		}
 		return false;
 	}
 
 	//opens context-menu with item "DELETE STORY" or "DELETE TASK"
-	private void openContextMenu() {
+	private ContextMenu getContextMenu() {
 		Label label = new Label();
 		ContextMenu contextMenu = new ContextMenu();
 		if(selectedStory != null) {
@@ -515,18 +526,20 @@ public class TaskController {
 			});	
 			contextMenu.getItems().addAll(item1);
 		}
-
-		gridPane.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-			@Override
-			public void handle(ContextMenuEvent event) {
-				contextMenu.show(gridPane, event.getScreenX(), event.getScreenY());
-			}
-		});
+//
+//		gridPane.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+//			@Override
+//			public void handle(ContextMenuEvent event) {
+//				contextMenu.show(gridPane, event.getScreenX(), event.getScreenY());
+//			}
+//		});
 
 		gridPane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			System.out.println("[controller.TaskController] Mouse Clicked to hide context menu");
 			contextMenu.hide();
 		}); 
+		
+		return contextMenu;
 	}
 
 	//sets the attribute navigationController
@@ -539,12 +552,12 @@ public class TaskController {
 		System.out.println("[controller.TaskController] Print Story Error-Message");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Delete Story");
-		alert.setHeaderText("Deleting story: " + selectedStory.getStoryName() + " Are you sure?");
+		alert.setHeaderText("Deleting story: " + selectedStory.getStoryName() + ". Are you sure?");
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() == ButtonType.OK) {
 			System.out.println("[controller.TaskController] Story deleted!");
 			storyModel.deleteStory(selectedStory);
-			navigationController.laodTaskView();    		
+			navigationController.loadTaskView();    		
 		}
 		else if(result.get() == ButtonType.CANCEL) {
 			alert.close();
@@ -556,13 +569,13 @@ public class TaskController {
 		System.out.println("[controller.TasklController] Print Task Error-Message");
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Delete Task");
-		alert.setHeaderText("Deleting task: " + selectedTask.getTaskName() + " Are you sure?");
+		alert.setHeaderText("Deleting task: " + selectedTask.getTaskName() + ". Are you sure?");
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() == ButtonType.OK) {
 			System.out.println("[controller.TaskController] Task deleted!");
 
 			storyModel.deleteTask(selectedTask);
-			navigationController.laodTaskView();    		
+			navigationController.loadTaskView();    		
 		}
 		else if(result.get() == ButtonType.CANCEL) {
 			alert.close();
