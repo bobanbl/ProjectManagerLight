@@ -202,7 +202,6 @@ public class TaskController {
 			storyNameLabel.setText(s.getStoryName());
 			storyNameLabel.getStyleClass().add("storyNameLabel");
 
-
 			Label storyDurationLabel = new Label();
 			storyDurationLabel.setText(String.valueOf(s.getDuration()));
 			storyDurationLabel.getStyleClass().add("storyAnyLabel");
@@ -232,8 +231,11 @@ public class TaskController {
 				selectedTask = null;
 				
 				vbox.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+					
 					@Override
 					public void handle(ContextMenuEvent event) {
+						selectedStory = s;
+						selectedTask = null;
 						getContextMenu().show(gridPane, event.getScreenX(), event.getScreenY());
 					}
 				});
@@ -336,6 +338,8 @@ public class TaskController {
 				vbox1.getStyleClass().add("vboxTasks");
 				vbox1.setUserData(t);
 				vbox1.setId("TaskBox");
+				
+				
 
 				vbox1.setOnMouseClicked(event ->{
 					System.out.println("[controller.TaskController] StoryName: " + vbox.getId());
@@ -345,6 +349,8 @@ public class TaskController {
 					vbox1.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
 						@Override
 						public void handle(ContextMenuEvent event) {
+							selectedStory = null;
+							selectedTask = (Task) vbox1.getUserData();
 							getContextMenu().show(gridPane, event.getScreenX(), event.getScreenY());
 						}
 					});
