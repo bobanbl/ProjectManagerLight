@@ -143,9 +143,11 @@ public class ProjectController {
 	 */
 	public void tablesChanges() {
 		
-		projectTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+		projectTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {		
 			@Override
 			public void handle(ContextMenuEvent event) {
+				selectedProjectList = projectTable.getSelectionModel().getSelectedItems();
+				selectedProject = selectedProjectList.get(0);
 				getContextMenu().show(projectTable, event.getScreenX(), event.getScreenY());
 			}
 		});
