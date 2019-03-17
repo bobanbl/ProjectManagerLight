@@ -195,7 +195,7 @@ public class UserManController {
 		});		
 		contextMenu.getItems().addAll(item1, item2);
 
-		userTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+		userTable.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
 			System.out.println("[controller.UserManController] Any button pressed hide context");
 			contextMenu.hide();
 		}); 

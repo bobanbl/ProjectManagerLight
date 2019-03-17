@@ -225,21 +225,20 @@ public class TaskController {
 			vbox.setUserData(s);
 			vbox.setId("StoryBox");
 
+			vbox.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {			
+				@Override
+				public void handle(ContextMenuEvent event) {
+					selectedStory = s;
+					selectedTask = null;
+					getContextMenu().show(gridPane, event.getScreenX(), event.getScreenY());
+				}
+			});
+			
 			vbox.setOnMouseClicked(event ->{
 				System.out.println("[controller.TaskController] StoryName: " + vbox.getId());
 				selectedStory = s;
 				selectedTask = null;
-				
-				vbox.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-					
-					@Override
-					public void handle(ContextMenuEvent event) {
-						selectedStory = s;
-						selectedTask = null;
-						getContextMenu().show(gridPane, event.getScreenX(), event.getScreenY());
-					}
-				});
-					
+									
 				if (event.getClickCount() == 2) {
 					loadStoryDetailPopUp();
 				} 
@@ -339,22 +338,20 @@ public class TaskController {
 				vbox1.setUserData(t);
 				vbox1.setId("TaskBox");
 				
+				vbox1.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+					@Override
+					public void handle(ContextMenuEvent event) {
+						selectedStory = null;
+						selectedTask = (Task) vbox1.getUserData();
+						getContextMenu().show(gridPane, event.getScreenX(), event.getScreenY());
+					}
+				});
 				
-
 				vbox1.setOnMouseClicked(event ->{
 					System.out.println("[controller.TaskController] StoryName: " + vbox.getId());
 					selectedStory = null;
 					selectedTask = (Task) vbox1.getUserData();
-					
-					vbox1.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-						@Override
-						public void handle(ContextMenuEvent event) {
-							selectedStory = null;
-							selectedTask = (Task) vbox1.getUserData();
-							getContextMenu().show(gridPane, event.getScreenX(), event.getScreenY());
-						}
-					});
-					
+
 					if (event.getClickCount() == 2) {
 						loadTaskDetailPopUp();
 					} 
@@ -531,15 +528,8 @@ public class TaskController {
 			});	
 			contextMenu.getItems().addAll(item1);
 		}
-//
-//		gridPane.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-//			@Override
-//			public void handle(ContextMenuEvent event) {
-//				contextMenu.show(gridPane, event.getScreenX(), event.getScreenY());
-//			}
-//		});
 
-		gridPane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+		gridPane.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
 			System.out.println("[controller.TaskController] Mouse Clicked to hide context menu");
 			contextMenu.hide();
 		}); 
