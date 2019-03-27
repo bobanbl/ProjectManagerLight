@@ -25,6 +25,7 @@ public class Story implements Serializable{
 	private int storyID;
 	private String storyName;
 	private String description;
+	
 	@ManyToOne
 	@JoinColumn(name = "FK_USERID", referencedColumnName = "USERID")
 	private ProjectUser responsibility;
