@@ -129,7 +129,7 @@ public class NavigationController {
 	public void loadTaskView() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("../view/taskView.fxml"));  	
+			loader.setLocation(getClass().getResource("/view/taskView.fxml"));  	
 			Parent root = loader.load();
 			root.getStylesheets().add("application/application.css");
 
@@ -149,13 +149,14 @@ public class NavigationController {
 	private void loadUserManView() {
 		try {
 			FXMLLoader loader = new FXMLLoader();    	
-			loader.setLocation(getClass().getResource("../view/userManView.fxml"));  
+			loader.setLocation(getClass().getResource("/view/userManView.fxml"));  
 
 			Parent root = loader.load();
 
 			UserManController userManController =  loader.getController();
 			userManController.setDataModel(userModel);
 			userManController.setProjectModel(projectModel);
+			userManController.setStoryModel(storyModel);
 
 			anchorPaneViews.getChildren().setAll(root);			
 			labelSelectedView.setText("User Management");			
@@ -168,7 +169,7 @@ public class NavigationController {
 	public void loadProjectView() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("../view/projectView.fxml"));  	
+			loader.setLocation(getClass().getResource("/view/projectView.fxml"));  	
 			Parent root = loader.load();
 
 			ProjectController projectController =  loader.getController();
@@ -186,10 +187,10 @@ public class NavigationController {
 	//sets the label "labelLoggedUser" with "Logged User: " and the given String
 	public void setLabelLoggedUser(String loggedUser) {
 		for(ProjectUser u : userModel.getUserList()) {
-			u.getUserShortcut().equals(loggedUser);
-			labelLoggedUser.setText("Logged User: " + u.getFirstName() + " " + u.getLastName());
+			if(u.getUserShortcut().equals(loggedUser)) {
+				labelLoggedUser.setText("Logged User: " + u.getFirstName() + " " + u.getLastName());
+			}
 		}
-		
 	}
 
 	//Alert-Pop-Up-Window with the given String as message

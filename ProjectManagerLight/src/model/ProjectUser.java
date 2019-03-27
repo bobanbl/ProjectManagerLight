@@ -29,14 +29,13 @@ public class ProjectUser implements Serializable{
 	private String role;
 	private String password;
 
-
-	@OneToMany(mappedBy = "projectManager", orphanRemoval=true)
+	@OneToMany(mappedBy = "projectManager")
 	private List<Project> projectManger = new ArrayList<Project>();
 
-	@OneToMany(mappedBy = "responsibility", orphanRemoval=true)
+	@OneToMany(mappedBy = "responsibility", fetch=FetchType.EAGER)
 	private List<Story> involvedStories = new ArrayList<>();
 
-	@OneToMany(mappedBy = "responsibility", orphanRemoval=true)
+	@OneToMany(mappedBy = "responsibility")
 	private List<Task> involvedTasks = new ArrayList<>();
 
 	@ManyToMany(mappedBy = "projectMembers", fetch=FetchType.EAGER)

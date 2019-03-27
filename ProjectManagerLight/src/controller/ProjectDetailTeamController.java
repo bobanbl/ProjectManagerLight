@@ -21,7 +21,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -198,21 +197,30 @@ public class ProjectDetailTeamController {
 
 	//Right-Mouse-Click on projectMemberTable --> selectedUser attribute gets set and method openContextMenu gets called
 	public void clickOnTable() {
+		
+		projectMemberTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+			@Override
+			public void handle(ContextMenuEvent event) {
+				selectedUser = projectMemberTable.getSelectionModel().getSelectedItems().get(0);
+				getContextMenu().show(projectMemberTable, event.getScreenX(), event.getScreenY());
+			}
+		});
+		
 		projectMemberTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 			System.out.println("[controller.ProjectUserAddController] click on table");
 			if(projectMemberTable.getSelectionModel().getSelectedItems() != null) {
 				selectedUser = projectMemberTable.getSelectionModel().getSelectedItems().get(0);
 			}
 
-			if (event.getButton() == MouseButton.SECONDARY && selectedUser != null) {
-				System.out.println("Right Mouse Button clicked");
-				openContextMenu();
-			}
+//			if (event.getButton() == MouseButton.SECONDARY && selectedUser != null) {
+//				System.out.println("Right Mouse Button clicked");
+//				openContextMenu();
+//			}
 		});
 	}
 
 	//opens context-menu with the item "DELETE USER"
-	private void openContextMenu() {
+	private ContextMenu getContextMenu() {
 		Label label = new Label();
 		ContextMenu contextMenu = new ContextMenu();
 
@@ -226,18 +234,15 @@ public class ProjectDetailTeamController {
 			}
 		});	
 		contextMenu.getItems().addAll(item1);
-		projectMemberTable.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-			@Override
-			public void handle(ContextMenuEvent event) {
-				contextMenu.show(projectMemberTable, event.getScreenX(), event.getScreenY());
-			}
-		});
 
-		projectMemberTable.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+
+		projectMemberTable.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
 			System.out.println("(controller.ProjectDetailTeamController] Any button pressed hide context");
 			contextMenu.hide();
 		}); 
+		return contextMenu;
 	}
 }
+
 
 

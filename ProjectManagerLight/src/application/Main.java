@@ -11,7 +11,7 @@ import model.DataModelProject;
 import model.DataModelStory;
 /** This is the main Class from the tool "ProjectManagerLight" which opens the Login Window
 @author Boblaz
-@version 0.6 <I>Java Project 2019</I>
+@version 1.0 <I>Java Project 2019</I>
  */
 
 public class Main extends Application {
@@ -19,7 +19,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {			
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("../view/login.fxml"));
+			loader.setLocation(getClass().getResource("/view/login.fxml"));
 			Parent root = loader.load();
 
 			LoginController loginController = loader.getController();

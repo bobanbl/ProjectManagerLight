@@ -74,7 +74,7 @@ public class ProjectController {
 		try {
 			addProjectButton.setVisible(false);
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("../view/projectDetail.fxml"));
+			loader.setLocation(getClass().getResource("/view/projectDetail.fxml"));
 			Parent root = loader.load();
 			projectDetailController = loader.getController();
 			projectDetailController.setDataModelUser(userModel);
@@ -180,7 +180,7 @@ public class ProjectController {
 		try {
 			addProjectButton.setVisible(false);
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("../view/projectDetail.fxml"));
+			loader.setLocation(getClass().getResource("/view/projectDetail.fxml"));
 			Parent root = loader.load();
 			projectDetailController = loader.getController();
 			projectDetailController.setProjectController(this);

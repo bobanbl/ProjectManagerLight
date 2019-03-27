@@ -25,6 +25,7 @@ import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import model.DataModelProject;
+import model.DataModelStory;
 import model.DataModelUser;
 import model.Project;
 import model.ProjectUser;
@@ -34,6 +35,7 @@ public class UserManController {
 
 	private DataModelUser model;
 	DataModelProject projectModel;
+	DataModelStory storyModel;
 	private ProjectUser selectedUser;
 	ObservableList<ProjectUser> selectedUserList;
 	private boolean isPopUpOpen = false;
@@ -81,6 +83,11 @@ public class UserManController {
 	//sets the attribute projectModel
 	public void setProjectModel(DataModelProject projectModel) {
 		this.projectModel = projectModel;
+	}
+
+	//sets the attribute storyModel
+	public void setStoryModel(DataModelStory storyModel) {
+		this.storyModel = storyModel;
 	}
 
 	//sets the items from the userList in the userModel into the columns from the userTable
@@ -212,6 +219,10 @@ public class UserManController {
 		Optional<ButtonType> result = alert.showAndWait();
 		if(result.get() == ButtonType.OK) {
 			System.out.println("[controller.UserManController] User deleted!");
+						
+			storyModel.removeUserFromStories(selectedUser);
+			storyModel.removeUserFromTasks(selectedUser);
+			
 			if(selectedUser.getInvolvedProjects() != null) {
 				for(Project p : selectedUser.getInvolvedProjects()) {
 					p.removeMemberFromProject(selectedUser);
@@ -251,3 +262,5 @@ public class UserManController {
 		}
 	}
 }
+
+

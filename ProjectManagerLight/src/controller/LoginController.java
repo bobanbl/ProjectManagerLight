@@ -94,12 +94,12 @@ public class LoginController {
 		try {
 			loginButton.getScene().getWindow().hide();	
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("../view/main.fxml"));  	
+			loader.setLocation(getClass().getResource("/view/main.fxml"));  	
 			Parent root = loader.load();
 
 			this.navigationController =  loader.getController();
 			this.navigationController.setModels(userModel, storyModel, projectModel);
-			this.navigationController.setLabelLoggedUser(loggedUser.toUpperCase());
+			this.navigationController.setLabelLoggedUser(loggedUser.toLowerCase());
 
 			Scene scene = new Scene(root, root.minWidth(0), root.minHeight(0));
 			Stage mainStage = new Stage();

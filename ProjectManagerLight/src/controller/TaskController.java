@@ -106,7 +106,7 @@ public class TaskController {
 
 				isPopUpOpen = true;
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("../view/storyDetailPopUp.fxml"));  	
+				loader.setLocation(getClass().getResource("/view/storyDetailPopUp.fxml"));  	
 				Parent root = loader.load();	
 
 				StoryDetailController storyDetailController =  loader.getController();
@@ -147,7 +147,7 @@ public class TaskController {
 				isPopUpOpen = true;
 
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("../view/taskDetailPopUp.fxml"));  	
+				loader.setLocation(getClass().getResource("/view/taskDetailPopUp.fxml"));  	
 				Parent root = loader.load();	
 
 				TaskDetailController taskDetailController =  loader.getController();
@@ -244,7 +244,7 @@ public class TaskController {
 				} 
 			});
 
-			Image addImage = new Image(getClass().getResourceAsStream("../assets/AddProject.png"),20,20,false,true);
+			Image addImage = new Image(getClass().getResourceAsStream("/assets/AddProject.png"),20,20,false,true);
 			ImageView addTaskButton = new ImageView();
 			addTaskButton.setImage(addImage);
 			VBox vBoxAddTask = new VBox(addTaskButton);

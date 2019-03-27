@@ -142,7 +142,7 @@ public class ProjectDetailController {
 		try {
 			anchorPaneDetailViews.getChildren().clear();
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("../view/projectDetailMain.fxml"));  	
+			loader.setLocation(getClass().getResource("/view/projectDetailMain.fxml"));  	
 			Parent root = loader.load();
 
 			projectDetailMainController = loader.getController();
@@ -162,7 +162,7 @@ public class ProjectDetailController {
 		try {
 			anchorPaneDetailViews.getChildren().clear();
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("../view/projectDetailTeam.fxml"));  	
+			loader.setLocation(getClass().getResource("/view/projectDetailTeam.fxml"));  	
 			Parent root = loader.load();
 			projectDetailTeamController = loader.getController();
 

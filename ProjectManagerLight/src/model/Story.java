@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,13 +32,12 @@ public class Story implements Serializable{
 	private int duration;
 	private int positionGridPane;
 
-	@OneToMany(mappedBy = "story", orphanRemoval=true)
+	@OneToMany(mappedBy = "story")
 	private List<Task> tasks = new ArrayList<>();
 
 	@OneToOne
 	@JoinColumn(name = "FKProjectID", referencedColumnName = "PROJECTID")
 	private Project project;
-
 
 	public int getStoryID() {
 		return storyID;
@@ -63,6 +63,7 @@ public class Story implements Serializable{
 	public void setResponsibility(ProjectUser responsibility) {
 		this.responsibility = responsibility;
 	}
+
 	public int getDuration() {
 		return duration;
 	}

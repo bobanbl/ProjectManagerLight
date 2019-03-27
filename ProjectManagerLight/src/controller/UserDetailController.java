@@ -70,10 +70,11 @@ public class UserDetailController {
 			errorWindow("Empty field!");
 		} else if(selectedUser == null){
 			createNewUser();
+			userManController.closePopUpWindow();
 		} else if(selectedUser != null){
 			updateSelectedUser();
-		}
-		userManController.closePopUpWindow();
+			userManController.closePopUpWindow();
+		} 	
 	}
 
 	/*update selected ProjectUser with values from attributes (text-fields)
@@ -157,15 +158,18 @@ public class UserDetailController {
 
 	//return true is shortcut does NOT exist!! because this the 'everything is fine' case  
 	private boolean evaluateuserDetailShortcutField(String shortcut) {
+		//existingUserShortcutCheck is TRUE if the shortcut equals the shortcut of the selected user
+		boolean existingUserShortcutCheck = true;
+		
 		for(ProjectUser u : model.getUserList()) {
-			//existingUserShortcutCheck is TRUE if the shortcut equals the shortcut of the selected user
-			boolean existingUserShortcutCheck = true;
 			if(selectedUser != null) {
-				if(u.getUserShortcut().equals(selectedUser.getUserShortcut())){
+				if(shortcut.toLowerCase().equals(selectedUser.getUserShortcut())){
 					existingUserShortcutCheck = false;
 				}
 			}
-			if(u.getUserShortcut().toLowerCase().contains(shortcut.toLowerCase()) && existingUserShortcutCheck && !userDetailShortcutField.getText().equals("")){
+			
+			if(u.getUserShortcut().toLowerCase().equals(shortcut.toLowerCase()) && 
+					existingUserShortcutCheck && !userDetailShortcutField.getText().equals("")){
 				System.out.println("User-Shortcut already exists");
 				userDetailShortcutField.setStyle("-fx-control-inner-background: #FF0000");
 				return true;    
@@ -175,8 +179,6 @@ public class UserDetailController {
 		System.out.println("User-Shortcut is free");
 		userDetailShortcutField.setStyle("-fx-control-inner-background: #FFFFFF");
 		return false;
-
-
 	}
 
 	/*returns true if eMail has right syntax, otherwise false
@@ -211,3 +213,5 @@ public class UserDetailController {
 		alert.showAndWait();
 	}
 }
+
+

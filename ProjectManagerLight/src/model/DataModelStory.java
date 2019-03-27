@@ -116,8 +116,22 @@ public class DataModelStory {
 		storyList.set(storyIndex, updateStory);
 		printStoryData();
 	}
+	
+	//removes the given ProjectUser from all Stories
+	public void removeUserFromStories(ProjectUser projectUser) {
+		System.out.println("[model.DataModelStory] removeUserFromStories: " + projectUser);
+		for(Story s : storyList) {
+			if(projectUser == s.getResponsibility()) {
+				s.setResponsibility(null);
+				int storyIndex = storyList.indexOf(s);
+				storyList.set(storyIndex, s);
+			}
+		}
+		printStoryData();
+	}
+	
 	//----------------------------Task------------------------------------------
-	/*load Taks from Database into a list and adds this list to an ObservableList taskList
+	/*load Tasks from Database into a list and adds this list to an ObservableList taskList
 	 * and calls the method: loadTaskData
 	 */
 	public void loadTaskData() {
@@ -156,7 +170,21 @@ public class DataModelStory {
 		taskList.set(taskIndex, updateTask);
 		printTaskData();
 	} 
+	
+	//removes the given ProjectUser from all Tasks
+	public void removeUserFromTasks(ProjectUser projectUser) {
+		System.out.println("[model.DataModelStory] removeUserFromTasks: " + projectUser);
+		for(Task t : taskList) {
+			if(projectUser == t.getResponsibility()) {
+				t.setResponsibility(null);
+				int taskIndex = taskList.indexOf(t);
+				taskList.set(taskIndex, t);
+			}
+		}
+		printStoryData();
+	}
 
 }
+
 
 

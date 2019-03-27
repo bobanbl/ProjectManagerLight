@@ -87,7 +87,7 @@ public class DataModelProject {
 
 	//update existing project
 	public void updateProject(Project updateProject) {
-		System.out.println("[model.DataModelProject] Update project: " + updateProject.getProjectName()); 	
+		System.out.println("[model.DataModelProject] Update project: " + updateProject); 	
 		int userIndex = projectList.indexOf(updateProject);
 		projectList.set(userIndex, updateProject);
 		printProjectData();

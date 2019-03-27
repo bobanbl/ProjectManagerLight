@@ -42,12 +42,9 @@ public class Project implements Serializable{
 	@OneToOne
 	@JoinColumn(name = "FK_USERID", referencedColumnName = "USERID")
 	private ProjectUser projectManager;
-	//(fetch=FetchType.EAGER, cascade = {CascadeType.ALL})
-	//
-	@ManyToMany(fetch=FetchType.EAGER)
+	
+	@ManyToMany
 	private List<ProjectUser> projectMembers = new ArrayList<>();
-	//	@JoinColumn(name = "FKUSERID", JoinColumns = { @JoinColumns"USERID")
-
 
 	@OneToMany(mappedBy = "project", orphanRemoval=true)
 	private List<Story> stories = new ArrayList<>();
