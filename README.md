@@ -3,10 +3,18 @@ In the project management business many tools were used to have an overview of t
 
 “Project Manager Light” should combine different project management tools in one application, to give a basic overview of tasks and responsibilities for different projects. Furthermore with the software it should be possible to plan tasks only with essential information. Another advantage of the software should be the intuitive handling of it.
 
-## Layered Architecture
+## Framework, Tools & Layered Architecture
+* Java Version: JDK 8 
+*	Development environment:	Eclipse
+* Build Tool: Maven
+
 <p align="center">
 <img src="images/LayeredArchitecture.png" width="300" heigh="300">
 </p>
+
+## Patterns & System Features
+* MVC Pattern
+* Database Controller through CRUD
 
 ## User Interface (Wireframe protoype)
 ### Login Screen
@@ -58,4 +66,3 @@ In the project management business many tools were used to have an overview of t
 <p align="center">
 <img src="images/ERD.png" width="500" heigh="500">
 </p>
-
