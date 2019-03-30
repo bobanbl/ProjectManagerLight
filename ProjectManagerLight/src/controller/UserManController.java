@@ -127,6 +127,7 @@ public class UserManController {
 			selectedUser = selectedUserList.get(0);
 			System.out.println("[controller.UserManController] selectedUser: " + selectedUser.getLastName());
 			if (event.getClickCount() == 2) {
+				System.out.println("[controller.UserManController] Double Clicked on User");
 				loadUserDetailPopUp(false);
 			}
 		}); 
@@ -141,7 +142,7 @@ public class UserManController {
 			try {
 				isPopUpOpen = true;
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("../view/userDetailPopUp.fxml"));  	
+				loader.setLocation(getClass().getResource("/view/userDetailPopUp.fxml"));  	
 				Parent root = loader.load();
 
 				UserDetailController userDetailController =  loader.getController();
@@ -243,7 +244,7 @@ public class UserManController {
 	private void openInvolvedProjectsPopUpWindow() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("../view/involvedProjectsPopUp.fxml"));  	
+			loader.setLocation(getClass().getResource("/view/involvedProjectsPopUp.fxml"));  	
 			Parent root = loader.load();
 
 			InvolvedProjectsController involvedProjectsController =  loader.getController();

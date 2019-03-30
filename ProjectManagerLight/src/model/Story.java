@@ -32,7 +32,7 @@ public class Story implements Serializable{
 	private int duration;
 	private int positionGridPane;
 
-	@OneToMany(mappedBy = "story")
+	@OneToMany(mappedBy = "story", orphanRemoval = true)
 	private List<Task> tasks = new ArrayList<>();
 
 	@OneToOne

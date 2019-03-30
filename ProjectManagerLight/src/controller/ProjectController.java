@@ -35,8 +35,8 @@ public class ProjectController {
 	private ProjectDetailController projectDetailController;
 	private NavigationController navigationController;
 	private DataModelUser userModel;
-	private boolean isNewProject;
 	private DataModelProject projectModel;
+	private boolean isNewProject;
 	private Project selectedProject;
 	ObservableList<Project> selectedProjectList;
 	@FXML
@@ -169,10 +169,7 @@ public class ProjectController {
 				System.out.println("[controller.ProjectController] One Mouse Click on Project: " + selectedProject.getProjectName());
 				System.out.println("[controller.ProjectController] navigationController: " + navigationController);
 			}
-		});  
-		
-		
-		
+		});  		
 	}
 
 	//opens Project-Detail-Window
@@ -243,7 +240,7 @@ public class ProjectController {
 					navigationController.setSelectedProject(projectTable.getItems().get(1));
 				}
 			}
-			removeSelectedProjectFromAllUser();
+			removeSelectedProjectFromAllUser();			
 			projectModel.deleteProject(selectedProject);	
 		}
 		else if(result.get() == ButtonType.CANCEL) {

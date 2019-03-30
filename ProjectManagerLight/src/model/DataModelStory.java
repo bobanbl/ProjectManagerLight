@@ -103,6 +103,12 @@ public class DataModelStory {
 	 */
 	public void deleteStory(Story deleteStory) {
 		System.out.println("[model.DataModelStory] Deleting story: " + deleteStory);
+		
+		for(Task t : taskList) {
+			if(t.getStory() == deleteStory) {
+				deleteTask(t);
+			}
+		}
 		Project project = deleteStory.getProject();
 		project.removeStoryFromProject(deleteStory);
 		storyList.remove(deleteStory);
@@ -130,6 +136,25 @@ public class DataModelStory {
 		printStoryData();
 	}
 	
+	/** Deleting existing Story belonging to given Project
+	 * 
+	 * @param deleteStory
+	 */
+	public void deleteStoryBelongingToProject(Project project) {
+		System.out.println("[model.DataModelStory] deleteStoryBelongingToProject: " + project);
+		for(Story s : storyList) {
+			if(s.getProject() == project) {
+				for(Task t : taskList) {
+					if(t.getStory() == s) {
+						deleteTask(t);
+					}
+				}
+				deleteStory(s);
+			}
+		}
+		printStoryData();
+	}  	
+	
 	//----------------------------Task------------------------------------------
 	/*load Tasks from Database into a list and adds this list to an ObservableList taskList
 	 * and calls the method: loadTaskData
@@ -156,7 +181,7 @@ public class DataModelStory {
 
 	//deleting existing Task in TaskList and call method printTaskData
 	public void deleteTask(Task deleteTask) {
-		System.out.println("[model.DataModelStory] 1 Deleting Task: " + deleteTask);
+		System.out.println("[model.DataModelStory] Deleting Task: " + deleteTask);
 		Story story = deleteTask.getStory();
 		story.removeTaskFromStory(deleteTask);
 		taskList.remove(deleteTask);
@@ -183,6 +208,8 @@ public class DataModelStory {
 		}
 		printStoryData();
 	}
+	
+
 
 }
 
