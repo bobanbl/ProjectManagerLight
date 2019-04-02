@@ -31,7 +31,6 @@ import model.ProjectUser;
 
 //Controller for projectView.fxml
 public class ProjectController {
-
 	private ProjectDetailController projectDetailController;
 	private NavigationController navigationController;
 	private DataModelUser userModel;
