@@ -16,6 +16,20 @@ In the project management business many tools were used to have an overview of t
 * MVC Pattern
 * Database Controller through CRUD
 
+## CopyAndRun Folder
+To use ProjectManagerLight (tested on Windows):
+1. Install Java jre1.8.0_191 or higher
+2. Download the "CopyAndRun"-Folder 
+3. Open the folder 
+  - Double-click on project.jar <p align="center"> <img src="images/CopyAndRun1.png" width="400" heigh="400"> </p>
+  - or double-click on "Start.bat" (for Windows)  <p align="center"> <img src="images/CopyAndRun.png" width="400" heigh="400"> </p>
+4. For the first login: 
+>Username: **admin** <br />
+>Passowrd: **password**
+<p align="center">
+<img src="images/FirstLogin.png" width="400" heigh="400">
+</p>
+
 ## User Interface (Wireframe protoype)
 ### Login Screen
 <p align="center">
