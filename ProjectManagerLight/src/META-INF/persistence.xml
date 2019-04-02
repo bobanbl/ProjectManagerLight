@@ -6,10 +6,11 @@
 		<class>model.Task</class>
 		<class>model.ProjectUser</class>
 		<properties>
-			<property name="javax.persistence.jdbc.url" value="jdbc:derby:..\ProjectManagerLight\DB;create=true"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:derby:DB;create=true"/>
 			<property name="javax.persistence.jdbc.user" value="admin"/>
 			<property name="javax.persistence.jdbc.password" value="100"/>
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+			<property name="eclipselink.jdbc.bind-parameters" value="true"/>
 		</properties>
 	</persistence-unit>
 </persistence>
