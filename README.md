@@ -21,14 +21,12 @@ To use ProjectManagerLight (tested on Windows):
 1. Install Java jre1.8.0_191 or higher
 2. Download the "CopyAndRun"-Folder 
 3. Open the folder 
-  - Double-click on project.jar <p align="center"> <img src="images/CopyAndRun1.png" width="400" heigh="400"> </p>
-  - or double-click on "Start.bat" (for Windows)  <p align="center"> <img src="images/CopyAndRun.png" width="400" heigh="400"> </p>
+  - Double-click on project.jar <p align="center"> <img src="images/CopyAndRun1.png" width="200" heigh="200"> </p>
+  - or double-click on "Start.bat" (for Windows)  <p align="center"> <img src="images/CopyAndRun.png" width="200" heigh="200"> </p>
 4. For the first login: 
->Username: **admin** <br />
->Passowrd: **password**
-<p align="center">
-<img src="images/FirstLogin.png" width="400" heigh="400">
-</p>
+>Username: **admin**
+<br /> Password: **password** <p align="center"> <img src="images/FirstLogin.png" width="400" heigh="400"> </p>
+5. Have fun :)
 
 ## User Interface (Wireframe protoype)
 ### Login Screen
