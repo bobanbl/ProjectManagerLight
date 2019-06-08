@@ -18,7 +18,7 @@ In the project management business many tools were used to have an overview of t
 
 ## CopyAndRun Folder
 To use ProjectManagerLight (tested on Windows):
-1. Install Java jre1.8.0_191 or higher
+1. Install Java 8 (jre1.8.0_191 or higher)
 2. Download the "CopyAndRun"-Folder 
 3. Open the folder 
   - Double-click on project.jar <p align="center"> <img src="images/CopyAndRun1.png" width="200" heigh="200"> </p>
